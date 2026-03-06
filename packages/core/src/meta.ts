@@ -1,5 +1,13 @@
 import type { DocMeta } from "./types"
-import type { Node, Tiramisu } from "@timeleap/tiramisu/src/types/nodes"
+import type { Node } from "@timeleap/tiramisu/src/types/nodes"
+import {
+  ArrayValue,
+  FunctionCall,
+  Paragraph,
+  MixedText,
+  NamedParameter,
+  Tiramisu,
+} from "@timeleap/tiramisu/src/types/nodes"
 
 export interface ExtractMetaResult {
   meta: DocMeta
@@ -32,13 +40,13 @@ export function extractMeta(ast: Tiramisu): ExtractMetaResult {
  * - Paragraph.children[i] -> MixedText.shards[0] -> FunctionCall
  * - MixedText.shards[0] -> MixedText.shards[0] -> FunctionCall
  */
-function findMetaFunctionCall(node: any): any | null {
-  if (node.constructor.name === "FunctionCall" && node.functionName === "meta") {
+function findMetaFunctionCall(node: Node): FunctionCall | null {
+  if (node instanceof FunctionCall && node.functionName === "meta") {
     return node
   }
 
   // Check Paragraph.children
-  if (node.constructor.name === "Paragraph" && node.children) {
+  if (node instanceof Paragraph) {
     for (const child of node.children) {
       const result = findMetaFunctionCall(child)
       if (result) return result
@@ -46,7 +54,7 @@ function findMetaFunctionCall(node: any): any | null {
   }
 
   // Check MixedText.shards
-  if (node.constructor.name === "MixedText" && node.shards) {
+  if (node instanceof MixedText) {
     for (const shard of node.shards) {
       const result = findMetaFunctionCall(shard)
       if (result) return result
@@ -59,12 +67,12 @@ function findMetaFunctionCall(node: any): any | null {
 /**
  * Extract named parameters from a meta FunctionCall and populate DocMeta.
  */
-function extractMetaFromFunctionCall(fc: any, meta: DocMeta): void {
+function extractMetaFromFunctionCall(fc: FunctionCall, meta: DocMeta): void {
   const params = fc.parameters?.parameters
   if (!params) return
 
   for (const param of params) {
-    if (param.constructor.name !== "NamedParameter") continue
+    if (!(param instanceof NamedParameter)) continue
 
     const name: string = param.name
     const rawValue = extractParamValue(param.value)
@@ -76,9 +84,11 @@ function extractMetaFromFunctionCall(fc: any, meta: DocMeta): void {
       case "description":
         meta.description = rawValue
         break
-      case "order":
-        meta.order = parseInt(rawValue, 10)
+      case "order": {
+        const n = parseInt(rawValue, 10)
+        if (!isNaN(n)) meta.order = n
         break
+      }
       case "group":
         meta.group = rawValue
         break
@@ -90,9 +100,9 @@ function extractMetaFromFunctionCall(fc: any, meta: DocMeta): void {
  * Extract a string value from a NamedParameter's value field.
  * value is Node[] | ArrayValue. For meta fields we expect Node[].
  */
-function extractParamValue(value: any): string {
+function extractParamValue(value: Node[] | ArrayValue): string {
   if (Array.isArray(value)) {
-    return value.map((v: any) => v.toString()).join("").trim()
+    return value.map((v) => v.toString()).join("").trim()
   }
   return String(value).trim()
 }

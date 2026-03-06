@@ -12,6 +12,12 @@ describe("extractMeta", () => {
     expect(contentNodes.length).toBeGreaterThan(0)
   })
 
+  it("extracts description from meta block", () => {
+    const ast = compile("meta { title = My Page, description = A helpful guide }\n\nContent here")
+    const { meta } = extractMeta(ast)
+    expect(meta.description).toBe("A helpful guide")
+  })
+
   it("returns empty meta when no meta block", () => {
     const ast = compile("Hello world")
     const { meta, contentNodes } = extractMeta(ast)
