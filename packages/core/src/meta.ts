@@ -1,7 +1,7 @@
 import type { DocMeta } from "./types"
-import type { Node } from "@timeleap/tiramisu/src/types/nodes"
 import {
-  ArrayValue,
+  type Node,
+  type ArrayValue,
   FunctionCall,
   Paragraph,
   MixedText,
