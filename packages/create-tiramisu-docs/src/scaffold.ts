@@ -99,7 +99,7 @@ export default defineConfig({
 
 function tiramisuConfig(name: string): GeneratedFile {
   return {
-    path: "src/tiramisu.config.ts",
+    path: "src/lib/tiramisu.config.ts",
     content: `import { defineConfig } from "@tiramisu-docs/kit"
 
 export default defineConfig({
@@ -217,7 +217,7 @@ function pageSvelte(): GeneratedFile {
   import DocsLayout from "@tiramisu-docs/kit/components/DocsLayout.svelte"
   import DocPage from "@tiramisu-docs/kit/components/DocPage.svelte"
   import { sidebar } from "virtual:tiramisu-docs"
-  import config from "../../tiramisu.config"
+  import config from "$lib/tiramisu.config"
   import { resolveConfig } from "@tiramisu-docs/kit"
 
   let { data } = $props()
