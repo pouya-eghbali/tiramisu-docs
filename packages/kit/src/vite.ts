@@ -22,6 +22,7 @@ interface SidebarGroup {
 
 const VIRTUAL_MODULE_ID = "virtual:tiramisu-docs"
 const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID
+const TIRAMISU_SVELTE_SUFFIX = ".tiramisu.svelte"
 
 export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
   const docsDir = options.docsDir ?? "src/docs"
@@ -83,7 +84,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       sidebar.push({ label, items })
     }
 
-    // Build dynamic imports map
+    // Build dynamic imports — use .tiramisu.svelte suffix so resolveId maps them
     const importsEntries = docs
       .map((doc) => {
         const absPath = path
@@ -112,7 +113,14 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       if (id === VIRTUAL_MODULE_ID) {
         return RESOLVED_VIRTUAL_MODULE_ID
       }
-      // Let .tiramisu files resolve normally (they exist on disk)
+      // Resolve .tiramisu imports to a virtual .svelte ID
+      // so the Svelte plugin processes the output
+      if (id.endsWith(".tiramisu")) {
+        const resolved = path.isAbsolute(id) ? id : path.resolve(viteRoot, id)
+        if (fs.existsSync(resolved)) {
+          return resolved + ".svelte"
+        }
+      }
       return undefined
     },
 
@@ -121,12 +129,13 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
         return buildVirtualModule()
       }
 
-      // Compile .tiramisu files to Svelte
-      if (id.endsWith(".tiramisu")) {
-        const filePath = id.startsWith("\0") ? id.slice(1) : id
-        if (!fs.existsSync(filePath)) return undefined
+      // Compile .tiramisu files to Svelte component source
+      // These come in as .tiramisu.svelte due to resolveId above
+      if (id.endsWith(TIRAMISU_SVELTE_SUFFIX)) {
+        const tiramisuPath = id.slice(0, -".svelte".length)
+        if (!fs.existsSync(tiramisuPath)) return undefined
 
-        const source = fs.readFileSync(filePath, "utf-8")
+        const source = fs.readFileSync(tiramisuPath, "utf-8")
         const { svelte } = compileTiramisu(source)
         return svelte
       }
@@ -144,7 +153,14 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
           ctx.server.moduleGraph.invalidateModule(virtualMod)
         }
 
-        // Trigger full reload since .tiramisu content changed
+        // Invalidate the compiled .svelte version too
+        const svelteMod = ctx.server.moduleGraph.getModuleById(
+          ctx.file + ".svelte"
+        )
+        if (svelteMod) {
+          ctx.server.moduleGraph.invalidateModule(svelteMod)
+        }
+
         ctx.server.ws.send({ type: "full-reload" })
         return []
       }
