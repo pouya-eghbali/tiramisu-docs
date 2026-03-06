@@ -16,7 +16,8 @@
       "default": "./dist/vite.js"
     },
     "./components/*": {
-      "svelte": "./src/lib/components/*"
+      "svelte": "./src/lib/components/*",
+      "default": "./src/lib/components/*"
     }
   },
   "scripts": {
