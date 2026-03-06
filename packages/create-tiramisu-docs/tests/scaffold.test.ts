@@ -9,7 +9,7 @@ describe("generateProjectFiles", () => {
     expect(paths).toContain("package.json")
     expect(paths).toContain("svelte.config.js")
     expect(paths).toContain("vite.config.ts")
-    expect(paths).toContain("src/tiramisu.config.ts")
+    expect(paths).toContain("src/lib/tiramisu.config.ts")
     expect(paths).toContain("src/docs/index.tiramisu")
     expect(paths).toContain("src/docs/getting-started.tiramisu")
     expect(paths).toContain("src/app.html")

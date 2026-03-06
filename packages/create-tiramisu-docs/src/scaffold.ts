@@ -50,6 +50,7 @@ function packageJson(name: string): GeneratedFile {
       svelte: "^5.0.0",
       vite: "^6.0.0",
       tailwindcss: "^4.0.0",
+      "@tailwindcss/vite": "^4.0.0",
       typescript: "^5.4.0",
     },
   }
@@ -88,10 +89,11 @@ function viteConfig(): GeneratedFile {
     path: "vite.config.ts",
     content: `import { sveltekit } from "@sveltejs/kit/vite"
 import { tiramisuPlugin } from "@tiramisu-docs/kit/vite"
+import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite"
 
 export default defineConfig({
-  plugins: [tiramisuPlugin(), sveltekit()],
+  plugins: [tiramisuPlugin(), tailwindcss(), sveltekit()],
 })
 `,
   }
