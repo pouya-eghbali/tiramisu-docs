@@ -10,7 +10,7 @@
       {/if}
       {config.title}
     </a>
-    <div class="flex-1" />
+    <div class="flex-1"></div>
     {#each config.nav as link}
       <a href={link.href} class="text-sm text-muted-foreground hover:text-foreground transition-colors">
         {link.label}
