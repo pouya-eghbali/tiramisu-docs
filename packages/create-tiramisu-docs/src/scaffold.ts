@@ -9,7 +9,7 @@ export interface GeneratedFile {
 }
 
 export function generateProjectFiles(options: ScaffoldOptions): GeneratedFile[] {
-  const { name, theme } = options
+  const { name } = options
 
   return [
     packageJson(name),
@@ -40,8 +40,8 @@ function packageJson(name: string): GeneratedFile {
       preview: "vite preview",
     },
     dependencies: {
-      "@tiramisu-docs/kit": "workspace:*",
-      "@timeleap/tiramisu": "workspace:*",
+      "@tiramisu-docs/kit": "^0.1.0",
+      "@timeleap/tiramisu": "^1.6.0",
     },
     devDependencies: {
       "@sveltejs/adapter-static": "^3.0.0",
@@ -106,7 +106,7 @@ export default defineConfig({
   title: "${name}",
   description: "Documentation powered by Tiramisu Docs",
   nav: [
-    { title: "Docs", href: "/docs" },
+    { label: "Docs", href: "/docs" },
   ],
 })
 `,
