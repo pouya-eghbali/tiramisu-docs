@@ -5,8 +5,8 @@ import {
   NamedParameter,
   ArrayValue,
   ArrayItem,
-} from "@timeleap/tiramisu/src/types/nodes"
-import type { Heading } from "./types"
+} from "@timeleap/tiramisu/types/nodes"
+import type { Heading } from "./types.js"
 
 /** Context passed to built-in handlers so they can collect headings / imports */
 export interface EmitContext {

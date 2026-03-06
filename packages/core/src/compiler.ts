@@ -1,4 +1,4 @@
-import { compile } from "@timeleap/tiramisu/src/index"
+import { compile } from "@timeleap/tiramisu"
 import {
   type Node,
   FunctionCall,
@@ -9,10 +9,10 @@ import {
   NamedParameter,
   ArrayValue,
   ArrayItem,
-} from "@timeleap/tiramisu/src/types/nodes"
-import { extractMeta } from "./meta"
-import type { CompileResult, Heading } from "./types"
-import { builtins, type EmitContext } from "./builtins"
+} from "@timeleap/tiramisu/types/nodes"
+import { extractMeta } from "./meta.js"
+import type { CompileResult, Heading } from "./types.js"
+import { builtins, type EmitContext } from "./builtins.js"
 
 /**
  * Compile a tiramisu source string into a Svelte component.

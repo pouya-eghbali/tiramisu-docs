@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 import { extractMeta } from "../src/meta"
-import { compile } from "@timeleap/tiramisu/src/index.ts"
+import { compile } from "@timeleap/tiramisu"
 
 describe("extractMeta", () => {
   it("extracts meta from a tiramisu AST", () => {

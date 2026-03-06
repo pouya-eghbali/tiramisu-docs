@@ -1,2 +1,2 @@
-export { defineConfig, resolveConfig } from "./config"
-export type { TiramisuDocsConfig, ResolvedConfig } from "./config"
+export { defineConfig, resolveConfig } from "./config.js"
+export type { TiramisuDocsConfig, ResolvedConfig } from "./config.js"

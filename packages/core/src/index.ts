@@ -1,4 +1,4 @@
-export { extractMeta } from "./meta"
-export type { ExtractMetaResult } from "./meta"
-export { compileTiramisu } from "./compiler"
-export type { DocMeta, CompileResult, Heading } from "./types"
+export { extractMeta } from "./meta.js"
+export type { ExtractMetaResult } from "./meta.js"
+export { compileTiramisu } from "./compiler.js"
+export type { DocMeta, CompileResult, Heading } from "./types.js"

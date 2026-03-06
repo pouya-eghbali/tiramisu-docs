@@ -1,4 +1,4 @@
-import type { DocMeta } from "./types"
+import type { DocMeta } from "./types.js"
 import {
   type Node,
   type ArrayValue,
@@ -7,7 +7,7 @@ import {
   MixedText,
   NamedParameter,
   Tiramisu,
-} from "@timeleap/tiramisu/src/types/nodes"
+} from "@timeleap/tiramisu/types/nodes"
 
 export interface ExtractMetaResult {
   meta: DocMeta

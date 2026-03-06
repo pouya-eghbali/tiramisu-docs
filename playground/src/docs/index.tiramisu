@@ -1,0 +1,7 @@
+meta { title = Welcome, order = 1, group = Getting Started }
+
+h1 { Welcome to playground }
+
+This is your documentation site powered by bold { Tiramisu Docs }.
+
+Get started by editing the files in code { src/docs/ }.
