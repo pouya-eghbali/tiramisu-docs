@@ -25,8 +25,9 @@ export async function load({ params }: { params: { slug?: string } }) {
 }
 
 function loadLegacy(mod: any, slug: string) {
-  const importFn = mod.docImports[slug];
+  let importFn = mod.docImports[slug] ?? mod.docImports[slug + "/index"];
   if (!importFn) throw error(404, "Page not found");
+  if (!mod.docImports[slug]) slug = slug + "/index";
 
   return importFn().then((c: any) => {
     const doc = (mod.docs as any[]).find((d) => d.slug === slug);
@@ -46,12 +47,14 @@ function loadLegacy(mod: any, slug: string) {
 }
 
 async function loadDoc(localeData: any, slug: string, locale: string, mod: any) {
-  let importFn = localeData.docImports[slug];
+  let importFn = localeData.docImports[slug] ?? localeData.docImports[slug + "/index"];
+  if (!localeData.docImports[slug] && localeData.docImports[slug + "/index"]) slug = slug + "/index";
   let showFallbackBanner = false;
 
   if (!importFn) {
     const defaultData = mod.locales[mod.defaultLocale];
-    importFn = defaultData?.docImports[slug];
+    importFn = defaultData?.docImports[slug] ?? defaultData?.docImports[slug + "/index"];
+    if (!defaultData?.docImports[slug] && defaultData?.docImports[slug + "/index"]) slug = slug + "/index";
     if (!importFn) throw error(404, "Page not found");
     showFallbackBanner = true;
   }
