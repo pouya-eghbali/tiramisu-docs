@@ -10,6 +10,8 @@ export interface TiramisuPluginOptions {
   docsDir?: string
   componentsDir?: string
   groupOrder?: string[]
+  sections?: SectionConfig[]
+  title?: string
 }
 
 export interface SidebarItem {
@@ -316,8 +318,6 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       }
     })
 
-    const sidebar = buildSidebarTree(docs, groupOrder)
-
     // Build dynamic imports — use .tiramisu.svelte suffix so resolveId maps them
     const importsEntries = docs
       .map((doc) => {
@@ -328,12 +328,25 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       })
       .join(",\n")
 
-    return [
-      `export const sidebar = ${JSON.stringify(sidebar, null, 2)};`,
-      `export const docs = ${JSON.stringify(docs, null, 2)};`,
-      `export const searchIndex = ${JSON.stringify(searchIndex)};`,
-      `export const docImports = {\n${importsEntries}\n};`,
-    ].join("\n\n")
+    if (options.sections) {
+      const resolvedSections = buildSectionSidebars(docs, options.sections, options.title)
+      return [
+        `export const sections = ${JSON.stringify(resolvedSections, null, 2)};`,
+        `export const sidebar = [];`,
+        `export const docs = ${JSON.stringify(docs, null, 2)};`,
+        `export const searchIndex = ${JSON.stringify(searchIndex)};`,
+        `export const docImports = {\n${importsEntries}\n};`,
+      ].join("\n\n")
+    } else {
+      const sidebar = buildSidebarTree(docs, groupOrder)
+      return [
+        `export const sections = undefined;`,
+        `export const sidebar = ${JSON.stringify(sidebar, null, 2)};`,
+        `export const docs = ${JSON.stringify(docs, null, 2)};`,
+        `export const searchIndex = ${JSON.stringify(searchIndex)};`,
+        `export const docImports = {\n${importsEntries}\n};`,
+      ].join("\n\n")
+    }
   }
 
   return {
