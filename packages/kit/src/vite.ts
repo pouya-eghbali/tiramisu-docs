@@ -12,20 +12,10 @@ function compileWithLocation(source: string, filePath: string) {
     return compileTiramisu(source)
   } catch (err: any) {
     if (err.line != null) {
-      const lines = source.split("\n")
-      const errorLine = lines[err.line - 1] ?? ""
-      const pointer = " ".repeat(Math.max(0, (err.column ?? 1) - 1)) + "^".repeat(err.length ?? 1)
-      const frame = [
-        `${err.line} | ${errorLine}`,
-        `${" ".repeat(String(err.line).length)} | ${pointer}`,
-      ].join("\n")
-
-      const enhanced = new Error(
-        `${err.hint ?? err.message}\n\n${filePath}:${err.line}:${err.column ?? 0}\n\n${frame}\n`
-      )
+      const enhanced = new Error(err.hint ?? err.message)
       ;(enhanced as any).id = filePath
-      ;(enhanced as any).loc = { line: err.line, column: err.column ?? 0 }
-      ;(enhanced as any).frame = frame
+      ;(enhanced as any).loc = { file: filePath, line: err.line, column: err.column ?? 0 }
+      ;(enhanced as any).plugin = "tiramisu-docs"
       throw enhanced
     }
     throw err
