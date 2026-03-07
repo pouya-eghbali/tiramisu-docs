@@ -4,5 +4,17 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite"
 
 export default defineConfig({
-  plugins: [tiramisuPlugin(), tailwindcss(), sveltekit()],
+  plugins: [
+    tiramisuPlugin({
+      groupOrder: ["Getting Started", "Writing", "Customization"],
+      sections: [
+        { label: "Getting Started", path: "getting-started" },
+        { label: "Writing", path: "writing" },
+        { label: "Customization", path: "customization" },
+      ],
+      title: "Tiramisu Docs",
+    }),
+    tailwindcss(),
+    sveltekit(),
+  ],
 })
