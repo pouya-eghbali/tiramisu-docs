@@ -1,14 +1,25 @@
 <script>
+  import * as Alert from "../ui/alert/index.js"
+
   let { type = "info", children } = $props()
 
-  const styles = {
-    info: "border-blue-500/50 bg-blue-500/10 text-blue-700 dark:text-blue-300",
-    warning: "border-yellow-500/50 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300",
-    error: "border-red-500/50 bg-red-500/10 text-red-700 dark:text-red-300",
-    success: "border-green-500/50 bg-green-500/10 text-green-700 dark:text-green-300",
-  }
+  const variantMap = { info: "info", warning: "warning", error: "destructive", success: "success" }
+  const variant = $derived(variantMap[type] ?? "info")
+  const title = $derived(type.charAt(0).toUpperCase() + type.slice(1))
 </script>
 
-<div class="my-4 rounded-lg border-l-4 p-4 {styles[type] ?? styles.info}" role="alert">
-  {@render children()}
-</div>
+<Alert.Root {variant} class="my-4">
+  {#if type === "info"}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+  {:else if type === "warning"}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+  {:else if type === "error"}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+  {:else if type === "success"}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+  {/if}
+  <Alert.Title>{title}</Alert.Title>
+  <Alert.Description class="block">
+    {@render children()}
+  </Alert.Description>
+</Alert.Root>

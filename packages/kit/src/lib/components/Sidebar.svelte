@@ -2,9 +2,14 @@
   import { page } from "$app/stores"
   import { Collapsible } from "./ui/collapsible/index.js"
 
-  let { config, groups, onSearchClick, hasSections = false } = $props()
+  let { config, groups, onSearchClick, hasSections = false, locale } = $props()
 
   let dark = $state(false)
+
+  function docHref(slug) {
+    const prefix = locale ? `/docs/${locale}` : "/docs"
+    return slug === "index" ? prefix : `${prefix}/${slug}`
+  }
 
   function initTheme() {
     if (typeof window === "undefined") return
@@ -21,7 +26,7 @@
 
   function isSubgroupActive(entry, pathname) {
     if (entry.slug) {
-      const href = `/docs/${entry.slug}`
+      const href = docHref(entry.slug)
       if (pathname === href) return true
     }
     return hasActiveDescendant(entry.items, pathname)
@@ -30,7 +35,7 @@
   function hasActiveDescendant(items, pathname) {
     for (const entry of items) {
       if (entry.type === "item") {
-        const href = entry.slug === "index" ? "/docs" : `/docs/${entry.slug}`
+        const href = docHref(entry.slug)
         if (pathname === href) return true
       } else if (entry.type === "subgroup") {
         if (isSubgroupActive(entry, pathname)) return true
@@ -47,7 +52,7 @@
 {#snippet renderEntries(entries, depth)}
   {#each entries as entry}
     {#if entry.type === "item"}
-      {@const href = entry.slug === "index" ? "/docs" : `/docs/${entry.slug}`}
+      {@const href = docHref(entry.slug)}
       {@const active = $page.url.pathname === href}
       <a
         {href}
@@ -60,12 +65,12 @@
         {entry.title}
       </a>
     {:else}
-      {@const subActive = entry.slug && $page.url.pathname === `/docs/${entry.slug}`}
+      {@const subActive = entry.slug && $page.url.pathname === docHref(entry.slug)}
       <Collapsible open={isSubgroupActive(entry, $page.url.pathname)} class="mt-0.5">
         {#snippet trigger()}
           {#if entry.slug}
             <a
-              href="/docs/{entry.slug}"
+              href={docHref(entry.slug)}
               class="text-[13px] font-medium transition-colors
                 {subActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}"
               style:padding-left="{0.5 + depth * 0.75}rem"

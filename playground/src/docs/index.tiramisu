@@ -1,7 +1,31 @@
-meta { title = Welcome, order = 1, group = Getting Started }
+meta { title = Introduction, description = Tiramisu Docs is a documentation generator built on SvelteKit and the Tiramisu markup language., order = 1, group = Getting Started }
 
-h1 { Welcome to playground }
+h2 { What is Tiramisu Docs? }
 
-This is your documentation site powered by bold { Tiramisu Docs }.
+Tiramisu Docs is a documentation generator that turns code { .tiramisu } files into beautiful, fast documentation sites. It's built on bold { SvelteKit 5 } and uses the bold { Tiramisu markup language } — a functional, composable alternative to Markdown.
 
-Get started by editing the files in code { src/docs/ }.
+h2 { Why Tiramisu? }
+
+list {
+  bold { Functional syntax } — every element is a function call\, making the markup predictable and extensible,
+  bold { SvelteKit powered } — file-based routing and server-side rendering out of the box,
+  bold { Custom components } — drop a Svelte component in your project and use it directly in your docs,
+  bold { Zero config } — sensible defaults with a simple config file when you need it,
+  bold { Dark mode } — built-in light and dark themes with one-click toggle
+}
+
+h2 { Quick Example }
+
+A code { .tiramisu } file looks like this:
+
+codeblock { language = tiramisu, """meta { title = My Page, group = Guide }
+
+h2 { Hello World }
+
+This is a paragraph with bold { bold text } and code { inline code }.
+
+codeblock { language = javascript, "console.log('hello')" }""" }
+
+h2 { Next Steps }
+
+Head to the link { url = /docs/getting-started/quick-start, Quick Start } guide to create your first Tiramisu Docs site in under a minute.

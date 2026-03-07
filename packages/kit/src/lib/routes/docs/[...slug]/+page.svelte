@@ -10,6 +10,9 @@
   sidebar={data.activeSidebar}
   headings={data.headings}
   sections={data.sections}
+  locale={data.locale}
+  locales={data.locales}
+  showFallbackBanner={data.showFallbackBanner}
 >
   <DocPage meta={data.meta}>
     <svelte:component this={data.component} />

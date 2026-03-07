@@ -1,0 +1,69 @@
+meta { title = Page Meta, description = Control page titles and ordering with the meta function., order = 4 }
+
+h2 { The Meta Block }
+
+Every code { .tiramisu } file should start with a code { meta } block. It defines the page's metadata — used for the sidebar, page title, and SEO:
+
+codeblock { language = tiramisu, "meta { title = My Page Title, description = A brief description., order = 3 }" }
+
+h2 { Meta Fields }
+
+table {
+  row = [Field, Type, Required, Description],
+  row = [title, string, Yes, Displayed in the sidebar and as the page heading],
+  row = [description, string, No, Shown below the title and used for SEO meta tags],
+  row = [order, number, No, Controls sort order within a group (lower first)],
+  row = [group, string, No, Sidebar group for root-level files (not needed inside folders)]
+}
+
+h2 { Sidebar Groups }
+
+Pages are organized into sidebar groups in two ways:
+
+h3 { Folder-Based Groups (Recommended) }
+
+Place your files in folders under code { src/docs/ }. Each top-level folder becomes a sidebar group\, and nested folders become collapsible subgroups:
+
+codeblock { """src/docs/
+  getting-started/         → Group: "Getting Started"
+    index.tiramisu         → Group landing page
+    quick-start.tiramisu
+  writing/                 → Group: "Writing"
+    content/               → Subgroup: "Content"
+      code-blocks.tiramisu""" }
+
+An code { index.tiramisu } inside a folder sets the group's display label (from its code { title }) and serves as the landing page — clicking the group heading navigates to it.
+
+h3 { Meta-Based Groups }
+
+Root-level files (directly in code { src/docs/ }) use the code { group } meta field to join a group:
+
+codeblock { language = tiramisu, "meta { title = Markup Basics, order = 1, group = Writing }" }
+
+This file appears in the "Writing" group but keeps its short URL — code { /docs/markup-basics } with no folder prefix. The match is case-insensitive\, so code { """group = writing""" } merges into the code { writing/ } folder group.
+
+callout { type = info, If no code { group } is specified on a root-level file\, it goes into a default group called "Docs". Files inside folders don't need a code { group } field — the folder structure determines their group. }
+
+h2 { Sort Order }
+
+Within each group or subgroup\, pages are sorted by their code { order } value (ascending). Pages without an explicit order default to 999 and appear at the end.
+
+codeblock { language = tiramisu, """meta { title = First Page, order = 1 }
+meta { title = Second Page, order = 2 }
+meta { title = Last Page, order = 99 }""" }
+
+For subgroups with an code { index.tiramisu }\, the subgroup's position is determined by the index file's code { order }. Subgroups without an index derive their position from the minimum order of their children.
+
+h2 { Group Order }
+
+You can control the order of top-level sidebar groups using the code { groupOrder } option in your Vite plugin config:
+
+codeblock { language = typescript, """tiramisuPlugin({
+  groupOrder: ['Getting Started', 'Writing', 'Customization'],
+})""" }
+
+Groups listed in code { groupOrder } appear first in that order. Any groups not listed appear after.
+
+h2 { SEO }
+
+The code { title } and code { description } fields are automatically used for the HTML title tag, Open Graph meta tags, and the meta description tag. Your documentation pages are search-engine friendly out of the box.

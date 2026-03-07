@@ -10,6 +10,6 @@
     "test": "bun run --filter '*' test"
   },
   "dependencies": {
-    "@timeleap/tiramisu": "^1.6.1"
+    "@timeleap/tiramisu": "^1.7.0"
   }
 }

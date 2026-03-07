@@ -15,6 +15,9 @@
   sidebar={data.activeSidebar}
   headings={data.headings}
   sections={data.sections}
+  locale={data.locale}
+  locales={data.locales ? resolved.i18n?.locales?.filter(l => data.locales.includes(l.code)) : undefined}
+  showFallbackBanner={data.showFallbackBanner}
 >
   <DocPage meta={data.meta}>
     {#if data.component}
@@ -22,5 +25,5 @@
       <Component />
     {/if}
   </DocPage>
-  <PrevNextNav sidebar={data.activeSidebar} currentSlug={data.slug} />
+  <PrevNextNav sidebar={data.activeSidebar} currentSlug={data.slug} locale={data.locale} />
 </DocsLayout>

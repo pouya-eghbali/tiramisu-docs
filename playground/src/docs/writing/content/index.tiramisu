@@ -1,0 +1,13 @@
+meta { title = Content, description = Rich content elements for your documentation., order = 2 }
+
+h2 { Overview }
+
+Beyond basic text and headings\, Tiramisu provides several built-in functions for rich content. Each page in this section covers a specific content type:
+
+list {
+  link { url = /docs/writing/content/code-blocks, Code Blocks } — syntax-highlighted code with copy buttons,
+  link { url = /docs/writing/content/rich-content, Rich Content } — callouts\, badges\, and steps,
+  link { url = /docs/writing/content/layout, Layout } — columns\, cards\, and accordion,
+  link { url = /docs/writing/content/visual-elements, Visual Elements } — quotes\, task lists\, file trees\, and image zoom,
+  link { url = /docs/writing/content/diagrams-math, Diagrams & Math } — mermaid diagrams and KaTeX math
+}

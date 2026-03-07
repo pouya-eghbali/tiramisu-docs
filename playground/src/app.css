@@ -1,1 +1,9 @@
+@import "@tiramisu-docs/kit/styles/theme.css";
 @import "tailwindcss";
+
+@source "../../packages/kit/src/lib";
+
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

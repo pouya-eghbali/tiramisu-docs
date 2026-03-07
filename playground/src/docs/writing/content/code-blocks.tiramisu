@@ -1,0 +1,68 @@
+meta { title = Code Blocks, description = Display code with syntax labels and copy buttons., order = 2 }
+
+h2 { Basic Code Blocks }
+
+Use the code { codeblock } function to display code. Pass the code as a positional string parameter:
+
+codeblock { language = tiramisu, """codeblock { "console.log('hello world')" }""" }
+
+demo {
+  codeblock { "console.log('hello world')" }
+}
+
+h2 { Language Labels }
+
+Add a code { language } named parameter to show a language label in the header:
+
+codeblock { language = tiramisu, """codeblock { language = typescript, "const x: number = 42" }""" }
+
+demo {
+  codeblock { language = typescript, "const x: number = 42" }
+}
+
+h2 { Copy Button }
+
+Every code block includes a copy button that appears on hover. Click it to copy the code contents to your clipboard.
+
+h2 { Supported Languages }
+
+The code { language } parameter accepts any string. It's displayed as a label in the code block header. Some examples:
+
+table {
+  row = [Language Value, Usage],
+  row = [typescript, TypeScript and JavaScript with types],
+  row = [javascript, Plain JavaScript],
+  row = [bash, Shell commands],
+  row = [html, HTML markup],
+  row = [css, CSS styles],
+  row = [json, JSON data],
+  row = [tiramisu, Tiramisu markup]
+}
+
+h2 { Multi-line Code }
+
+Code blocks preserve whitespace and line breaks within the string:
+
+codeblock { language = tiramisu, """codeblock { language = typescript, """"""interface User {
+  name: string
+  email: string
+  role: 'admin' | 'user'
+}"""""" }""" }
+
+demo {
+  codeblock { language = typescript, """interface User {
+  name: string
+  email: string
+  role: 'admin' | 'user'
+}""" }
+}
+
+h2 { Code Blocks Without Language }
+
+If you omit the code { language } parameter\, the code block renders without a header bar. The copy button still appears on hover in the top-right corner:
+
+codeblock { language = tiramisu, """codeblock { "just some plain text in a code block" }""" }
+
+demo {
+  codeblock { "just some plain text in a code block" }
+}

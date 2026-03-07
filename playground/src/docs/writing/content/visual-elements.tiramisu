@@ -1,0 +1,73 @@
+meta { title = Visual Elements, description = Quotes\, task lists\, file trees\, and image zoom., order = 5 }
+
+h2 { Blockquotes }
+
+Use code { quote } for styled quotations with optional attribution:
+
+codeblock { language = tiramisu, """quote { The best documentation is the one that gets read., author = Unknown }
+
+quote { Simple quote without attribution. }""" }
+
+demo {
+  quote { The best documentation is the one that gets read., author = Unknown }
+
+  quote { Simple quote without attribution. }
+}
+
+h2 { Task Lists }
+
+Use code { tasklist } to display checklist items. Prefix each item with code { "[x]" } (checked) or code { "[ ]" } (unchecked):
+
+codeblock { language = tiramisu, """tasklist {
+  "[x] Write documentation",
+  "[ ] Add tests",
+  "[x] Deploy to production",
+  "[ ] Celebrate"
+}""" }
+
+demo {
+  tasklist {
+    "[x] Write documentation",
+    "[ ] Add tests",
+    "[x] Deploy to production",
+    "[ ] Celebrate"
+  }
+}
+
+h2 { File Tree }
+
+Display file and folder hierarchies with code { filetree }. Use code { file } for files and code { folder } for directories with nested contents:
+
+codeblock { language = tiramisu, """filetree {
+  file { app.css },
+  folder { src,
+    file { index.ts },
+    file { utils.ts }
+  },
+  folder { components,
+    file { Button.svelte },
+    file { Card.svelte }
+  }
+}""" }
+
+demo {
+  filetree {
+    file { app.css },
+    folder { src,
+      file { index.ts },
+      file { utils.ts }
+    },
+    folder { components,
+      file { Button.svelte },
+      file { Card.svelte }
+    }
+  }
+}
+
+h2 { Image Zoom }
+
+All images automatically support click-to-zoom. Just use the standard code { image } function:
+
+codeblock { language = tiramisu, "image { src = /screenshot.png, alt = Screenshot }" }
+
+Clicking any image opens it in a fullscreen overlay. Press Escape or click outside to close.

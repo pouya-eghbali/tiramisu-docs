@@ -1,0 +1,82 @@
+meta { title = Rich Content, description = Callouts and badges to enhance your documentation., order = 3 }
+
+h2 { Callouts }
+
+Callouts are colored boxes that highlight important information. Use the code { callout } function with a code { type } parameter:
+
+codeblock { language = tiramisu, """callout { type = info, This is an informational note. }
+
+callout { type = warning, Be careful with this operation. }
+
+callout { type = error, This action is irreversible. }
+
+callout { type = success, Everything is working correctly. }""" }
+
+demo {
+  callout { type = info, This is an informational note. }
+
+  callout { type = warning, Be careful with this operation. }
+
+  callout { type = error, This action is irreversible. }
+
+  callout { type = success, Everything is working correctly. }
+}
+
+h2 { Callout Types }
+
+table {
+  row = [Type, Color, Use For],
+  row = [info, Blue, General notes and tips],
+  row = [warning, Yellow, Important warnings],
+  row = [error, Red, Critical errors or dangers],
+  row = [success, Green, Positive confirmations]
+}
+
+If no code { type } is specified\, it defaults to code { info }.
+
+h2 { Badges }
+
+Badges are small inline labels. Use the code { badge } function:
+
+codeblock { language = tiramisu, """badge { New }
+badge { variant = secondary, Beta }
+badge { variant = destructive, Deprecated }
+badge { variant = outline, v2.0 }""" }
+
+demo {
+  badge { New } badge { variant = secondary, Beta } badge { variant = destructive, Deprecated } badge { variant = outline, v2.0 }
+}
+
+h2 { Badge Variants }
+
+table {
+  row = [Variant, Style],
+  row = [default, Primary color background],
+  row = [secondary, Muted background],
+  row = [destructive, Red/danger background],
+  row = [outline, Border only]
+}
+
+h2 { Steps }
+
+Use code { steps } to show ordered procedural steps with numbered indicators and a connecting line:
+
+codeblock { language = tiramisu, "steps { Install dependencies, Configure your project, Start the dev server }" }
+
+demo {
+  steps { Install dependencies, Configure your project, Start the dev server }
+}
+
+h2 { Combining Elements }
+
+Rich content elements work alongside all other Tiramisu functions. You can put them between headings\, paragraphs\, code blocks\, and lists in any order:
+
+codeblock { language = tiramisu, """h2 { Setup }
+
+callout { type = info, Make sure you have Node.js 18+ installed. }
+
+steps { Run the installer, Open the config file, Add your API key }
+
+codeblock { language = bash, "npm start" }
+
+callout { type = success, You're all set! }""" }

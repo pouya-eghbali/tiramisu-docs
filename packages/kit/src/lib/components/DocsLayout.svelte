@@ -48,7 +48,7 @@
     />
   {:else}
     <!-- Legacy mobile navbar -->
-    <Navbar {config} {sidebar} onSearchClick={() => (searchOpen = true)} />
+    <Navbar {config} {sidebar} onSearchClick={() => (searchOpen = true)} {locale} />
   {/if}
 
   {#if showFallbackBanner}
@@ -62,7 +62,7 @@
     <aside class="relative hidden w-[15rem] shrink-0 border-r lg:block">
       <div class="absolute inset-0 bg-card" style="left: -100vw; width: calc(100% + 100vw);"></div>
       <div class="relative sticky top-0 h-screen" style:top={hasSections ? "6rem" : "0"} style:height={hasSections ? "calc(100vh - 6rem)" : "100vh"}>
-        <Sidebar {config} groups={sidebar} onSearchClick={() => (searchOpen = true)} {hasSections} />
+        <Sidebar {config} groups={sidebar} onSearchClick={() => (searchOpen = true)} {hasSections} {locale} />
       </div>
     </aside>
 
@@ -84,7 +84,7 @@
   </div>
 </div>
 
-<SearchDialog bind:open={searchOpen} />
+<SearchDialog bind:open={searchOpen} {locale} />
 
 <!-- Mobile sidebar sheet (used when TopBar is active) -->
 {#if hasSections}
@@ -98,7 +98,7 @@
               {#each group.items as entry}
                 {#if entry.type === "item"}
                   <a
-                    href={entry.slug === "index" ? "/docs" : `/docs/${entry.slug}`}
+                    href={entry.slug === "index" ? (locale ? `/docs/${locale}` : "/docs") : (locale ? `/docs/${locale}/${entry.slug}` : `/docs/${entry.slug}`)}
                     onclick={() => (mobileOpen = false)}
                     class="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground"
                   >

@@ -14,6 +14,15 @@ import { extractMeta } from "./meta.js"
 import type { CompileResult, Heading } from "./types.js"
 import { builtins, type EmitContext } from "./builtins.js"
 
+/** Escape HTML special characters in plain text */
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+}
+
 /**
  * Compile a tiramisu source string into a Svelte component.
  * Returns the compiled svelte markup, extracted meta, and headings for TOC.
@@ -24,10 +33,12 @@ export function compileTiramisu(source: string): CompileResult {
 
   const headings: Heading[] = []
   const customImports = new Set<string>()
+  const scriptVars: string[] = []
 
   const ctx: EmitContext = {
     headings,
     customImports,
+    scriptVars,
     emitNode,
   }
 
@@ -45,7 +56,9 @@ export function compileTiramisu(source: string): CompileResult {
     }
 
     if (node instanceof PureText) {
-      return node.shards.join("")
+      return node.shards
+        .map((s) => (typeof s === "string" ? escapeHtml(s) : emitNode(s)))
+        .join("")
     }
 
     if (node instanceof ArrayItem) {
@@ -72,10 +85,11 @@ export function compileTiramisu(source: string): CompileResult {
 
     // Fallback: use toString
     if (typeof node === "string") {
-      return node
+      return escapeHtml(node)
     }
 
-    return node.toString()
+    const str = node?.toString() ?? ""
+    return escapeHtml(str)
   }
 
   function emitFunctionCall(fc: FunctionCall, ctx: EmitContext): string {
@@ -145,9 +159,16 @@ export function compileTiramisu(source: string): CompileResult {
   // Build final svelte output
   let svelte = ""
 
-  if (customImports.size > 0) {
-    const imports = Array.from(customImports).sort().join("\n  ")
-    svelte += `<script>\n  ${imports}\n</script>\n\n`
+  if (customImports.size > 0 || scriptVars.length > 0) {
+    const lines: string[] = []
+    if (customImports.size > 0) {
+      lines.push(...Array.from(customImports).sort())
+    }
+    if (scriptVars.length > 0) {
+      if (lines.length > 0) lines.push("")
+      lines.push(...scriptVars)
+    }
+    svelte += `<script>\n  ${lines.join("\n  ")}\n</script>\n\n`
   }
 
   svelte += markup
@@ -155,8 +176,11 @@ export function compileTiramisu(source: string): CompileResult {
   return { meta, svelte, headings }
 }
 
-/** Check if HTML content starts with a block-level element */
+/** Check if HTML content starts with a block-level element or Svelte component */
 function isBlockElement(html: string): boolean {
+  // Svelte components start with <Uppercase
+  if (/^<[A-Z]/.test(html)) return true
+
   const blockTags = [
     "<h1", "<h2", "<h3", "<h4", "<h5", "<h6",
     "<div", "<pre", "<ul", "<ol", "<table",

@@ -12,6 +12,7 @@ import type { Heading } from "./types.js"
 export interface EmitContext {
   headings: Heading[]
   customImports: Set<string>
+  scriptVars: string[]
   emitNode: (node: Node) => string
 }
 
@@ -94,6 +95,37 @@ function getAllNamedParams(fc: FunctionCall, name: string): NamedParameter[] {
   )
 }
 
+/** Find all FunctionCall nodes nested inside a positional parameter's value */
+function findNestedCalls(param: Parameter): FunctionCall[] {
+  const results: FunctionCall[] = []
+  function walk(node: unknown) {
+    if (node == null || typeof node !== "object") return
+    if (node instanceof FunctionCall) {
+      results.push(node)
+      return
+    }
+    if ("shards" in node && Array.isArray((node as any).shards)) {
+      for (const s of (node as any).shards) walk(s)
+    }
+  }
+  if (Array.isArray(param.value)) {
+    for (const v of param.value) walk(v)
+  }
+  return results
+}
+
+/** Collect all nested FunctionCalls from all positional params of a parent */
+function getChildCalls(fc: FunctionCall): FunctionCall[] {
+  const params = fc.parameters?.parameters ?? []
+  const results: FunctionCall[] = []
+  for (const p of params) {
+    if (p instanceof Parameter) {
+      results.push(...findNestedCalls(p))
+    }
+  }
+  return results
+}
+
 function makeHeadingHandler(level: number): BuiltinHandler {
   return (fc, ctx) => {
     const text = getPositionalText(fc, ctx)
@@ -135,14 +167,21 @@ const builtins: Record<string, BuiltinHandler> = {
   image(fc, ctx) {
     const src = getNamedParam(fc, "src", ctx) ?? ""
     const alt = getNamedParam(fc, "alt", ctx) ?? ""
-    return `<img src="${src}" alt="${alt}" />`
+    ctx.customImports.add(
+      `import ZoomImage from "@tiramisu-docs/kit/components/tiramisu/ZoomImage.svelte"`
+    )
+    return `<ZoomImage src="${src}" alt="${alt}" />`
   },
 
   codeblock(fc, ctx) {
     const language = getNamedParam(fc, "language", ctx) ?? ""
     const code = getPositionalText(fc, ctx)
-    const langClass = language ? ` class="language-${language}"` : ""
-    return `<pre><code${langClass}>${escapeHtml(code)}</code></pre>`
+    ctx.customImports.add(
+      `import CodeBlock from "@tiramisu-docs/kit/components/tiramisu/CodeBlock.svelte"`
+    )
+    const varName = `__code_${ctx.scriptVars.length}`
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(escapeHtml(code))}`)
+    return `<CodeBlock language="${language}" code={${varName}} />`
   },
 
   list(fc, ctx) {
@@ -190,23 +229,145 @@ const builtins: Record<string, BuiltinHandler> = {
   callout(fc, ctx) {
     const type = getNamedParam(fc, "type", ctx) ?? "info"
     const text = getPositionalText(fc, ctx)
-    return `<div class="callout callout-${type}">${text}</div>`
+    ctx.customImports.add(
+      `import Callout from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"`
+    )
+    return `<Callout type="${type}">${text}</Callout>`
   },
 
   tabs(fc, ctx) {
-    return `<div class="tabs">${getPositionalText(fc, ctx)}</div>`
+    ctx.customImports.add(
+      `import Tabs from "@tiramisu-docs/kit/components/tiramisu/Tabs.svelte"`
+    )
+    return `<Tabs>${getPositionalText(fc, ctx)}</Tabs>`
   },
 
   steps(fc, ctx) {
     const items = getPositionalParams(fc, ctx)
+    ctx.customImports.add(
+      `import Steps from "@tiramisu-docs/kit/components/tiramisu/Steps.svelte"`
+    )
     const lis = items.map((item) => `<li class="step">${item}</li>`).join("")
-    return `<ol class="steps">${lis}</ol>`
+    return `<Steps><ol>${lis}</ol></Steps>`
+  },
+
+  demo(fc, ctx) {
+    const title = getNamedParam(fc, "title", ctx) ?? "Preview"
+    const text = getPositionalText(fc, ctx)
+    ctx.customImports.add(
+      `import Demo from "@tiramisu-docs/kit/components/tiramisu/Demo.svelte"`
+    )
+    return `<Demo title="${title}">${text}</Demo>`
   },
 
   badge(fc, ctx) {
     const variant = getNamedParam(fc, "variant", ctx) ?? "default"
     const text = getPositionalText(fc, ctx)
-    return `<span class="badge badge-${variant}">${text}</span>`
+    ctx.customImports.add(
+      `import Badge from "@tiramisu-docs/kit/components/ui/badge/badge.svelte"`
+    )
+    return `<Badge variant="${variant}">${text}</Badge>`
+  },
+
+  quote(fc, ctx) {
+    const text = getPositionalText(fc, ctx)
+    const author = getNamedParam(fc, "author", ctx)
+    const cite = author ? `<footer><cite>— ${author}</cite></footer>` : ""
+    return `<blockquote>${text}${cite}</blockquote>`
+  },
+
+  tasklist(fc, ctx) {
+    const items = getPositionalParams(fc, ctx)
+    const lis = items
+      .map((item) => {
+        const checked = item.startsWith("[x] ")
+        const unchecked = item.startsWith("[ ] ")
+        const label = checked || unchecked ? item.slice(4) : item
+        const checkbox = checked
+          ? `<span class="task-checkbox checked"></span>`
+          : `<span class="task-checkbox"></span>`
+        return `<li>${checkbox}${label}</li>`
+      })
+      .join("")
+    return `<ul class="task-list">${lis}</ul>`
+  },
+
+  columns(fc, ctx) {
+    const cols = getChildCalls(fc)
+    const children = cols.map((c) => ctx.emitNode(c)).join("")
+    return `<div class="columns">${children}</div>`
+  },
+
+  col(fc, ctx) {
+    const text = getPositionalText(fc, ctx)
+    return `<div class="column">${text}</div>`
+  },
+
+  accordion(fc, ctx) {
+    const title = getNamedParam(fc, "title", ctx) ?? "Details"
+    const text = getPositionalText(fc, ctx)
+    ctx.customImports.add(
+      `import Accordion from "@tiramisu-docs/kit/components/tiramisu/Accordion.svelte"`
+    )
+    return `<Accordion title="${title}">${text}</Accordion>`
+  },
+
+  cards(fc, ctx) {
+    ctx.customImports.add(
+      `import NavCard from "@tiramisu-docs/kit/components/tiramisu/NavCard.svelte"`
+    )
+    const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
+    return `<div class="cards-grid">${children}</div>`
+  },
+
+  card(fc, ctx) {
+    const title = getNamedParam(fc, "title", ctx) ?? ""
+    const description = getNamedParam(fc, "description", ctx) ?? ""
+    const href = getNamedParam(fc, "href", ctx) ?? "#"
+    ctx.customImports.add(
+      `import NavCard from "@tiramisu-docs/kit/components/tiramisu/NavCard.svelte"`
+    )
+    return `<NavCard title="${title}" description="${description}" href="${href}" />`
+  },
+
+  filetree(fc, ctx) {
+    ctx.customImports.add(
+      `import FileTree from "@tiramisu-docs/kit/components/tiramisu/FileTree.svelte"`
+    )
+    const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
+    return `<FileTree>${children}</FileTree>`
+  },
+
+  folder(fc, ctx) {
+    const params = getPositionalParams(fc, ctx)
+    const name = params[0] ?? "folder"
+    const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
+    return `<div class="tree-folder" data-name="${name}">${children}</div>`
+  },
+
+  file(fc, ctx) {
+    const text = getPositionalText(fc, ctx)
+    return `<div class="tree-file">${text}</div>`
+  },
+
+  math(fc, ctx) {
+    const text = getPositionalText(fc, ctx)
+    ctx.customImports.add(
+      `import MathBlock from "@tiramisu-docs/kit/components/tiramisu/MathBlock.svelte"`
+    )
+    const varName = `__math_${ctx.scriptVars.length}`
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(text)}`)
+    return `<MathBlock formula={${varName}} />`
+  },
+
+  mermaid(fc, ctx) {
+    const text = getPositionalText(fc, ctx)
+    ctx.customImports.add(
+      `import Mermaid from "@tiramisu-docs/kit/components/tiramisu/Mermaid.svelte"`
+    )
+    const varName = `__mermaid_${ctx.scriptVars.length}`
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(text)}`)
+    return `<Mermaid chart={${varName}} />`
   },
 }
 
