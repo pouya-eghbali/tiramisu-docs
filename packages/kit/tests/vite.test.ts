@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test"
-import { tiramisuPlugin, buildSidebarTree, buildSectionSidebars } from "../src/vite"
+import { tiramisuPlugin, buildSidebarTree, buildSectionSidebars, buildLocaleData } from "../src/vite"
 import type { SidebarItem, SidebarSubgroup } from "../src/vite"
 
 describe("tiramisuPlugin", () => {
@@ -185,5 +185,23 @@ describe("buildSectionSidebars", () => {
     expect(result).toHaveLength(1)
     expect(result[0].href).toBe("https://blog.example.com")
     expect(result[0].sidebar).toBeUndefined()
+  })
+})
+
+describe("buildLocaleData", () => {
+  it("groups docs by locale prefix", () => {
+    const allDocs = [
+      { slug: "en/intro", meta: { title: "Intro" } },
+      { slug: "en/guide", meta: { title: "Guide" } },
+      { slug: "fr/intro", meta: { title: "Introduction" } },
+    ]
+    const locales = [
+      { code: "en", label: "English" },
+      { code: "fr", label: "Français" },
+    ]
+    const result = buildLocaleData(allDocs, locales)
+    expect(result.en.docs).toHaveLength(2)
+    expect(result.en.docs[0].slug).toBe("intro")
+    expect(result.fr.docs).toHaveLength(1)
   })
 })

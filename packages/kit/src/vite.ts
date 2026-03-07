@@ -12,6 +12,7 @@ export interface TiramisuPluginOptions {
   groupOrder?: string[]
   sections?: SectionConfig[]
   title?: string
+  i18n?: { defaultLocale: string; locales: { code: string; label: string; flag?: string }[] }
 }
 
 export interface SidebarItem {
@@ -254,6 +255,21 @@ function resolveSection(
   }
 }
 
+export function buildLocaleData(
+  allDocs: { slug: string; meta: DocMeta }[],
+  locales: { code: string }[]
+): Record<string, { docs: { slug: string; meta: DocMeta }[] }> {
+  const result: Record<string, { docs: { slug: string; meta: DocMeta }[] }> = {}
+  for (const locale of locales) {
+    const prefix = locale.code + "/"
+    const docs = allDocs
+      .filter((d) => d.slug.startsWith(prefix))
+      .map((d) => ({ slug: d.slug.slice(prefix.length), meta: d.meta }))
+    result[locale.code] = { docs }
+  }
+  return result
+}
+
 export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
   const docsDir = options.docsDir ?? "src/docs"
   const groupOrder = options.groupOrder ?? []
@@ -327,6 +343,61 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
         return `  "${doc.slug}": () => import("${absPath}")`
       })
       .join(",\n")
+
+    if (options.i18n) {
+      const localeData = buildLocaleData(docs, options.i18n.locales)
+
+      const localeBlocks = options.i18n.locales.map((locale) => {
+        const localeDocs = localeData[locale.code].docs
+        const localeSections = options.sections
+          ? buildSectionSidebars(localeDocs, options.sections, options.title)
+          : undefined
+        const localeSidebar = buildSidebarTree(localeDocs, groupOrder)
+
+        // Build locale-specific search index
+        const localeSearchIndex = localeDocs.map((doc) => {
+          const fullSlug = `${locale.code}/${doc.slug}`
+          const file = path.resolve(absDocsDir, fullSlug + ".tiramisu")
+          const source = fs.readFileSync(file, "utf-8")
+          const { svelte } = compileTiramisu(source)
+          const text = extractPlainText(svelte)
+          return {
+            id: doc.slug,
+            title: doc.meta.title ?? doc.slug,
+            group: resolveSearchGroup(doc.slug, doc.meta),
+            slug: doc.slug,
+            headings: docs.find(d => d.slug === fullSlug)?.headings?.map(h => h.text).join(" ") ?? "",
+            text,
+          }
+        })
+
+        const localeImports = localeDocs
+          .map((doc) => {
+            const fullSlug = `${locale.code}/${doc.slug}`
+            const absPath = path.resolve(absDocsDir, fullSlug + ".tiramisu").replace(/\\/g, "/")
+            return `    "${doc.slug}": () => import("${absPath}")`
+          })
+          .join(",\n")
+
+        return `  "${locale.code}": {
+    sections: ${JSON.stringify(localeSections, null, 2)},
+    sidebar: ${JSON.stringify(localeSidebar, null, 2)},
+    docs: ${JSON.stringify(localeDocs, null, 2)},
+    searchIndex: ${JSON.stringify(localeSearchIndex)},
+    docImports: {\n${localeImports}\n    },
+  }`
+      }).join(",\n")
+
+      return [
+        `export const locales = {\n${localeBlocks}\n};`,
+        `export const defaultLocale = "${options.i18n.defaultLocale}";`,
+        `export const sidebar = locales["${options.i18n.defaultLocale}"].sidebar;`,
+        `export const sections = locales["${options.i18n.defaultLocale}"].sections;`,
+        `export const docs = locales["${options.i18n.defaultLocale}"].docs;`,
+        `export const searchIndex = locales["${options.i18n.defaultLocale}"].searchIndex;`,
+        `export const docImports = locales["${options.i18n.defaultLocale}"].docImports;`,
+      ].join("\n\n")
+    }
 
     if (options.sections) {
       const resolvedSections = buildSectionSidebars(docs, options.sections, options.title)
