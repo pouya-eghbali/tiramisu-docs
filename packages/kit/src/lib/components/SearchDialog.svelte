@@ -15,17 +15,19 @@
       : searchIndex
   )
 
-  const miniSearch = new MiniSearch({
-    fields: ["title", "headings", "text"],
-    storeFields: ["title", "group", "slug"],
-    searchOptions: {
-      boost: { title: 3, headings: 2 },
-      fuzzy: 0.2,
-      prefix: true,
-    },
+  const miniSearch = $derived.by(() => {
+    const ms = new MiniSearch({
+      fields: ["title", "headings", "text"],
+      storeFields: ["title", "group", "slug"],
+      searchOptions: {
+        boost: { title: 3, headings: 2 },
+        fuzzy: 0.2,
+        prefix: true,
+      },
+    })
+    ms.addAll(activeIndex)
+    return ms
   })
-
-  miniSearch.addAll(activeIndex)
 
   const results = $derived(
     query.length > 0

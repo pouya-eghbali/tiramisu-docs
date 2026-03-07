@@ -402,6 +402,8 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     if (options.sections) {
       const resolvedSections = buildSectionSidebars(docs, options.sections, options.title)
       return [
+        `export const locales = undefined;`,
+        `export const defaultLocale = undefined;`,
         `export const sections = ${JSON.stringify(resolvedSections, null, 2)};`,
         `export const sidebar = [];`,
         `export const docs = ${JSON.stringify(docs, null, 2)};`,
@@ -411,6 +413,8 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     } else {
       const sidebar = buildSidebarTree(docs, groupOrder)
       return [
+        `export const locales = undefined;`,
+        `export const defaultLocale = undefined;`,
         `export const sections = undefined;`,
         `export const sidebar = ${JSON.stringify(sidebar, null, 2)};`,
         `export const docs = ${JSON.stringify(docs, null, 2)};`,
