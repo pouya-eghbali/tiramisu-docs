@@ -10,6 +10,24 @@ export interface SectionConfig {
   children?: SectionConfig[]
 }
 
+export interface LocaleConfig {
+  code: string
+  label: string
+  flag?: string
+}
+
+export interface I18nConfig {
+  defaultLocale: string
+  locales: LocaleConfig[]
+  fallback?: "default-language" | "404"
+}
+
+export interface ResolvedI18nConfig {
+  defaultLocale: string
+  locales: LocaleConfig[]
+  fallback: "default-language" | "404"
+}
+
 export interface TiramisuDocsConfig {
   title?: string
   description?: string
@@ -19,6 +37,7 @@ export interface TiramisuDocsConfig {
     groupOrder?: string[]
   }
   sections?: SectionConfig[]
+  i18n?: I18nConfig
   theme?: {
     primary?: string
     radius?: string
@@ -31,6 +50,7 @@ export interface ResolvedConfig {
   logo: LogoConfig
   nav: { label: string; href: string }[]
   sections?: SectionConfig[]
+  i18n?: ResolvedI18nConfig
   sidebar: { groupOrder: string[] }
   theme: { primary: string; radius: string }
 }
@@ -52,6 +72,11 @@ export function resolveConfig(config: TiramisuDocsConfig): ResolvedConfig {
     logo: resolveLogo(config.logo),
     nav: config.nav ?? [],
     sections: config.sections,
+    i18n: config.i18n ? {
+      defaultLocale: config.i18n.defaultLocale,
+      locales: config.i18n.locales,
+      fallback: config.i18n.fallback ?? "default-language",
+    } : undefined,
     sidebar: {
       groupOrder: config.sidebar?.groupOrder ?? [],
     },

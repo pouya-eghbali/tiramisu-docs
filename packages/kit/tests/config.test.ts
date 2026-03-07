@@ -36,4 +36,25 @@ describe("resolveConfig", () => {
     const config = resolveConfig({})
     expect(config.sections).toBeUndefined()
   })
+
+  it("resolves i18n config", () => {
+    const config = resolveConfig({
+      i18n: {
+        defaultLocale: "en",
+        locales: [
+          { code: "en", label: "English", flag: "🇺🇸" },
+          { code: "fr", label: "Français", flag: "🇫🇷" },
+        ],
+      },
+    })
+    expect(config.i18n).toBeDefined()
+    expect(config.i18n!.defaultLocale).toBe("en")
+    expect(config.i18n!.locales).toHaveLength(2)
+    expect(config.i18n!.fallback).toBe("default-language")
+  })
+
+  it("resolves undefined i18n as undefined", () => {
+    const config = resolveConfig({})
+    expect(config.i18n).toBeUndefined()
+  })
 })
