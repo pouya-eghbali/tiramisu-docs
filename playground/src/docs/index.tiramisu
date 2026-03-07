@@ -7,7 +7,7 @@ Tiramisu Docs is a documentation generator that turns code { .tiramisu } files i
 h2 { Why Tiramisu? }
 
 list {
-  bold { Functional syntax } — every element is a function call\, making the markup predictable and extensible,
+  bold { Functional syntax } "— every element is a function call, making the markup predictable and extensible",
   bold { SvelteKit powered } — file-based routing and server-side rendering out of the box,
   bold { Custom components } — drop a Svelte component in your project and use it directly in your docs,
   bold { Zero config } — sensible defaults with a simple config file when you need it,

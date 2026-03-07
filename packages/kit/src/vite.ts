@@ -6,6 +6,32 @@ import type { Plugin, ResolvedConfig, HmrContext } from "vite"
 import { highlightCodeBlocks } from "./highlight.js"
 import type { SectionConfig } from "./config.js"
 
+/** Wrap compileTiramisu to produce Vite-friendly errors with file location */
+function compileWithLocation(source: string, filePath: string) {
+  try {
+    return compileTiramisu(source)
+  } catch (err: any) {
+    if (err.line != null) {
+      const lines = source.split("\n")
+      const errorLine = lines[err.line - 1] ?? ""
+      const pointer = " ".repeat(Math.max(0, (err.column ?? 1) - 1)) + "^".repeat(err.length ?? 1)
+      const frame = [
+        `${err.line} | ${errorLine}`,
+        `${" ".repeat(String(err.line).length)} | ${pointer}`,
+      ].join("\n")
+
+      const enhanced = new Error(
+        `${err.hint ?? err.message}\n\n${filePath}:${err.line}:${err.column ?? 0}\n\n${frame}\n`
+      )
+      ;(enhanced as any).id = filePath
+      ;(enhanced as any).loc = { line: err.line, column: err.column ?? 0 }
+      ;(enhanced as any).frame = frame
+      throw enhanced
+    }
+    throw err
+  }
+}
+
 export interface TiramisuPluginOptions {
   docsDir?: string
   componentsDir?: string
@@ -303,7 +329,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
 
     for (const file of files) {
       const source = fs.readFileSync(file, "utf-8")
-      const { meta, headings } = compileTiramisu(source)
+      const { meta, headings } = compileWithLocation(source, file)
       const relativePath = path.relative(absDocsDir, file)
       const slug = relativePath.replace(/\.tiramisu$/, "").replace(/\\/g, "/")
       docs.push({ slug, meta, headings })
@@ -322,7 +348,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     const searchIndex = docs.map((doc) => {
       const file = path.resolve(absDocsDir, doc.slug + ".tiramisu")
       const source = fs.readFileSync(file, "utf-8")
-      const { svelte } = compileTiramisu(source)
+      const { svelte } = compileWithLocation(source, file)
       const text = extractPlainText(svelte)
       return {
         id: doc.slug,
@@ -359,7 +385,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
           const fullSlug = `${locale.code}/${doc.slug}`
           const file = path.resolve(absDocsDir, fullSlug + ".tiramisu")
           const source = fs.readFileSync(file, "utf-8")
-          const { svelte } = compileTiramisu(source)
+          const { svelte } = compileWithLocation(source, file)
           const text = extractPlainText(svelte)
           return {
             id: doc.slug,
@@ -459,7 +485,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
         if (!fs.existsSync(tiramisuPath)) return undefined
 
         const source = fs.readFileSync(tiramisuPath, "utf-8")
-        const { svelte } = compileTiramisu(source)
+        const { svelte } = compileWithLocation(source, tiramisuPath)
         return await highlightCodeBlocks(svelte)
       }
 
