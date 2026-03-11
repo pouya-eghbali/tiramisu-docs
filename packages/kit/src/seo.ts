@@ -109,7 +109,8 @@ export function buildInstantOgUrl(pageUrl: string, options: { siteId: string; te
 }
 
 export function buildCanonicalUrl(baseUrl: string, slug: string): string {
-  return `${baseUrl.replace(/\/+$/, "")}/docs/${slug}`
+  const cleanSlug = slug.replace(/\/index$/, "")
+  return `${baseUrl.replace(/\/+$/, "")}/docs/${cleanSlug}`
 }
 
 export function buildPageJsonLd(options: {
