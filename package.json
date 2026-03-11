@@ -7,7 +7,10 @@
     "playground"
   ],
   "scripts": {
-    "build": "bun run --filter '@tiramisu-docs/core' build && bun run --filter '@tiramisu-docs/kit' build && bun run --filter 'playground' build",
+    "build:core": "cd packages/core && bun run build",
+    "build:kit": "cd packages/kit && bun run build",
+    "build:playground": "cd playground && bun run build",
+    "build": "bun run build:core && bun run build:kit && bun run build:playground",
     "test": "bun run --filter '*' test"
   },
   "dependencies": {
