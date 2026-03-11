@@ -2,7 +2,8 @@ import { defineConfig } from "@tiramisu-docs/kit";
 
 export default defineConfig({
   title: "Tiramisu Docs",
-  description: "Documentation for the Tiramisu markup language and Tiramisu Docs framework",
+  description:
+    "Documentation for the Tiramisu markup language and Tiramisu Docs framework",
   logo: { light: "/logo.svg", dark: "/logo-dark.svg" },
   url: "https://tiramisudocs.com",
   nav: [{ label: "Docs", href: "/docs" }],
@@ -12,7 +13,17 @@ export default defineConfig({
     dir: "src/docs",
   },
   sidebar: {
-    groupOrder: ["Getting Started", "Writing", "Content", "Configuration", "Customization", "Integrations", "Basics", "Internals", "Tooling"],
+    groupOrder: [
+      "Getting Started",
+      "Writing",
+      "Content",
+      "Configuration",
+      "Customization",
+      "Integrations",
+      "Basics",
+      "Internals",
+      "Tooling",
+    ],
   },
   sections: [
     { label: "Framework", path: "framework", icon: "book-open" },
@@ -29,6 +40,8 @@ export default defineConfig({
   },
   instantOg: {
     siteId: "site_b6bc4c3f",
+    template: "generic/standard",
+    theme: "dark",
   },
   footer: {
     socials: {
