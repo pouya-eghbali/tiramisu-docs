@@ -1,11 +1,11 @@
 import { createHighlighter, type Highlighter } from "shiki"
 import { tiramisuGrammar } from "./tiramisu-grammar.js"
 
-let highlighter: Highlighter | null = null
+let highlighterPromise: Promise<Highlighter> | null = null
 
-async function getHighlighter(): Promise<Highlighter> {
-  if (!highlighter) {
-    highlighter = await createHighlighter({
+function getHighlighter(): Promise<Highlighter> {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighter({
       themes: ["github-light", "github-dark"],
       langs: [
         "typescript",
@@ -24,7 +24,7 @@ async function getHighlighter(): Promise<Highlighter> {
       ],
     })
   }
-  return highlighter
+  return highlighterPromise
 }
 
 /**
