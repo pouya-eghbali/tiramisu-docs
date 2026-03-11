@@ -7,6 +7,7 @@ export interface SectionConfig {
   label: string
   path?: string
   href?: string
+  icon?: string
   children?: SectionConfig[]
 }
 
@@ -28,9 +29,39 @@ export interface ResolvedI18nConfig {
   fallback: "default-language" | "404"
 }
 
+export interface GitHubConfig {
+  repo: string
+  branch?: string
+  dir?: string
+}
+
+export interface FooterSocials {
+  github?: string
+  x?: string
+  discord?: string
+  bluesky?: string
+  mastodon?: string
+  youtube?: string
+  linkedin?: string
+}
+
+export interface FooterConfig {
+  socials?: FooterSocials
+  copyright?: string
+}
+
+export interface InstantOgConfig {
+  siteId: string
+  template?: string
+  theme?: "light" | "dark"
+  accentColor?: string
+  gradientBg?: boolean
+}
+
 export interface TiramisuDocsConfig {
   title?: string
   description?: string
+  url?: string
   logo?: string | LogoConfig
   nav?: { label: string; href: string }[]
   sidebar?: {
@@ -38,6 +69,10 @@ export interface TiramisuDocsConfig {
   }
   sections?: SectionConfig[]
   i18n?: I18nConfig
+  github?: GitHubConfig
+  mcp?: boolean | string
+  footer?: FooterConfig
+  instantOg?: InstantOgConfig
   theme?: {
     primary?: string
     radius?: string
@@ -47,10 +82,15 @@ export interface TiramisuDocsConfig {
 export interface ResolvedConfig {
   title: string
   description: string
+  url?: string
   logo: LogoConfig
   nav: { label: string; href: string }[]
   sections?: SectionConfig[]
   i18n?: ResolvedI18nConfig
+  github?: GitHubConfig
+  mcp?: boolean | string
+  footer?: FooterConfig
+  instantOg?: InstantOgConfig
   sidebar: { groupOrder: string[] }
   theme: { primary: string; radius: string }
 }
@@ -69,9 +109,14 @@ export function resolveConfig(config: TiramisuDocsConfig): ResolvedConfig {
   return {
     title: config.title ?? "Documentation",
     description: config.description ?? "",
+    url: config.url?.replace(/\/+$/, ""),
     logo: resolveLogo(config.logo),
     nav: config.nav ?? [],
     sections: config.sections,
+    github: config.github,
+    mcp: config.mcp,
+    footer: config.footer,
+    instantOg: config.instantOg,
     i18n: config.i18n ? {
       defaultLocale: config.i18n.defaultLocale,
       locales: config.i18n.locales,

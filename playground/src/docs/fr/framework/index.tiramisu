@@ -1,0 +1,99 @@
+meta {
+  title = Framework,
+  description = Un framework de documentation propulsé par SvelteKit et le langage de balisage Tiramisu.,
+  order = 0,
+  icon = layers
+}
+
+Tiramisu Docs est un framework de documentation construit sur link { url = https://svelte.dev, SvelteKit } et le link { url = /docs/language, langage de balisage Tiramisu }. Rédigez vos documents dans des fichiers code { .tiramisu } — le framework gère le routage, la navigation, la recherche et tout le reste.
+
+callout {
+  type = warning,
+  bold { Bêta } — Tiramisu Docs est en cours de développement actif. Les API et les fonctionnalités peuvent changer. Si vous rencontrez des problèmes ou souhaitez contribuer\, visitez le link { url = https://github.com/pouya-eghbali/tiramisu-docs, dépôt GitHub }.
+}
+
+h2 { Aperçu rapide }
+
+Créez un fichier, obtenez une page :
+
+codeblock {
+  language = tiramisu,
+  """
+meta { title = Getting Started, order = 1, icon = rocket }
+
+Welcome to my docs! Here's how to install:
+
+codeblock { language = bash, "npm install my-library" }
+
+And here's a basic example:
+
+codeblock { language = typescript, "import { create } from 'my-library'
+const instance = create({ debug: true })" }
+"""
+}
+
+C'est tout. Pas de fichiers de configuration, pas de configuration de routage, pas de scripts de build. Déposez un fichier code { .tiramisu } dans code { src/docs/ } et il devient une page.
+
+h2 { Fonctionnalités }
+
+cards {
+  card {
+    title = Routage basé sur les fichiers,
+    description = Les pages sont créées à partir de votre structure de fichiers. Les dossiers deviennent automatiquement des groupes dans la barre latérale.,
+    icon = folder-tree
+  },
+  card {
+    title = Recherche intégrée,
+    description = Recherche plein texte dans toute votre documentation sans aucune configuration.,
+    icon = search
+  },
+  card {
+    title = Coloration syntaxique,
+    description = Propulsée par Shiki avec la prise en charge de dizaines de langages et de thèmes doubles.,
+    icon = paintbrush
+  },
+  card {
+    title = Mode sombre,
+    description = Basculement automatique entre les thèmes clair et sombre dès l'installation.,
+    icon = moon
+  },
+  card {
+    title = Sections et i18n,
+    description = Divisez la documentation en sections indépendantes. Ajoutez des traductions avec un dossier par langue.,
+    icon = globe
+  },
+  card {
+    title = Prêt pour l'IA,
+    description = Serveur MCP intégré et génération de llms.txt pour les assistants IA.,
+    icon = bot
+  }
+}
+
+h2 { Commencer }
+
+cards {
+  card {
+    title = Installation,
+    description = Créez un nouveau projet en une seule commande.,
+    href = /docs/framework/getting-started/installation,
+    icon = download
+  },
+  card {
+    title = Démarrage rapide,
+    description = Rédigez votre première page de documentation.,
+    href = /docs/framework/getting-started/quick-start,
+    icon = zap
+  },
+  card {
+    title = Configuration,
+    description = Personnalisez les sections\, la barre latérale\, le thème\, et plus encore.,
+    href = /docs/framework/configuration,
+    icon = settings
+  },
+  card {
+    title = Rédiger de la documentation,
+    description = Apprenez la syntaxe de balisage Tiramisu.,
+    href = /docs/framework/writing,
+    icon = text
+  }
+}

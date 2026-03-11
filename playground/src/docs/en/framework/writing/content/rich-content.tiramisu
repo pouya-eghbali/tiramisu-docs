@@ -1,0 +1,148 @@
+meta { title = Rich Content, order = 6, icon = sparkles }
+
+Built-in components for interactive and highlighted content.
+
+h2 { Callouts }
+
+Highlight important information with callouts:
+
+codeblock {
+  language = tiramisu,
+  "callout { type = info, This is an informational callout. }"
+}
+
+Four types are available:
+
+demo {
+  callout { type = info, bold { Info } — general information and tips. }
+  callout { type = warning, bold { Warning } — something to be careful about. }
+  callout {
+    type = error,
+    bold { Error } — critical issues or breaking changes.
+  }
+  callout {
+    type = success,
+    bold { Success } — confirmations and positive outcomes.
+  }
+}
+
+h2 { Steps }
+
+Numbered instructions:
+
+codeblock {
+  language = tiramisu,
+  """
+steps {
+  Install the package:
+  codeblock { language = bash, npm i -S the-package },
+
+  Configure your project:
+  codeblock { language = bash, npx the-package --configure },
+  
+  Start the dev server:
+  codeblock { language = bash, npm run dev}
+}
+"""
+}
+
+demo {
+  steps {
+    Install the package:
+    codeblock { language = bash, npm i -S the-package },
+    Configure your project:
+    codeblock { language = bash, npx the-package --configure },
+    Start the dev server:
+    codeblock { language = bash, npm run dev }
+  }
+}
+
+h2 { Tabs }
+
+Tabbed content sections with optional group-based persistence:
+
+codeblock {
+  language = tiramisu,
+  """
+tabs { group = platforms,
+  tab { label = macOS, icon = uim:apple, Instructions for macOS. },
+  tab { label = Linux, icon = uim:linux, Instructions for Linux. },
+  tab { label = Windows, icon = uim:windows, Instructions for Windows. }
+}
+"""
+}
+
+demo {
+  tabs {
+    group = platforms,
+    tab { label = macOS, icon = uim:apple, Instructions for macOS. },
+    tab { label = Linux, icon = uim:linux, Instructions for Linux. },
+    tab { label = Windows, icon = uim:windows, Instructions for Windows. }
+  }
+}
+
+When multiple code { tabs } blocks share the same code { group } value, selecting a tab in one automatically syncs the selection across all of them. The choice is persisted in localStorage.
+
+h2 { Accordion }
+
+Collapsible content:
+
+codeblock {
+  language = tiramisu,
+  "accordion { title = Click to expand, Hidden content goes here. }"
+}
+
+demo { accordion { title = Click to expand, Hidden content goes here. } }
+
+h2 { Blockquotes }
+
+codeblock {
+  language = tiramisu,
+  "quote { The best documentation is the documentation that exists., author = Unknown }"
+}
+
+demo {
+  quote {
+    The best documentation is the documentation that exists.,
+    author = Unknown
+  }
+}
+
+h2 { Badges }
+
+Inline status indicators:
+
+codeblock {
+  language = tiramisu,
+  """
+badge { Stable }
+badge { variant = secondary, Beta }
+badge { variant = destructive, Deprecated }
+badge { variant = outline, v2.0 }
+"""
+}
+
+demo {
+  badge { Stable } badge { variant = secondary, Beta } badge { variant = destructive, Deprecated } badge { variant = outline, v2.0 }
+}
+
+h2 { Task Lists }
+
+codeblock {
+  language = tiramisu,
+  """
+tasklist {
+  "[x] Write documentation",
+  "[x] Add examples",
+  "[ ] Review and publish"
+}
+"""
+}
+
+demo {
+  tasklist {
+    "[x] Write documentation",
+    "[x] Add examples",
+    "[ ] Review and publish"
+  }
+}

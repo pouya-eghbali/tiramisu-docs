@@ -1,0 +1,65 @@
+meta {
+  title = Theme,
+  order = 6,
+  icon = paintbrush
+}
+
+h2 { Theme & Appearance }
+
+Tiramisu Docs uses a customizable theme built on Tailwind CSS and shadcn-svelte. You can adjust colors, branding, and appearance through your config file.
+
+h3 { Logo }
+
+Set your logo as a string (same for light and dark) or an object with separate variants:
+
+codeblock { language = typescript, """// Single logo
+logo: "/logo.svg",
+
+// Light and dark variants
+logo: {
+  light: "/logo.svg",
+  dark: "/logo-dark.svg",
+},""" }
+
+The logo appears in the top-left of the sidebar (or top bar when sections are enabled).
+
+h3 { Navigation Links }
+
+Add links to the top navigation bar:
+
+codeblock { language = typescript, """nav: [
+  { label: "Docs", href: "/docs" },
+  { label: "Blog", href: "/blog" },
+],""" }
+
+h3 { GitHub Integration }
+
+Configure GitHub to enable "Edit on GitHub" links on doc pages:
+
+codeblock { language = typescript, """github: {
+  repo: "user/repo",
+  branch: "main",
+  dir: "src/docs",
+},""" }
+
+The code { dir } field specifies where your docs live relative to the repository root.
+
+h3 { MCP Server }
+
+Set a URL for the built-in MCP server:
+
+codeblock { language = typescript, """mcp: "https://mcp.example.com",""" }
+
+See the link { url = /docs/framework/integrations/mcp-server, MCP Server } page for details on configuring AI-assisted documentation browsing.
+
+h3 { Dark Mode }
+
+Dark mode is built in and works automatically. Users can toggle between light and dark themes using the theme switcher in the sidebar or top bar. The theme preference is saved to local storage.
+
+h3 { CSS Customization }
+
+Import the Tiramisu theme in your code { src/app.css }:
+
+codeblock { language = css, """@import "@tiramisu-docs/kit/theme.css";""" }
+
+You can override CSS custom properties or add your own Tailwind classes to customize the look and feel further.

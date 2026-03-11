@@ -1,0 +1,62 @@
+meta {
+  title = Sektionen,
+  order = 2,
+  icon = layout-grid
+}
+
+Sektionen ermöglichen es Ihnen\, Ihre Dokumentation in separate Bereiche auf oberster Ebene aufzuteilen. Jede Sektion erscheint als Tab in der Navigationsleiste und erhält eine eigene Seitenleiste.
+
+h3 { Sektionen definieren }
+
+Fügen Sie ein code { sections }-Array zu Ihrer Konfiguration hinzu. Jede Sektion benötigt ein code { label } (Anzeigename) und einen code { path } (Ordnername in Ihrem Docs-Verzeichnis):
+
+codeblock { language = typescript, """sections: [
+  { label: "Framework", path: "framework" },
+  { label: "Language", path: "language" },
+],""" }
+
+Mit dieser Konfiguration sollte Ihre Ordnerstruktur wie folgt aussehen:
+
+filetree {
+  folder { src/docs,
+    folder { framework,
+      folder { getting-started },
+      folder { writing }
+    },
+    folder { language,
+      folder { basics },
+      folder { internals }
+    }
+  }
+}
+
+Jeder Ordnername entspricht dem code { path }-Wert aus Ihrer Sektionskonfiguration.
+
+h3 { Wie Sektionen funktionieren }
+
+Jede Sektion ist einem Unterordner in Ihrem Docs-Verzeichnis zugeordnet. Wenn ein Benutzer auf einen Sektions-Tab in der Navigationsleiste klickt\, wird die Seitenleiste aktualisiert und zeigt nur die Seiten innerhalb dieser Sektion an.
+
+callout { type = info, Sektionen sind optional. Wenn Sie keine definieren\, erscheinen alle Docs in einer einzigen Seitenleiste. }
+
+h3 { Externe Links }
+
+Sie können auch Sektionen hinzufügen\, die auf externe URLs verlinken\, indem Sie code { href } anstelle von code { path } verwenden:
+
+codeblock { language = typescript, """sections: [
+  { label: "Guide", path: "guide" },
+  { label: "GitHub", href: "https://github.com/user/repo" },
+],""" }
+
+h3 { Dropdown-Sektionen }
+
+Sektionen können Unterelemente für Dropdown-Menüs haben:
+
+codeblock { language = typescript, """sections: [
+  {
+    label: "Resources",
+    children: [
+      { label: "Blog", href: "https://blog.example.com" },
+      { label: "Changelog", href: "/changelog" },
+    ],
+  },
+],""" }

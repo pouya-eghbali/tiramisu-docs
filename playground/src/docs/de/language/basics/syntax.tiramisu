@@ -1,0 +1,85 @@
+meta { title = Syntax, order = 2, icon = braces }
+
+Tiramisu hat ein grundlegendes Konstrukt: den bold { Funktionsaufruf }.
+
+h3 { Funktionsaufrufe }
+
+Ein Funktionsaufruf besteht aus einem Namen\, gefolgt von Inhalt in geschweiften Klammern:
+
+codeblock { language = tiramisu, "name { content }" }
+
+Der Name kann ein beliebiger Text vor der öffnenden Klammer sein. Der Inhalt kann einfachen Text\, andere Funktionsaufrufe oder eine Mischung aus beidem enthalten.
+
+h3 { Verschachtelung }
+
+Funktionsaufrufe können beliebig tief verschachtelt werden:
+
+codeblock {
+  language = tiramisu,
+  "bold { italic { underline { deeply nested } } }"
+}
+
+Jeder Funktionsaufruf kann einfachen Text\, andere Funktionsaufrufe oder beides enthalten:
+
+codeblock {
+  language = tiramisu,
+  "bold { This is italic { partially } formatted }"
+}
+
+h3 { Absätze }
+
+Einfacher Text außerhalb von Funktionsaufrufen wird zu Absatzinhalt. Absätze werden durch Leerzeilen getrennt:
+
+codeblock {
+  language = tiramisu,
+  """
+This is the first paragraph.
+
+This is the second paragraph.
+
+This is the third.
+"""
+}
+
+h3 { Funktionsnamen }
+
+Ein Funktionsname ist jeder Text unmittelbar vor einer öffnenden code { "{" }. Das bedeutet\, dass Funktionsnamen Leerzeichen\, Zahlen und Sonderzeichen enthalten können — üblicherweise sind Funktionsnamen jedoch einfache Bezeichner:
+
+codeblock {
+  language = tiramisu,
+  """
+bold { works }
+myWidget { works }
+"""
+}
+
+h3 { Escaping }
+
+Um zu verhindern\, dass ein Funktionsaufruf geparst wird\, stellen Sie dem Funktionsnamen einen Backslash voran:
+
+codeblock { language = tiramisu, \bold { this is literal text } }
+
+Dies wird dargestellt als: code { "bold { this is literal text }" } — der Backslash weist den Parser an\, code { bold } als einfachen Text statt als Funktionsaufruf zu behandeln.
+
+h3 { Sonderzeichen }
+
+Einige Zeichen haben innerhalb von Funktionsaufruf-Parametern eine besondere Bedeutung. Sie müssen sie nur escapen\, wenn sie innerhalb von code { "{ }" } stehen — in einfachem Absatztext werden sie wörtlich behandelt und benötigen kein Escaping.
+
+table {
+  row = [bold { Escape }, bold { Zeichen }, bold { Warum }],
+  row = [code { "\," }, Komma, Verhindert Parametertrennung],
+  row = [code { "\=" }, Gleichheitszeichen, Verhindert benanntes Parameter-Parsing],
+  row = [code { "\{" }, Öffnende Klammer, Verhindert Funktionsaufruf-Parsing],
+  row = [code { "\}" }, Schließende Klammer, Verhindert das Schließen eines Funktionsaufrufs],
+  row = [code { "\[" }, Öffnende eckige Klammer, Verhindert Array-Parsing],
+  row = [code { "\]" }, Schließende eckige Klammer, Verhindert das Schließen eines Arrays],
+  row = [code { \name }, Funktionsname, Behandelt Name als wörtlichen Text]
+}
+
+callout {
+  type = info,
+  Diese Escapes werden nur innerhalb von Funktionsparametern benötigt. In einfachem Text außerhalb von code { "{ }" } sind
+  Kommas,
+  Gleichheitszeichen,
+  und eckige Klammern ganz normale Zeichen.
+}

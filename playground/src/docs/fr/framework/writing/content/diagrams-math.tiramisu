@@ -1,0 +1,43 @@
+meta { title = Diagrammes et maths, order = 9, icon = chart-no-axes-combined }
+
+Affichez des diagrammes et des formules mathématiques côté client.
+
+h2 { Diagrammes Mermaid }
+
+Créez des organigrammes\, des diagrammes de séquence et plus encore avec code { mermaid } :
+
+codeblock { language = tiramisu, """mermaid { """"""graph TD
+    A[Start] --> B[Process]
+    B --> C[End]"""""" }""" }
+
+demo {
+  mermaid { """graph TD
+    A[Start] --> B[Process]
+    B --> C[End]""" }
+}
+
+h3 { Types de diagrammes pris en charge }
+
+table {
+  row = [Type, Syntaxe],
+  row = [Organigramme, code { graph TD } ou code { graph LR }],
+  row = [Séquence, code { sequenceDiagram }],
+  row = [Classe, code { classDiagram }],
+  row = [État, code { stateDiagram-v2 }],
+  row = [Gantt, code { gantt }],
+  row = [Camembert, code { pie }]
+}
+
+callout { type = info, Le contenu Mermaid contient souvent des caractères spéciaux. Entourez-le de triples guillemets (code { """...""" }) pour éviter les problèmes d'analyse. Les diagrammes sont rendus côté client et s'adaptent automatiquement au mode sombre. }
+
+h2 { Formules mathématiques }
+
+Affichez des formules LaTeX avec code { math }. Les formules sont rendues avec KaTeX :
+
+codeblock { language = tiramisu, """math { "E = mc^2" }""" }
+
+demo {
+  math { "E = mc^2" }
+}
+
+callout { type = warning, Les formules mathématiques contenant code { "=" } doivent être entre guillemets\, car le code { "=" } non entouré de guillemets est interprété comme un séparateur de paramètre nommé. }

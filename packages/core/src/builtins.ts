@@ -14,6 +14,8 @@ export interface EmitContext {
   customImports: Set<string>
   scriptVars: string[]
   emitNode: (node: Node) => string
+  /** Read a file relative to the current .tiramisu file. Provided by the host (Vite plugin). */
+  resolveFile?: (src: string) => string
 }
 
 export type BuiltinHandler = (fc: FunctionCall, ctx: EmitContext) => string
@@ -35,6 +37,60 @@ function escapeHtml(text: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
+}
+
+/** Undo HTML/Svelte escaping for content that goes into JS string variables */
+function unescapeHtml(text: string): string {
+  return text
+    .replace(/&#123;/g, "{")
+    .replace(/&#125;/g, "}")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+}
+
+/** Parse CSV text into a 2D array of strings, handling quoted fields */
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = []
+  for (const line of text.split("\n")) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+    const cells: string[] = []
+    let i = 0
+    while (i < trimmed.length) {
+      if (trimmed[i] === '"') {
+        // Quoted field
+        let value = ""
+        i++ // skip opening quote
+        while (i < trimmed.length) {
+          if (trimmed[i] === '"' && trimmed[i + 1] === '"') {
+            value += '"'
+            i += 2
+          } else if (trimmed[i] === '"') {
+            i++ // skip closing quote
+            break
+          } else {
+            value += trimmed[i]
+            i++
+          }
+        }
+        cells.push(value)
+        if (trimmed[i] === ',') i++ // skip comma after quoted field
+      } else {
+        // Unquoted field
+        const next = trimmed.indexOf(',', i)
+        if (next === -1) {
+          cells.push(trimmed.slice(i).trim())
+          break
+        }
+        cells.push(trimmed.slice(i, next).trim())
+        i = next + 1
+      }
+    }
+    rows.push(cells)
+  }
+  return rows
 }
 
 /** Extract the text content from a FunctionCall's positional parameters */
@@ -161,27 +217,66 @@ const builtins: Record<string, BuiltinHandler> = {
   link(fc, ctx) {
     const url = getNamedParam(fc, "url", ctx) ?? "#"
     const text = getPositionalText(fc, ctx) || url
+    const isExternal = /^https?:\/\//.test(url)
+    if (isExternal) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="external-link">${text}<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="external-link-icon"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg></a>`
+    }
     return `<a href="${url}">${text}</a>`
   },
 
   image(fc, ctx) {
     const src = getNamedParam(fc, "src", ctx) ?? ""
     const alt = getNamedParam(fc, "alt", ctx) ?? ""
+    const caption = getNamedParam(fc, "caption", ctx) ?? ""
     ctx.customImports.add(
-      `import ZoomImage from "@tiramisu-docs/kit/components/tiramisu/ZoomImage.svelte"`
+      `import { ZoomImage } from "$lib/components"`
     )
-    return `<ZoomImage src="${src}" alt="${alt}" />`
+    return caption
+      ? `<ZoomImage src="${src}" alt="${alt}" caption="${caption}" />`
+      : `<ZoomImage src="${src}" alt="${alt}" />`
   },
 
   codeblock(fc, ctx) {
     const language = getNamedParam(fc, "language", ctx) ?? ""
+    const icon = getNamedParam(fc, "icon", ctx) ?? ""
     const code = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import CodeBlock from "@tiramisu-docs/kit/components/tiramisu/CodeBlock.svelte"`
+      `import { CodeBlock } from "$lib/components"`
     )
     const varName = `__code_${ctx.scriptVars.length}`
-    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(escapeHtml(code))}`)
-    return `<CodeBlock language="${language}" code={${varName}} />`
+    const rawCode = unescapeHtml(code)
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(rawCode)}`)
+    let props = `language="${language}" code={${varName}}`
+    if (icon) props += ` icon="${icon}"`
+    return `<CodeBlock ${props} />`
+  },
+
+  codetabs(fc, ctx) {
+    const group = getNamedParam(fc, "group", ctx) ?? ""
+    const children = getChildCalls(fc)
+    ctx.customImports.add(
+      `import { CodeTabs } from "$lib/components"`
+    )
+    const tabs: { label: string; icon: string; language: string; varName: string }[] = []
+    for (const child of children) {
+      if (child.functionName !== "codetab") continue
+      const label = getNamedParam(child, "label", ctx) ?? ""
+      const icon = getNamedParam(child, "icon", ctx) ?? ""
+      const language = getNamedParam(child, "language", ctx) ?? ""
+      const code = getPositionalText(child, ctx)
+      const varName = `__code_${ctx.scriptVars.length}`
+      const rawCode = unescapeHtml(code)
+      ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(rawCode)}`)
+      tabs.push({ label, icon, language, varName })
+    }
+    const tabsMeta = JSON.stringify(tabs.map(t => ({ label: t.label, icon: t.icon, language: t.language })))
+    const codesArray = `[${tabs.map(t => t.varName).join(", ")}]`
+    const langMap = JSON.stringify(tabs.map(t => t.language))
+    return `<CodeTabs group="${group}" tabs={${tabsMeta}} codes={${codesArray}} langMap={${langMap}} />`
+  },
+
+  codetab(_fc, _ctx) {
+    return ""
   },
 
   list(fc, ctx) {
@@ -193,6 +288,20 @@ const builtins: Record<string, BuiltinHandler> = {
   },
 
   table(fc, ctx) {
+    // CSV mode: parse CSV text into table
+    const csv = getNamedParam(fc, "csv", ctx)
+    if (csv) {
+      const csvRows = parseCsv(csv)
+      if (csvRows.length === 0) return "<table></table>"
+      const thead = `<thead><tr>${csvRows[0].map(c => `<th>${escapeHtml(c)}</th>`).join("")}</tr></thead>`
+      let tbody = ""
+      if (csvRows.length > 1) {
+        const bodyRows = csvRows.slice(1).map(r => `<tr>${r.map(c => `<td>${escapeHtml(c)}</td>`).join("")}</tr>`).join("")
+        tbody = `<tbody>${bodyRows}</tbody>`
+      }
+      return `<table>${thead}${tbody}</table>`
+    }
+
     const rows = getAllNamedParams(fc, "row")
     if (rows.length === 0) return "<table></table>"
 
@@ -230,22 +339,40 @@ const builtins: Record<string, BuiltinHandler> = {
     const type = getNamedParam(fc, "type", ctx) ?? "info"
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import Callout from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"`
+      `import { Callout } from "$lib/components"`
     )
     return `<Callout type="${type}">${text}</Callout>`
   },
 
   tabs(fc, ctx) {
+    const group = getNamedParam(fc, "group", ctx) ?? ""
+    const children = getChildCalls(fc)
     ctx.customImports.add(
-      `import Tabs from "@tiramisu-docs/kit/components/tiramisu/Tabs.svelte"`
+      `import { Tabs } from "$lib/components"`
     )
-    return `<Tabs>${getPositionalText(fc, ctx)}</Tabs>`
+    const tabs: { label: string; icon: string; varName: string }[] = []
+    for (const child of children) {
+      if (child.functionName !== "tab") continue
+      const label = getNamedParam(child, "label", ctx) ?? ""
+      const icon = getNamedParam(child, "icon", ctx) ?? ""
+      const content = getPositionalText(child, ctx)
+      const varName = `__tab_${ctx.scriptVars.length}`
+      ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(content)}`)
+      tabs.push({ label, icon, varName })
+    }
+    const tabsMeta = JSON.stringify(tabs.map(t => ({ label: t.label, icon: t.icon })))
+    const contentsArray = `[${tabs.map(t => t.varName).join(", ")}]`
+    return `<Tabs group="${group}" tabs={${tabsMeta}} contents={${contentsArray}} />`
+  },
+
+  tab(_fc, _ctx) {
+    return ""
   },
 
   steps(fc, ctx) {
     const items = getPositionalParams(fc, ctx)
     ctx.customImports.add(
-      `import Steps from "@tiramisu-docs/kit/components/tiramisu/Steps.svelte"`
+      `import { Steps } from "$lib/components"`
     )
     const lis = items.map((item) => `<li class="step">${item}</li>`).join("")
     return `<Steps><ol>${lis}</ol></Steps>`
@@ -255,7 +382,7 @@ const builtins: Record<string, BuiltinHandler> = {
     const title = getNamedParam(fc, "title", ctx) ?? "Preview"
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import Demo from "@tiramisu-docs/kit/components/tiramisu/Demo.svelte"`
+      `import { Demo } from "$lib/components"`
     )
     return `<Demo title="${title}">${text}</Demo>`
   },
@@ -264,7 +391,7 @@ const builtins: Record<string, BuiltinHandler> = {
     const variant = getNamedParam(fc, "variant", ctx) ?? "default"
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import Badge from "@tiramisu-docs/kit/components/ui/badge/badge.svelte"`
+      `import { Badge } from "$lib/components"`
     )
     return `<Badge variant="${variant}">${text}</Badge>`
   },
@@ -307,14 +434,14 @@ const builtins: Record<string, BuiltinHandler> = {
     const title = getNamedParam(fc, "title", ctx) ?? "Details"
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import Accordion from "@tiramisu-docs/kit/components/tiramisu/Accordion.svelte"`
+      `import { Accordion } from "$lib/components"`
     )
     return `<Accordion title="${title}">${text}</Accordion>`
   },
 
   cards(fc, ctx) {
     ctx.customImports.add(
-      `import NavCard from "@tiramisu-docs/kit/components/tiramisu/NavCard.svelte"`
+      `import { NavCard } from "$lib/components"`
     )
     const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
     return `<div class="cards-grid">${children}</div>`
@@ -323,16 +450,22 @@ const builtins: Record<string, BuiltinHandler> = {
   card(fc, ctx) {
     const title = getNamedParam(fc, "title", ctx) ?? ""
     const description = getNamedParam(fc, "description", ctx) ?? ""
-    const href = getNamedParam(fc, "href", ctx) ?? "#"
+    const href = getNamedParam(fc, "href", ctx) ?? ""
+    const icon = getNamedParam(fc, "icon", ctx) ?? ""
+    const image = getNamedParam(fc, "image", ctx) ?? ""
     ctx.customImports.add(
-      `import NavCard from "@tiramisu-docs/kit/components/tiramisu/NavCard.svelte"`
+      `import { NavCard } from "$lib/components"`
     )
-    return `<NavCard title="${title}" description="${description}" href="${href}" />`
+    let props = `title="${title}" description="${description}"`
+    if (href) props += ` href="${href}"`
+    if (icon) props += ` icon="${icon}"`
+    if (image) props += ` image="${image}"`
+    return `<NavCard ${props} />`
   },
 
   filetree(fc, ctx) {
     ctx.customImports.add(
-      `import FileTree from "@tiramisu-docs/kit/components/tiramisu/FileTree.svelte"`
+      `import { FileTree } from "$lib/components"`
     )
     const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
     return `<FileTree>${children}</FileTree>`
@@ -342,7 +475,7 @@ const builtins: Record<string, BuiltinHandler> = {
     const params = getPositionalParams(fc, ctx)
     const name = params[0] ?? "folder"
     const children = getChildCalls(fc).map((c) => ctx.emitNode(c)).join("")
-    return `<div class="tree-folder" data-name="${name}">${children}</div>`
+    return `<div class="tree-folder"><span class="tree-folder-name">${name}</span>${children}</div>`
   },
 
   file(fc, ctx) {
@@ -350,23 +483,34 @@ const builtins: Record<string, BuiltinHandler> = {
     return `<div class="tree-file">${text}</div>`
   },
 
+  readfile(fc, ctx) {
+    const src = getNamedParam(fc, "src", ctx) ?? getPositionalText(fc, ctx)
+    if (!src) return ""
+    if (!ctx.resolveFile) {
+      return `<!-- readfile: no file resolver available -->`
+    }
+    return ctx.resolveFile(src)
+  },
+
   math(fc, ctx) {
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import MathBlock from "@tiramisu-docs/kit/components/tiramisu/MathBlock.svelte"`
+      `import { MathBlock } from "$lib/components"`
     )
     const varName = `__math_${ctx.scriptVars.length}`
-    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(text)}`)
+    const raw = unescapeHtml(text)
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(raw)}`)
     return `<MathBlock formula={${varName}} />`
   },
 
   mermaid(fc, ctx) {
     const text = getPositionalText(fc, ctx)
     ctx.customImports.add(
-      `import Mermaid from "@tiramisu-docs/kit/components/tiramisu/Mermaid.svelte"`
+      `import { Mermaid } from "$lib/components"`
     )
     const varName = `__mermaid_${ctx.scriptVars.length}`
-    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(text)}`)
+    const raw = unescapeHtml(text)
+    ctx.scriptVars.push(`const ${varName} = ${JSON.stringify(raw)}`)
     return `<Mermaid chart={${varName}} />`
   },
 }

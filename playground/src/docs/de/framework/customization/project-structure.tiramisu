@@ -1,0 +1,102 @@
+meta { title = Projektstruktur, order = 3, icon = folder-tree }
+
+Ein Tiramisu Docs-Projekt folgt einem Standard-SvelteKit-Layout mit einigen Tiramisu-spezifischen Konventionen.
+
+h3 { Dateibaum }
+
+filetree {
+  folder {
+    my-docs,
+    folder {
+      src,
+      folder {
+        docs,
+        folder {
+          en,
+          file { getting-started.tiramisu },
+          file { guide.tiramisu }
+        }
+      },
+      folder {
+        lib,
+        file { tiramisu.config.ts },
+        folder {
+          components,
+          file { index.ts },
+          folder { tiramisu, file { MyCustomWidget.svelte } }
+        }
+      },
+      folder {
+        routes,
+        folder { "docs/[...slug]", file { +page.svelte }, file { +page.ts } }
+      },
+      file { app.css }
+    },
+    file { svelte.config.js },
+    file { vite.config.ts },
+    file { package.json }
+  }
+}
+
+h3 { Wichtige Dateien }
+
+table {
+  row = [bold { Datei }, bold { Zweck }],
+  row = [
+    code { src/lib/tiramisu.config.ts },
+    "Hauptkonfigurationsdatei. Definiert Titel, Abschnitte, Seitenleiste, i18n und mehr."
+  ],
+  row = [
+    code { src/docs/ },
+    Dokumentationsinhalt. Jede code { .tiramisu }-Datei wird zu einer Seite.
+  ],
+  row = [
+    code { src/lib/components/index.ts },
+    Komponenten-Barrel-Datei. Re-exportiert alle Kit-Komponenten. Bearbeiten Sie sie\, um eingebaute Komponenten zu überschreiben.
+  ],
+  row = [
+    code { src/lib/components/tiramisu/ },
+    Benutzerdefinierte Komponenten. Jede Svelte-Komponente hier kann als Tiramisu-Funktion verwendet werden.
+  ],
+  row = [
+    code { "src/routes/docs/[...slug]/" },
+    Die Catch-all-Route\, die Dokumentationsseiten rendert.
+  ],
+  row = [
+    code { vite.config.ts },
+    Vite-Konfiguration mit dem code { tiramisuPlugin() }.
+  ],
+  row = [code { svelte.config.js }, SvelteKit-Adapter-Konfiguration.],
+  row = [code { src/app.css }, Globale Stile. Importieren Sie hier das Tiramisu-Theme.]
+}
+
+h3 { Die Docs-Route }
+
+Das Verzeichnis code { "src/routes/docs/[...slug]/" } enthält zwei Dateien\, die die Dokumentation steuern:
+
+bold { +page.ts } lädt den kompilierten Tiramisu-Inhalt und die Metadaten:
+
+codeblock {
+  language = typescript,
+  """
+import { loadDoc } from "@tiramisu-docs/kit";
+
+export const load = loadDoc;
+"""
+}
+
+bold { +page.svelte } rendert das Dokumentations-Layout:
+
+codeblock {
+  language = svelte,
+  """
+<script>
+  import { DocsLayout } from "@tiramisu-docs/kit";
+  let { data } = $props();
+</script>
+
+<DocsLayout {...data}>
+  <data.component />
+</DocsLayout>
+"""
+}

@@ -1,0 +1,61 @@
+meta { title = Métadonnées de page, order = 3, icon = file-text }
+
+Chaque page de documentation commence par un bloc code { meta } qui définit les métadonnées utilisées pour la barre latérale\, la recherche et le SEO.
+
+h2 { Syntaxe }
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  description = A brief description,
+  order = 2,
+  group = Guide,
+  icon = book,
+  author = Jane Doe
+}""" }
+
+h2 { Champs }
+
+table {
+  row = [Champ, Type, Description],
+  row = [code { title }, Chaîne, Titre de la page — affiché dans la barre latérale et l'onglet du navigateur],
+  row = [code { description }, Chaîne, Courte description pour les balises méta SEO],
+  row = [code { order }, Nombre, Position de tri dans la barre latérale (le plus petit apparaît en premier)],
+  row = [code { group }, Chaîne, Nom du groupe dans la barre latérale (uniquement pour les fichiers à la racine)],
+  row = [code { lastEdited }, Chaîne de date, Remplacer la date de dernière modification (sinon utilise git ou le mtime du fichier)],
+  row = [code { icon }, Chaîne, Nom de l'icône (icône Lucide ou identifiant Iconify complet comme code { "mdi:home" })],
+  row = [code { image }, Chaîne, Chemin de l'image OG (relatif à la racine du site) ou URL absolue],
+  row = [code { author }, Chaîne, Nom de l'auteur — affiché sous la page et inclus dans le JSON-LD]
+}
+
+h2 { Titre }
+
+Le champ code { title } est le plus important — il contrôle ce qui apparaît dans la navigation de la barre latérale. S'il est omis\, le slug du fichier est utilisé à la place.
+
+h2 { Ordonnancement }
+
+Utilisez code { order } pour contrôler la position des pages au sein de leur groupe dans la barre latérale. Les pages sont triées par ordre croissant — code { "order = 1" } apparaît en premier\, code { "order = 2" } en second\, et ainsi de suite. Les pages sans ordre ont une valeur par défaut de 999.
+
+h2 { Groupes }
+
+Pour les fichiers à la racine (qui ne sont pas dans un dossier)\, le champ code { group } détermine à quel groupe de la barre latérale la page appartient :
+
+codeblock { language = tiramisu, "meta { title = Getting Started, group = Guide, order = 1 }" }
+
+Pour les fichiers dans des dossiers\, le groupe est déterminé automatiquement par le nom du dossier — vous n'avez pas besoin de définir code { group }.
+
+h2 { Pages d'index des dossiers }
+
+Un fichier code { index.tiramisu } dans un dossier définit le titre d'affichage du groupe :
+
+filetree {
+  folder { src/docs,
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu }
+    }
+  }
+}
+
+Si code { index.tiramisu } a code { "title = Getting Started" }\, cela devient le titre du groupe dans la barre latérale. Sans cela\, le nom du dossier est automatiquement mis en majuscules — code { getting-started } devient "Getting Started".
+
+callout { type = info, Les dossiers imbriqués créent des sous-groupes dans la barre latérale. Un fichier code { index.tiramisu } dans un sous-dossier fait du sous-groupe un lien cliquable. }

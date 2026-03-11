@@ -1,0 +1,91 @@
+meta {
+  title = Serveur MCP,
+  order = 3,
+  icon = server
+}
+
+Tiramisu Docs inclut un serveur MCP (Model Context Protocol) intégré qui permet aux assistants IA comme Claude\, Cursor et d'autres outils compatibles MCP de parcourir votre documentation de manière programmatique.
+
+Le serveur est hébergé en tant que point d'accès HTTP JSON-RPC à code { /mcp } sur votre site de documentation déployé. Il est livré sous forme de route SvelteKit — pas de CLI\, pas de processus séparé\, pas de configuration locale. Déployez votre site et le serveur MCP est en ligne.
+
+h2 { Activer le serveur }
+
+Définissez code { mcp: true } dans votre configuration pour générer une route POST code { /mcp } et afficher les boutons « Connecter » dans l'interface de vos docs :
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit";
+
+export default defineConfig({
+  mcp: true,
+  // ...
+});""" }
+
+Lorsqu'il est activé\, cela fait deux choses :
+
+list {
+  Génère une route POST code { /mcp } qui gère les requêtes JSON-RPC 2.0 provenant des outils IA,
+  Affiche les boutons bold { Connecter avec MCP } et bold { Connecter à VSCode } sur vos pages de documentation — l'URL est dérivée automatiquement de l'origine de votre site
+}
+
+h2 { URL personnalisée du serveur }
+
+Si vous hébergez votre serveur MCP séparément ou souhaitez que les boutons de l'interface pointent vers un autre point d'accès\, passez une chaîne URL à la place :
+
+codeblock { language = typescript, """export default defineConfig({
+  mcp: "https://docs.example.com/mcp",
+  // ...
+});""" }
+
+Lorsqu'une chaîne est fournie :
+
+list {
+  Les boutons de l'interface pointent vers l'URL donnée,
+  Aucune route code { /mcp } n'est générée — vous êtes responsable de l'hébergement du serveur à cette URL
+}
+
+h2 { Connecter les outils IA }
+
+Une fois votre site déployé avec code { mcp: true }\, les outils IA peuvent se connecter en utilisant l'URL hébergée.
+
+h3 { Claude Code }
+
+Ajoutez dans votre fichier code { .mcp.json } à la racine du projet :
+
+codeblock { language = json, """{
+  "mcpServers": {
+    "my-docs": {
+      "type": "streamableHttp",
+      "url": "https://docs.example.com/mcp"
+    }
+  }
+}""" }
+
+Remplacez code { docs.example.com } par votre domaine de documentation réel.
+
+h3 { Cursor }
+
+Dans les paramètres MCP de Cursor\, ajoutez un nouveau serveur et collez l'URL MCP de votre documentation (par ex. code { https://docs.example.com/mcp }). Cursor prend en charge nativement les points d'accès MCP HTTP.
+
+h3 { VSCode }
+
+Votre site de documentation affiche un bouton bold { Connecter à VSCode } dans le menu déroulant Open. En cliquant dessus\, le gestionnaire de protocole code { "vscode:mcp/install" } enregistre automatiquement le serveur — aucune configuration manuelle nécessaire.
+
+h2 { Outils disponibles }
+
+Le serveur expose cinq outils aux assistants IA :
+
+table {
+  row = [bold { Outil }, bold { Description }],
+  row = [code { search_docs }, Rechercher des pages par mot-clé],
+  row = [code { read_doc }, Lire une page spécifique par slug],
+  row = [code { list_pages }, Lister toutes les pages de documentation\, avec filtrage optionnel par section],
+  row = [code { list_sections }, Lister toutes les sections avec le nombre de pages],
+  row = [code { get_table_of_contents }, Obtenir les titres d'une page spécifique]
+}
+
+h2 { Comment ça fonctionne }
+
+Le serveur MCP est une route POST SvelteKit standard à code { /mcp }. Il communique en JSON-RPC 2.0 via HTTP — chaque requête est un POST unique avec un corps JSON\, et la réponse est en JSON.
+
+Les données de documentation proviennent du module code { virtual:tiramisu-docs } au moment du build. Le serveur ne scanne pas le système de fichiers à l'exécution\, ce qui signifie qu'il fonctionne sur n'importe quelle cible de déploiement : fonctions serverless\, runtimes edge\, adaptateurs statiques avec prérendu ou serveurs Node.js traditionnels. Partout où SvelteKit s'exécute\, le serveur MCP s'exécute.
+
+callout { type = info, Puisque le serveur est intégré à votre site\, il reste synchronisé avec votre documentation automatiquement. Chaque déploiement met à jour à la fois la documentation et le point d'accès MCP. }

@@ -1,0 +1,35 @@
+meta { title = Layout, order = 8, icon = columns-3 }
+
+Komponenten zur Anordnung von Inhalten auf der Seite.
+
+h2 { Spalten }
+
+Inhalte nebeneinander platzieren:
+
+codeblock { language = tiramisu, """columns {
+  col { This is the left column. },
+  col { This is the right column. }
+}""" }
+
+demo {
+  columns {
+    col { Dies ist die linke Spalte mit etwas Inhalt. },
+    col { Dies ist die rechte Spalte mit anderem Inhalt. }
+  }
+}
+
+Sie können beliebige Inhalte in Spalten verwenden\, einschließlich Codeblöcke\, Listen und andere Komponenten.
+
+h2 { Demo }
+
+Die Komponente code { demo } rendert Inhalte in einem Vorschau-Container:
+
+codeblock { language = tiramisu, """demo { title = Preview,
+  callout { type = success, This renders inside a demo container. }
+}""" }
+
+demo { title = Vorschau,
+  callout { type = success, Dies wird in einem Vorschau-Container gerendert. }
+}
+
+Demos sind nützlich\, um zu zeigen\, wie Komponenten neben ihrem Quellcode aussehen.

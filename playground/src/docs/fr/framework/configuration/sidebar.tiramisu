@@ -1,0 +1,67 @@
+meta {
+  title = Barre latérale,
+  order = 3,
+  icon = panel-left
+}
+
+La barre latérale est générée automatiquement à partir de votre structure de fichiers. Vous pouvez contrôler l'ordre et le regroupement des éléments via la configuration et les métadonnées des fichiers.
+
+h3 { Ordre des groupes }
+
+Utilisez code { sidebar.groupOrder } pour contrôler l'ordre d'apparition des groupes dans la barre latérale :
+
+codeblock { language = typescript, """sidebar: {
+  groupOrder: ["Getting Started", "Writing", "Configuration", "Advanced"],
+},""" }
+
+Les groupes non listés dans code { groupOrder } apparaissent après ceux listés\, triés par ordre alphabétique.
+
+h3 { Regroupement par dossier }
+
+Les dossiers de votre répertoire de documentation deviennent automatiquement des groupes dans la barre latérale. Le nom du dossier est converti en titre (par exemple\, code { getting-started } devient « Getting Started »).
+
+Pour personnaliser le libellé d'un groupe\, ajoutez un fichier code { index.tiramisu } dans le dossier :
+
+codeblock { language = tiramisu, """meta {
+  title = My Custom Group Name
+}""" }
+
+Le code { title } du fichier d'index devient le libellé du groupe dans la barre latérale.
+
+h3 { Regroupement au niveau racine }
+
+Les fichiers à la racine d'une section (pas dans un sous-dossier) peuvent être regroupés en utilisant le champ code { group } dans leur bloc meta :
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  group = Getting Started,
+  order = 1
+}""" }
+
+h3 { Ordonner les pages }
+
+Les pages au sein d'un groupe sont triées par leur valeur code { order } (les nombres les plus bas apparaissent en premier). Si aucun ordre n'est spécifié\, les pages sont triées par ordre alphabétique de titre.
+
+codeblock { language = tiramisu, """meta {
+  title = Installation,
+  order = 2
+}""" }
+
+h3 { Sous-groupes }
+
+Les dossiers imbriqués créent des sous-groupes dans la barre latérale. Ceux-ci apparaissent comme des sections repliables au sein de leur groupe parent :
+
+filetree {
+  folder { src/docs/framework,
+    folder { writing,
+      file { index.tiramisu },
+      file { basics.tiramisu },
+      folder { content,
+        file { index.tiramisu },
+        file { code-blocks.tiramisu }
+      }
+    }
+  }
+}
+
+Le fichier code { index.tiramisu } dans code { writing/ } définit le libellé du groupe « Writing ». Le fichier code { index.tiramisu } dans code { content/ } définit le libellé du sous-groupe « Content ».

@@ -1,12 +1,18 @@
-<script>
+<script lang="ts">
+  import "iconify-icon"
   import TopBar from "./TopBar.svelte"
   import Navbar from "./Navbar.svelte"
   import Sidebar from "./Sidebar.svelte"
   import TableOfContents from "./TableOfContents.svelte"
   import SearchDialog from "./SearchDialog.svelte"
-  import { SheetContent } from "./ui/sheet/index.js"
-  import { ScrollArea } from "./ui/scroll-area/index.js"
+  import PageFooter from "./PageFooter.svelte"
+  import { SheetContent } from "$lib/components/ui/sheet/index.js"
+  import { ScrollArea } from "$lib/components/ui/scroll-area/index.js"
   import { onMount } from "svelte"
+  import type { ResolvedConfig, LocaleConfig } from "../../config.js"
+  import type { SidebarGroup, SidebarEntry, ResolvedSection } from "../../types.js"
+  import type { Heading } from "@tiramisu-docs/core"
+  import type { Snippet } from "svelte"
 
   let {
     config,
@@ -17,15 +23,22 @@
     locale,
     locales,
     showFallbackBanner = false,
-  } = $props()
+  }: { config: ResolvedConfig; sidebar: SidebarGroup[]; headings: Heading[]; children: Snippet; sections?: ResolvedSection[]; locale?: string; locales?: LocaleConfig[]; showFallbackBanner?: boolean } = $props()
 
   let searchOpen = $state(false)
   let mobileOpen = $state(false)
 
   const hasSections = $derived(sections != null && sections.length > 0)
 
+  function docHref(slug: string): string {
+    const prefix = locale ? `/docs/${locale}` : "/docs"
+    if (slug === "index") return prefix
+    const clean = slug.replace(/\/index$/, "")
+    return `${prefix}/${clean}`
+  }
+
   onMount(() => {
-    function handleKeydown(e) {
+    function handleKeydown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault()
         searchOpen = !searchOpen
@@ -62,7 +75,7 @@
     <aside class="relative hidden w-[15rem] shrink-0 border-r lg:block">
       <div class="absolute inset-0 bg-card" style="left: -100vw; width: calc(100% + 100vw);"></div>
       <div class="relative sticky top-0 h-screen" style:top={hasSections ? "6rem" : "0"} style:height={hasSections ? "calc(100vh - 6rem)" : "100vh"}>
-        <Sidebar {config} groups={sidebar} onSearchClick={() => (searchOpen = true)} {hasSections} {locale} />
+        <Sidebar {config} groups={sidebar} onSearchClick={() => (searchOpen = true)} {hasSections} {locale} {locales} />
       </div>
     </aside>
 
@@ -82,11 +95,38 @@
       </aside>
     {/if}
   </div>
+
+  <PageFooter {config} />
 </div>
 
 <SearchDialog bind:open={searchOpen} {locale} />
 
 <!-- Mobile sidebar sheet (used when TopBar is active) -->
+{#snippet renderMobileEntries(entries: SidebarEntry[], depth: number)}
+  {#each entries as entry}
+    {#if entry.type === "item"}
+      <a
+        href={docHref(entry.slug)}
+        onclick={() => (mobileOpen = false)}
+        class="block rounded-md py-1.5 text-sm text-muted-foreground hover:text-foreground"
+        style:padding-left="{0.5 + depth * 0.75}rem"
+      >
+        {entry.title}
+      </a>
+    {:else if entry.type === "subgroup"}
+      <div class="mt-2 mb-1">
+        <h5
+          class="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+          style:padding-left="{0.5 + depth * 0.75}rem"
+        >{entry.label}</h5>
+        <div class="mt-0.5 space-y-0.5">
+          {@render renderMobileEntries(entry.items, depth + 1)}
+        </div>
+      </div>
+    {/if}
+  {/each}
+{/snippet}
+
 {#if hasSections}
   <SheetContent open={mobileOpen} onclose={() => (mobileOpen = false)} side="left">
     <div class="mt-6">
@@ -95,17 +135,7 @@
           <div class="mb-4">
             <h4 class="mb-1 px-2 text-sm font-semibold text-foreground">{group.label}</h4>
             <div class="space-y-0.5">
-              {#each group.items as entry}
-                {#if entry.type === "item"}
-                  <a
-                    href={entry.slug === "index" ? (locale ? `/docs/${locale}` : "/docs") : (locale ? `/docs/${locale}/${entry.slug}` : `/docs/${entry.slug}`)}
-                    onclick={() => (mobileOpen = false)}
-                    class="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    {entry.title}
-                  </a>
-                {/if}
-              {/each}
+              {@render renderMobileEntries(group.items, 0)}
             </div>
           </div>
         {/each}

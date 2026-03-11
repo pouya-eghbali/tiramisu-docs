@@ -4,7 +4,7 @@ import { compileTiramisu } from "../../packages/core/src/compiler"
 
 describe("end-to-end", () => {
   it("scaffolded project has valid tiramisu files that compile", () => {
-    const files = generateProjectFiles({ name: "test-docs", theme: "default" })
+    const files = generateProjectFiles({ name: "test-docs", sections: false, i18n: false, defaultLocale: "en", locales: [] })
     const tiramisuFiles = files.filter(f => f.path.endsWith(".tiramisu"))
 
     expect(tiramisuFiles.length).toBeGreaterThan(0)

@@ -1,0 +1,59 @@
+meta { title = Démarrage rapide, order = 3, icon = zap }
+
+Une fois votre projet mis en place\, créez votre première page de documentation.
+
+h2 { Créer une page }
+
+Créez un fichier à l'emplacement code { src/docs/getting-started.tiramisu } :
+
+codeblock { language = tiramisu, """meta { title = Getting Started, order = 1 }
+
+Welcome to my documentation!
+
+h2 { Installation }
+
+codeblock { language = bash, "bun add my-package" }
+
+h2 { Usage }
+
+Import and use the package:
+
+codeblock { language = typescript, "import { something } from 'my-package'" }""" }
+
+h2 { Comprendre les métadonnées }
+
+Chaque page commence par un bloc code { meta } qui définit les métadonnées de la page :
+
+table {
+  row = [Champ, Description],
+  row = [code { title }, Titre de la page affiché dans la barre latérale],
+  row = [code { order }, Ordre de tri — les nombres les plus bas apparaissent en premier],
+  row = [code { group }, Nom du groupe dans la barre latérale (pour les fichiers à la racine)],
+  row = [code { description }, Description de la page pour le SEO],
+  row = [code { icon }, Nom de l'icône pour l'en-tête de la page],
+  row = [code { image }, Chemin ou URL de l'image OG],
+  row = [code { author }, Nom de l'auteur affiché sous la page]
+}
+
+h2 { Lancer le serveur de développement }
+
+Démarrez le serveur de développement :
+
+codeblock { language = bash, "bun run dev" }
+
+Ouvrez link { url = http://localhost:5173/docs, http://localhost:5173/docs } dans votre navigateur. Votre page apparaît automatiquement dans la barre latérale.
+
+h2 { Routage basé sur les fichiers }
+
+Le chemin du fichier détermine l'URL :
+
+table {
+  row = [Fichier, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/apidpoints.tiramisu }, code { /docs/apidpoints }]
+}
+
+Les dossiers créent automatiquement des groupes dans la barre latérale. Un fichier code { index.tiramisu } à l'intérieur d'un dossier définit le titre du groupe.
+
+callout { type = info, Modifiez n'importe quel fichier code { .tiramisu } et le navigateur se recharge instantanément — le plugin Vite gère le remplacement de module à chaud. }

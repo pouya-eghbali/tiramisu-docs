@@ -1,0 +1,45 @@
+meta {
+  title = Footer,
+  order = 5,
+  icon = footprints
+}
+
+The footer appears at the bottom of every page and can display social media links, a copyright notice, and a "Powered by Tiramisu" badge.
+
+h3 { Configuration }
+
+Add a code { footer } block to your config:
+
+codeblock { language = typescript, """footer: {
+  socials: {
+    github: "https://github.com/user/repo",
+    x: "https://x.com/myproject",
+    discord: "https://discord.gg/myserver",
+  },
+  copyright: "© 2026 My Project",
+},""" }
+
+h3 { Social Links }
+
+The following social platforms are supported:
+
+table {
+  row = [bold { Platform }, bold { Config Key }, bold { Icon }],
+  row = [GitHub, code { github }, GitHub logo],
+  row = [X (Twitter), code { x }, X logo],
+  row = [Discord, code { discord }, Discord logo],
+  row = [Bluesky, code { bluesky }, Bluesky logo],
+  row = [Mastodon, code { mastodon }, Mastodon logo],
+  row = [YouTube, code { youtube }, YouTube logo],
+  row = [LinkedIn, code { linkedin }, LinkedIn logo]
+}
+
+Each social entry is a URL string. Only platforms with a URL will display an icon in the footer.
+
+h3 { Copyright }
+
+The code { copyright } string renders centered below the social icons. Use it for your copyright notice or any short text.
+
+h3 { Powered by Tiramisu }
+
+The footer automatically includes a "Powered by Tiramisu" pill that links to the Tiramisu Docs website. This badge helps support the project.

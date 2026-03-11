@@ -1,0 +1,78 @@
+meta {
+  title = Langage,
+  description = Un langage de balisage construit autour d'appels de fonctions qui compile vers n'importe quel format de sortie.,
+  order = 0,
+  icon = terminal
+}
+
+Tiramisu est un langage de balisage construit autour d'appels de fonctions. Il produit un AST générique qui peut être compilé vers n'importe quel format de sortie — HTML\, Svelte\, React\, PDF\, et plus encore.
+
+h2 { Aperçu rapide }
+
+Tout dans Tiramisu est soit du texte brut\, soit un appel de fonction :
+
+codeblock { language = tiramisu, """h2 { Hello World }
+
+This is plain text. Use bold { function calls } to add structure.
+
+list {
+  Simple and readable,
+  No closing tags,
+  Compiles to anything
+}""" }
+
+Les fonctions peuvent accepter des paramètres nommés\, des paramètres positionnels\, ou les deux. Elles s'imbriquent naturellement — toute valeur de paramètre peut contenir d'autres appels de fonctions.
+
+h2 { Principes de conception }
+
+cards {
+  card {
+    title = Des fonctions jusqu'au bout,
+    description = Un seul concept à apprendre. Titres\, listes\, tableaux\, blocs de code — tout est un appel de fonction.,
+    icon = braces
+  },
+  card {
+    title = Indépendant du format de sortie,
+    description = Le parseur produit un AST générique. Écrivez un compilateur pour HTML\, Svelte\, React\, PDF\, ou tout format dont vous avez besoin.,
+    icon = shuffle
+  },
+  card {
+    title = Lisible par défaut,
+    description = Pas de chevrons\, pas de balises fermantes. Tiramisu se lit comme de la prose structurée.,
+    icon = eye
+  },
+  card {
+    title = Extensible,
+    description = Les noms de fonctions inconnus deviennent des composants personnalisés. Ajoutez les vôtres sans toucher au parseur.,
+    icon = puzzle
+  }
+}
+
+h2 { Apprendre }
+
+cards {
+  card {
+    title = Syntaxe,
+    description = Appels de fonctions\, imbrication\, et comment texte et structure se mélangent.,
+    href = /docs/language/basics/syntax,
+    icon = braces
+  },
+  card {
+    title = Paramètres,
+    description = Positionnels\, nommés\, tableaux\, et paramètres imbriqués.,
+    href = /docs/language/basics/parameters,
+    icon = sliders-horizontal
+  },
+  card {
+    title = Chaînes & Échappement,
+    description = Règles de guillemets\, chaînes multi-lignes\, et caractères spéciaux.,
+    href = /docs/language/basics/strings,
+    icon = quote
+  },
+  card {
+    title = Front-ends personnalisés,
+    description = Construisez votre propre compilateur ciblant n'importe quel format de sortie.,
+    href = /docs/language/internals/custom-frontends,
+    icon = monitor
+  }
+}

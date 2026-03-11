@@ -1,7 +1,8 @@
-<script>
-  import * as Alert from "../ui/alert/index.js"
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import * as Alert from "$lib/components/ui/alert/index.js"
 
-  let { type = "info", children } = $props()
+  let { type = "info", children }: { type?: string; children: Snippet } = $props()
 
   const variantMap = { info: "info", warning: "warning", error: "destructive", success: "success" }
   const variant = $derived(variantMap[type] ?? "info")

@@ -1,0 +1,73 @@
+meta { title = Installation, order = 2, icon = download }
+
+h2 { Scaffolder }
+
+The fastest way to get started is with the scaffolder:
+
+codetabs { group = package-manager,
+  codetab { label = bun, language = bash, "bun create tiramisu-docs my-docs" },
+  codetab { label = npm, language = bash, "npm create tiramisu-docs my-docs" },
+  codetab { label = pnpm, language = bash, "pnpm create tiramisu-docs my-docs" }
+}
+
+The scaffolder will ask you about sections and i18n. Once done:
+
+codetabs { group = package-manager,
+  codetab { label = bun, language = bash, """cd my-docs
+bun install
+bun run dev""" },
+  codetab { label = npm, language = bash, """cd my-docs
+npm install
+npm run dev""" },
+  codetab { label = pnpm, language = bash, """cd my-docs
+pnpm install
+pnpm run dev""" }
+}
+
+h2 { Manual Setup }
+
+If you prefer to set things up yourself, start with a SvelteKit project and add the dependencies:
+
+codetabs { group = package-manager,
+  codetab { label = bun, language = bash, "bun add @tiramisu-docs/kit @timeleap/tiramisu" },
+  codetab { label = npm, language = bash, "npm install @tiramisu-docs/kit @timeleap/tiramisu" },
+  codetab { label = pnpm, language = bash, "pnpm add @tiramisu-docs/kit @timeleap/tiramisu" }
+}
+
+h3 { Vite Configuration }
+
+Configure the Vite plugin in code { vite.config.ts }:
+
+codeblock { language = typescript, """import { sveltekit } from "@sveltejs/kit/vite"
+import { tiramisuPlugin } from "@tiramisu-docs/kit/vite"
+import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from "vite"
+import config from "./src/lib/tiramisu.config"
+
+export default defineConfig({
+  plugins: [tiramisuPlugin({ config }), tailwindcss(), sveltekit()],
+  resolve: { conditions: ["browser"] },
+})""" }
+
+h3 { Tiramisu Configuration }
+
+Create code { src/lib/tiramisu.config.ts }:
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit"
+
+export default defineConfig({
+  title: "My Docs",
+  description: "Documentation for my project",
+  nav: [{ label: "Docs", href: "/docs" }],
+})""" }
+
+h3 { Theme Setup }
+
+Import the theme in code { src/app.css }:
+
+codeblock { language = css, """@import "@tiramisu-docs/kit/styles/theme.css";
+@import "tailwindcss";
+
+@source "../node_modules/@tiramisu-docs/kit/src/lib";""" }
+
+callout { type = info, See link { url = /docs/framework/customization/project-structure, Project Structure } for a complete overview of all files and folders. }

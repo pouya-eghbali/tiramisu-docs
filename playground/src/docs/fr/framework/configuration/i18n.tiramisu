@@ -1,0 +1,62 @@
+meta {
+  title = Internationalisation,
+  order = 4,
+  icon = globe
+}
+
+h2 { Internationalisation (i18n) }
+
+Tiramisu Docs prend en charge plusieurs langues nativement. Chaque langue dispose de son propre dossier\, et le framework gère le routage\, le repli et le changement de langue.
+
+h3 { Configuration }
+
+Ajoutez un bloc code { i18n } à votre configuration :
+
+codeblock { language = typescript, """i18n: {
+  defaultLocale: "en",
+  locales: [
+    { code: "en", label: "English", flag: "🇬🇧" },
+    { code: "fr", label: "Français", flag: "🇫🇷" },
+    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  ],
+},""" }
+
+h3 { Structure des dossiers }
+
+Chaque langue possède son propre dossier dans code { src/docs/ } :
+
+filetree {
+  folder { src/docs,
+    folder { en,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { fr,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { de,
+      file { getting-started.tiramisu }
+    }
+  }
+}
+
+Chaque dossier (code { en }\, code { fr }\, code { de }) correspond à un code de langue défini dans votre configuration.
+
+h3 { Structure des URL }
+
+Les pages sont servies sous leur préfixe de langue :
+
+list {
+  code { /docs/getting-started } — Version anglaise,
+  code { /docs/fr/getting-started } — Version française,
+  code { /docs/de/getting-started } — Version allemande
+}
+
+h3 { Comportement de repli }
+
+Si une page n'existe pas dans la langue sélectionnée\, Tiramisu Docs se rabat sur la langue par défaut et affiche une bannière indiquant que la page n'est pas disponible dans la langue choisie.
+
+h3 { Sélecteur de langue }
+
+Lorsque plusieurs langues sont configurées\, un sélecteur de langue apparaît dans la barre latérale. Les utilisateurs peuvent changer de langue et le framework navigue vers la page équivalente dans la langue sélectionnée.

@@ -1,0 +1,129 @@
+meta { title = Composants personnalisés, order = 2, icon = puzzle }
+
+Tout appel de fonction dans Tiramisu qui ne correspond pas à une fonction intégrée devient automatiquement un composant Svelte personnalisé. Cela vous permet d'enrichir votre documentation avec des widgets interactifs\, des mises en page personnalisées ou toute interface que vous pouvez construire avec Svelte.
+
+h3 { Comment ça fonctionne }
+
+Lorsque le compilateur Tiramisu rencontre un nom de fonction inconnu\, il génère un import pour un composant Svelte par convention :
+
+list {
+  code { "myWidget { }" } importe code { src/lib/components/tiramisu/MyWidget.svelte },
+  code { "apiPlayground { }" } importe code { src/lib/components/tiramisu/ApiPlayground.svelte },
+  code { "videoPlayer { }" } importe code { src/lib/components/tiramisu/VideoPlayer.svelte }
+}
+
+Le nom de la fonction est converti en PascalCase pour le nom du fichier du composant.
+
+h3 { Les paramètres deviennent des props }
+
+Les paramètres nommés dans l'appel de fonction deviennent des props du composant. Le contenu positionnel devient le slot par défaut (children) :
+
+codeblock {
+  language = tiramisu,
+  """
+myCard {
+  title = My Feature,
+  icon = rocket,
+  This is the card body content with bold { bold text } and other formatting.
+}
+"""
+}
+
+Ceci est équivalent à :
+
+codeblock {
+  language = svelte,
+  """
+<MyCard title="My Feature" icon="rocket">
+  <p>This is the card body content with <strong>bold text</strong> and other formatting.</p>
+</MyCard>
+"""
+}
+
+h3 { Créer un composant }
+
+steps {
+  Créez un fichier à l'emplacement code { src/lib/components/tiramisu/MyCard.svelte },
+  Définissez votre composant avec les props attendues,
+  Utilisez-le dans n'importe quel fichier code { .tiramisu }
+}
+
+Définissez votre composant avec les props attendues :
+
+codeblock {
+  language = svelte,
+  """
+<script>
+  let { title, icon, children } = $props()
+</script>
+
+<div class="my-card">
+  <h3>{title}</h3>
+  {@render children()}
+</div>
+
+<style>
+  .my-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+</style>
+"""
+}
+
+Puis utilisez-le dans n'importe quel fichier code { .tiramisu } :
+
+codeblock {
+  language = tiramisu,
+  """
+myCard {
+  title = Hello World,
+  This content will be rendered as children.
+}
+"""
+}
+
+h3 { Remplacer les composants intégrés }
+
+Tous les composants — de mise en page et intégrés — sont importés via un fichier barrel situé à code { src/lib/components/index.ts }. Ce fichier réexporte les valeurs par défaut du kit :
+
+codeblock {
+  language = typescript,
+  """
+// src/lib/components/index.ts
+export { default as DocsLayout } from "@tiramisu-docs/kit/components/DocsLayout.svelte"
+export { default as CodeBlock } from "@tiramisu-docs/kit/components/tiramisu/CodeBlock.svelte"
+export { default as Callout } from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"
+// ... other components
+"""
+}
+
+Pour remplacer n'importe quel composant\, créez votre propre version et modifiez l'export :
+
+steps {
+  Créez votre composant personnalisé (par ex. code { src/lib/components/MyCallout.svelte }),
+  Mettez à jour l'export dans code { src/lib/components/index.ts } :
+}
+
+codeblock {
+  language = typescript,
+  """
+// Before
+export { default as Callout } from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"
+
+// After
+export { default as Callout } from "./MyCallout.svelte"
+"""
+}
+
+Votre composant personnalisé reçoit les mêmes props que la version intégrée. Cela fonctionne pour n'importe quel composant — les composants de mise en page comme code { DocsLayout } et code { DocPage }\, ou les composants de contenu intégrés comme code { CodeBlock }\, code { Tabs } et code { NavCard }.
+
+callout {
+  type = info,
+  Le fichier barrel est généré par le scaffolder. Si vous configurez votre projet manuellement\,
+  consultez link {
+    url = /docs/framework/customization/project-structure,
+    Structure du projet
+  } pour la liste complète des réexports.
+}

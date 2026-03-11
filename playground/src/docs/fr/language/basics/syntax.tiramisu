@@ -1,0 +1,85 @@
+meta { title = Syntaxe, order = 2, icon = braces }
+
+Tiramisu possède une seule construction fondamentale : l'bold { appel de fonction }.
+
+h3 { Appels de fonctions }
+
+Un appel de fonction se compose d'un nom suivi d'un contenu entre accolades :
+
+codeblock { language = tiramisu, "name { content }" }
+
+Le nom peut être n'importe quel texte avant l'accolade ouvrante. Le contenu peut inclure du texte brut\, d'autres appels de fonctions\, ou un mélange des deux.
+
+h3 { Imbrication }
+
+Les appels de fonctions peuvent être imbriqués à n'importe quelle profondeur :
+
+codeblock {
+  language = tiramisu,
+  "bold { italic { underline { deeply nested } } }"
+}
+
+Chaque appel de fonction peut contenir du texte brut\, d'autres appels de fonctions\, ou les deux :
+
+codeblock {
+  language = tiramisu,
+  "bold { This is italic { partially } formatted }"
+}
+
+h3 { Paragraphes }
+
+Le texte brut en dehors des appels de fonctions devient du contenu de paragraphe. Les paragraphes sont séparés par des lignes vides :
+
+codeblock {
+  language = tiramisu,
+  """
+This is the first paragraph.
+
+This is the second paragraph.
+
+This is the third.
+"""
+}
+
+h3 { Noms de fonctions }
+
+Un nom de fonction est n'importe quel texte juste avant une accolade ouvrante code { "{" }. Cela signifie que les noms de fonctions peuvent inclure des espaces\, des chiffres et des caractères spéciaux — bien que par convention\, la plupart des noms de fonctions soient de simples identifiants :
+
+codeblock {
+  language = tiramisu,
+  """
+bold { works }
+myWidget { works }
+"""
+}
+
+h3 { Échappement }
+
+Pour empêcher un appel de fonction d'être analysé\, préfixez le nom de la fonction avec un antislash :
+
+codeblock { language = tiramisu, \bold { this is literal text } }
+
+Cela affiche : code { "bold { this is literal text }" } — l'antislash indique au parseur de traiter code { bold } comme du texte brut plutôt que comme un appel de fonction.
+
+h3 { Caractères spéciaux }
+
+Certains caractères ont une signification spéciale à l'intérieur des paramètres d'appels de fonctions. Vous ne devez les échapper que lorsqu'ils apparaissent à l'intérieur de code { "{ }" } — dans le texte de paragraphe ordinaire\, ils sont traités littéralement et ne nécessitent aucun échappement.
+
+table {
+  row = [bold { Échappement }, bold { Caractère }, bold { Pourquoi }],
+  row = [code { "\," }, Virgule, Empêche la séparation des paramètres],
+  row = [code { "\=" }, Égal, Empêche l'analyse des paramètres nommés],
+  row = [code { "\{" }, Accolade ouvrante, Empêche l'analyse d'appel de fonction],
+  row = [code { "\}" }, Accolade fermante, Empêche la fermeture d'un appel de fonction],
+  row = [code { "\[" }, Crochet ouvrant, Empêche l'analyse de tableau],
+  row = [code { "\]" }, Crochet fermant, Empêche la fermeture d'un tableau],
+  row = [code { \name }, Nom de fonction, Traite le nom comme du texte littéral]
+}
+
+callout {
+  type = info,
+  Ces échappements ne sont nécessaires qu'à l'intérieur des paramètres de fonctions. Dans le texte brut en dehors de code { "{ }" },
+  les virgules,
+  les signes égal,
+  et les crochets sont de simples caractères ordinaires.
+}

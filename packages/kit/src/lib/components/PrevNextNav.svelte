@@ -1,13 +1,23 @@
-<script>
-  let { sidebar = [], currentSlug = "", locale } = $props()
+<script lang="ts">
+  import type { SidebarGroup, SidebarEntry } from "../../types.js"
 
-  function docHref(slug) {
+  let { sidebar = [], currentSlug = "", locale }: { sidebar?: SidebarGroup[]; currentSlug?: string; locale?: string } = $props()
+
+  function docHref(slug: string) {
     const prefix = locale ? `/docs/${locale}` : "/docs"
-    return slug === "index" ? prefix : `${prefix}/${slug}`
+    if (slug === "index") return prefix
+    const clean = slug.replace(/\/index$/, "")
+    return `${prefix}/${clean}`
   }
 
-  function flattenEntries(entries) {
-    const result = []
+  interface FlatItem {
+    title: string
+    href: string
+    slug: string
+  }
+
+  function flattenEntries(entries: SidebarEntry[]): FlatItem[] {
+    const result: FlatItem[] = []
     for (const entry of entries) {
       if (entry.type === "item") {
         result.push({
@@ -30,11 +40,11 @@
   }
 
   const items = $derived(
-    sidebar.flatMap((group) => flattenEntries(group.items))
+    sidebar.flatMap((group: SidebarGroup) => flattenEntries(group.items))
   )
 
   const currentIndex = $derived(
-    items.findIndex((item) => item.slug === (currentSlug || "index"))
+    items.findIndex((item: FlatItem) => item.slug === (currentSlug || "index"))
   )
 
   const prev = $derived(currentIndex > 0 ? items[currentIndex - 1] : null)
@@ -42,7 +52,7 @@
 </script>
 
 {#if prev || next}
-  <nav class="mt-16 flex gap-4 border-t pt-8">
+  <nav class="mt-8 flex gap-4 border-t pt-8">
     {#if prev}
       <a
         href={prev.href}

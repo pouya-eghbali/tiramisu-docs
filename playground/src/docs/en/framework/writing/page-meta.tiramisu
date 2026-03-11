@@ -1,0 +1,61 @@
+meta { title = Page Meta, order = 3, icon = file-text }
+
+Every documentation page starts with a code { meta } block that defines metadata used for the sidebar, search, and SEO.
+
+h2 { Syntax }
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  description = A brief description,
+  order = 2,
+  group = Guide,
+  icon = book,
+  author = Jane Doe
+}""" }
+
+h2 { Fields }
+
+table {
+  row = [Field, Type, Description],
+  row = [code { title }, String, Page title — shown in the sidebar and browser tab],
+  row = [code { description }, String, Short description for SEO meta tags],
+  row = [code { order }, Number, Sort position in the sidebar (lower appears first)],
+  row = [code { group }, String, Sidebar group name (only for root-level files)],
+  row = [code { lastEdited }, Date string, Override the last-edited date (otherwise uses git or file mtime)],
+  row = [code { icon }, String, Icon name (Lucide icon or full Iconify ID like code { "mdi:home" })],
+  row = [code { image }, String, OG image path (relative to site root) or absolute URL],
+  row = [code { author }, String, Author name — displayed below the page and included in JSON-LD]
+}
+
+h2 { Title }
+
+The code { title } field is the most important — it controls what appears in the sidebar navigation. If omitted, the file's slug is used instead.
+
+h2 { Ordering }
+
+Use code { order } to control the position of pages within their sidebar group. Pages are sorted by order ascending — code { "order = 1" } appears first, code { "order = 2" } second, and so on. Pages without an order default to 999.
+
+h2 { Groups }
+
+For root-level files (not inside a folder), the code { group } field determines which sidebar group the page belongs to:
+
+codeblock { language = tiramisu, "meta { title = Getting Started, group = Guide, order = 1 }" }
+
+For files inside folders, the group is determined automatically by the folder name — you don't need to set code { group }.
+
+h2 { Folder Index Pages }
+
+An code { index.tiramisu } file inside a folder sets the group's display title:
+
+filetree {
+  folder { src/docs,
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu }
+    }
+  }
+}
+
+If code { index.tiramisu } has code { "title = Getting Started" }, that becomes the sidebar group heading. Without it, the folder name is title-cased automatically — code { getting-started } becomes "Getting Started".
+
+callout { type = info, Nested folders create subgroups in the sidebar. An code { index.tiramisu } in a subfolder makes the subgroup a clickable link. }

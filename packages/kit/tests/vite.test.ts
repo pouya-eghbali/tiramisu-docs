@@ -39,10 +39,12 @@ describe("buildSidebarTree", () => {
     ]
     const result = buildSidebarTree(docs)
     expect(result).toHaveLength(1)
-    expect(result[0].label).toBe("Getting Started")
-    expect(result[0].items).toHaveLength(2)
-    expect((result[0].items[0] as SidebarItem).title).toBe("Introduction")
-    expect((result[0].items[1] as SidebarItem).title).toBe("Quick Start")
+    // Index page title becomes the group label; group has no slug
+    expect(result[0].label).toBe("Introduction")
+    expect(result[0]).not.toHaveProperty("slug")
+    // Non-index files are direct items in the group
+    expect(result[0].items).toHaveLength(1)
+    expect((result[0].items[0] as SidebarItem).title).toBe("Quick Start")
   })
 
   it("nested subgroups from deep folder structure", () => {
@@ -100,6 +102,41 @@ describe("buildSidebarTree", () => {
     const result = buildSidebarTree(docs, ["Beta", "Alpha"])
     expect(result[0].label).toBe("Beta")
     expect(result[1].label).toBe("Alpha")
+  })
+
+  it("propagates icon from meta to sidebar items", () => {
+    const docs = [
+      { slug: "intro", meta: { title: "Intro", order: 1, group: "Guide", icon: "book-open" } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect((result[0].items[0] as SidebarItem).icon).toBe("book-open")
+  })
+
+  it("propagates icon from folder index to group", () => {
+    const docs = [
+      { slug: "guide/index", meta: { title: "Guide", order: 1, icon: "compass" } },
+      { slug: "guide/setup", meta: { title: "Setup", order: 2 } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect(result[0].icon).toBe("compass")
+  })
+
+  it("propagates icon from subfolder index to subgroup", () => {
+    const docs = [
+      { slug: "guide/advanced/index", meta: { title: "Advanced", order: 1, icon: "zap" } },
+      { slug: "guide/advanced/tips", meta: { title: "Tips", order: 2 } },
+    ]
+    const result = buildSidebarTree(docs)
+    const subgroup = result[0].items[0] as SidebarSubgroup
+    expect(subgroup.icon).toBe("zap")
+  })
+
+  it("items without icon have undefined icon", () => {
+    const docs = [
+      { slug: "readme", meta: { title: "README" } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect((result[0].items[0] as SidebarItem).icon).toBeUndefined()
   })
 
   it("defaults root files without meta.group to 'Docs'", () => {
@@ -178,6 +215,45 @@ describe("buildSectionSidebars", () => {
     expect(result[0].children![1].sidebar).toHaveLength(1)
   })
 
+  it("nested docs within a section preserve full hierarchy (no prefix stripping)", () => {
+    const docs = [
+      { slug: "writing/index", meta: { title: "Writing", order: 1 } },
+      { slug: "writing/markup-basics", meta: { title: "Markup Basics", order: 2 } },
+      { slug: "writing/content/index", meta: { title: "Content", order: 3 } },
+      { slug: "writing/content/code-blocks", meta: { title: "Code Blocks", order: 4 } },
+      { slug: "writing/page-meta", meta: { title: "Page Meta", order: 5 } },
+    ]
+    const sections = [{ label: "Writing", path: "writing" }]
+    const result = buildSectionSidebars(docs, sections)
+    expect(result).toHaveLength(1)
+    expect(result[0].label).toBe("Writing")
+
+    const sidebar = result[0].sidebar!
+    expect(sidebar).toHaveLength(1)
+
+    const group = sidebar[0]
+    expect(group.label).toBe("Writing")
+    // Should have: Markup Basics (item), Content (subgroup), Page Meta (item)
+    expect(group.items).toHaveLength(3)
+
+    const markupBasics = group.items[0] as SidebarItem
+    expect(markupBasics.type).toBe("item")
+    expect(markupBasics.title).toBe("Markup Basics")
+    expect(markupBasics.slug).toBe("writing/markup-basics")
+
+    const contentSubgroup = group.items[1] as SidebarSubgroup
+    expect(contentSubgroup.type).toBe("subgroup")
+    expect(contentSubgroup.label).toBe("Content")
+    expect(contentSubgroup.slug).toBe("writing/content/index")
+    expect(contentSubgroup.items).toHaveLength(1)
+    expect((contentSubgroup.items[0] as SidebarItem).slug).toBe("writing/content/code-blocks")
+
+    const pageMeta = group.items[2] as SidebarItem
+    expect(pageMeta.type).toBe("item")
+    expect(pageMeta.title).toBe("Page Meta")
+    expect(pageMeta.slug).toBe("writing/page-meta")
+  })
+
   it("external href sections have no sidebar", () => {
     const docs: { slug: string; meta: any }[] = []
     const sections = [{ label: "Blog", href: "https://blog.example.com" }]
@@ -191,9 +267,9 @@ describe("buildSectionSidebars", () => {
 describe("buildLocaleData", () => {
   it("groups docs by locale prefix", () => {
     const allDocs = [
-      { slug: "en/intro", meta: { title: "Intro" } },
-      { slug: "en/guide", meta: { title: "Guide" } },
-      { slug: "fr/intro", meta: { title: "Introduction" } },
+      { slug: "en/intro", meta: { title: "Intro" }, headings: [], lastEdited: "2026-03-01T00:00:00.000Z" },
+      { slug: "en/guide", meta: { title: "Guide" }, headings: [], lastEdited: "2026-03-01T00:00:00.000Z" },
+      { slug: "fr/intro", meta: { title: "Introduction" }, headings: [], lastEdited: "2026-03-01T00:00:00.000Z" },
     ]
     const locales = [
       { code: "en", label: "English" },

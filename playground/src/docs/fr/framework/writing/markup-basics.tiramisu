@@ -1,0 +1,73 @@
+meta { title = Bases du balisage, order = 2, icon = text }
+
+Tiramisu utilise une syntaxe d'appels de fonctions pour tout contenu structuré. Le texte brut en dehors des appels de fonctions devient du contenu de paragraphe.
+
+h2 { Appels de fonctions }
+
+La syntaxe de base est un nom de fonction suivi du contenu entre accolades :
+
+codeblock { language = tiramisu, "h1 { Hello World }" }
+
+Les fonctions peuvent avoir des paramètres séparés par des virgules :
+
+codeblock { language = tiramisu, "link { url = https://example.com, Click here }" }
+
+h2 { Paragraphes }
+
+Le texte en dehors des appels de fonctions est affiché sous forme de paragraphes. Les lignes vides séparent les paragraphes :
+
+codeblock { language = tiramisu, """This is the first paragraph.
+
+This is the second paragraph.""" }
+
+Les sauts de ligne simples à l'intérieur d'un paragraphe sont traités comme des espaces.
+
+h2 { Mise en forme en ligne }
+
+table {
+  row = [Syntaxe, Résultat],
+  row = [code { "bold { text }" }, bold { texte }],
+  row = [code { "italic { text }" }, italic { texte }],
+  row = [code { "code { text }" }, code { text }]
+}
+
+Ces éléments peuvent être imbriqués : bold { italic { gras et italique } }.
+
+codeblock { language = tiramisu, "bold { italic { bold and italic } }" }
+
+h2 { Liens }
+
+codeblock { language = tiramisu, "link { url = https://example.com, Link text }" }
+
+S'affiche ainsi : link { url = https://example.com, Texte du lien }
+
+Les liens externes (commençant par code { http:// } ou code { https:// }) s'ouvrent automatiquement dans un nouvel onglet et affichent une petite icône de lien externe.
+
+h2 { Titres }
+
+Six niveaux de titres sont disponibles :
+
+codeblock { language = tiramisu, """h1 { Heading 1 }
+h2 { Heading 2 }
+h3 { Heading 3 }
+h4 { Heading 4 }
+h5 { Heading 5 }
+h6 { Heading 6 }""" }
+
+Les titres génèrent automatiquement des identifiants d'ancrage et apparaissent dans la table des matières.
+
+h2 { Imbrication }
+
+Les appels de fonctions peuvent être imbriqués les uns dans les autres :
+
+codeblock { language = tiramisu, """callout { type = info,
+  Use bold { bold } to emphasize key points in your
+  link { url = /docs, documentation }.
+}""" }
+
+demo {
+  callout { type = info,
+    Utilisez le bold { gras } pour mettre en valeur les points clés de votre
+    link { url = /docs, documentation }.
+  }
+}

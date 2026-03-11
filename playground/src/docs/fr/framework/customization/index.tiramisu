@@ -1,0 +1,12 @@
+meta {
+  title = Personnalisation,
+  order = 4,
+  icon = palette
+}
+
+Tiramisu Docs est conçu pour être entièrement personnalisable. Vous pouvez remplacer les composants intégrés\, créer vos propres fonctions personnalisées et adapter l'apparence complète pour correspondre à votre marque.
+
+list {
+  link { url = /docs/framework/customization/custom-components, Composants personnalisés } — Créez vos propres fonctions Tiramisu en tant que composants Svelte,
+  link { url = /docs/framework/customization/project-structure, Structure du projet } — Comprenez les fichiers et dossiers clés d'un projet Tiramisu Docs
+}

@@ -1,0 +1,67 @@
+meta {
+  title = Sidebar,
+  order = 3,
+  icon = panel-left
+}
+
+The sidebar is automatically generated from your file structure. You can control the ordering and grouping of items through configuration and file metadata.
+
+h3 { Group Order }
+
+Use code { sidebar.groupOrder } to control the order that groups appear in the sidebar:
+
+codeblock { language = typescript, """sidebar: {
+  groupOrder: ["Getting Started", "Writing", "Configuration", "Advanced"],
+},""" }
+
+Groups not listed in code { groupOrder } appear after the listed ones, sorted alphabetically.
+
+h3 { Folder-Based Grouping }
+
+Folders in your docs directory automatically become sidebar groups. The folder name is converted to a title (e.g., code { getting-started } becomes "Getting Started").
+
+To customize a group's label, add an code { index.tiramisu } file inside the folder:
+
+codeblock { language = tiramisu, """meta {
+  title = My Custom Group Name
+}""" }
+
+The code { title } from the index file becomes the group label in the sidebar.
+
+h3 { Root-Level Grouping }
+
+Files at the root of a section (not in a subfolder) can be grouped using the code { group } field in their meta block:
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  group = Getting Started,
+  order = 1
+}""" }
+
+h3 { Ordering Pages }
+
+Pages within a group are sorted by their code { order } value (lower numbers appear first). If no order is specified, pages are sorted alphabetically by title.
+
+codeblock { language = tiramisu, """meta {
+  title = Installation,
+  order = 2
+}""" }
+
+h3 { Subgroups }
+
+Nested folders create subgroups in the sidebar. These appear as collapsible sections within their parent group:
+
+filetree {
+  folder { src/docs/framework,
+    folder { writing,
+      file { index.tiramisu },
+      file { basics.tiramisu },
+      folder { content,
+        file { index.tiramisu },
+        file { code-blocks.tiramisu }
+      }
+    }
+  }
+}
+
+The code { index.tiramisu } in code { writing/ } defines the "Writing" group label. The code { index.tiramisu } in code { content/ } defines the "Content" subgroup label.

@@ -1,0 +1,129 @@
+meta {
+  title = Front-ends personnalisés,
+  order = 2,
+  icon = monitor
+}
+
+h2 { Front-ends compilateurs personnalisés }
+
+Puisque le parseur Tiramisu produit un AST générique\, vous pouvez écrire votre propre front-end compilateur pour transformer le Tiramisu en n'importe quel format de sortie. Cette page vous guide dans la construction d'un simple compilateur Tiramisu vers HTML.
+
+h3 { Pour commencer }
+
+Installez le parseur Tiramisu :
+
+codeblock { language = bash, "bun add @timeleap/tiramisu" }
+
+h3 { Analyse du texte source }
+
+Utilisez la fonction code { parse } pour convertir le source Tiramisu en AST :
+
+codeblock { language = typescript, """import { parse } from "@timeleap/tiramisu/src/index";
+
+const source = 'bold { Hello } world';
+const ast = parse(source);""" }
+
+La fonction code { parse } retourne un nœud racine code { Tiramisu } contenant tout le contenu analysé.
+
+h3 { Parcourir l'AST }
+
+Pour compiler l'AST\, parcourez ses nœuds en utilisant des vérifications code { instanceof } :
+
+codeblock { language = typescript, """import {
+  Tiramisu,
+  Paragraph,
+  MixedText,
+  PureText,
+  FunctionCall,
+  Parameter,
+  NamedParameter,
+} from "@timeleap/tiramisu/src/types/nodes";
+
+function compile(node) {
+  if (node instanceof Tiramisu) {
+    return node.nodes.map(compile).join("");
+  }
+
+  if (node instanceof Paragraph) {
+    const inner = node.nodes.map(compile).join("");
+    return "<p>" + inner + "</p>";
+  }
+
+  if (node instanceof MixedText) {
+    return node.segments.map(compile).join("");
+  }
+
+  if (node instanceof PureText) {
+    return node.text;
+  }
+
+  if (node instanceof FunctionCall) {
+    return handleFunction(node);
+  }
+
+  if (node instanceof Parameter) {
+    return node.nodes.map(compile).join("");
+  }
+
+  return "";
+}
+
+function handleFunction(node) {
+  const name = node.functionName.trim();
+  const params = node.parameters?.params ?? [];
+  const content = params.map(compile).join("");
+
+  switch (name) {
+    case "bold":
+      return "<strong>" + content + "</strong>";
+    case "italic":
+      return "<em>" + content + "</em>";
+    case "code":
+      return "<code>" + content + "</code>";
+    case "h1":
+      return "<h1>" + content + "</h1>";
+    case "h2":
+      return "<h2>" + content + "</h2>";
+    default:
+      return "<div class=\"" + name + "\">" + content + "</div>";
+  }
+}""" }
+
+h3 { Utiliser le compilateur }
+
+codeblock { language = typescript, "const source = `
+h1 { Hello World }
+
+This is a bold { simple } example with italic { formatting }.
+`;
+
+const ast = parse(source);
+const html = compile(ast);
+console.log(html);
+// <h1>Hello World</h1><p>This is a <strong>simple</strong> example with <em>formatting</em>.</p>" }
+
+h3 { Gérer les paramètres nommés }
+
+Pour des fonctions plus complexes\, vous voudrez extraire les paramètres nommés :
+
+codeblock { language = typescript, """import { NamedParameter } from "@timeleap/tiramisu/src/types/nodes";
+
+function getNamedParam(params, name) {
+  for (const param of params) {
+    if (param instanceof NamedParameter && param.name.trim() === name) {
+      return param.nodes.map(compile).join("");
+    }
+  }
+  return null;
+}
+
+// Usage in handleFunction:
+case "link":
+  const url = getNamedParam(params, "url");
+  return '<a href="' + url + '">' + content + '</a>';""" }
+
+h3 { Exemple concret }
+
+Le cœur de Tiramisu Docs (code { @tiramisu-docs/core }) est un front-end compilateur complet qui transforme l'AST Tiramisu en composants Svelte. Il démontre la gestion de tous les types de nœuds\, les définitions de fonctions intégrées\, la résolution de composants personnalisés et l'extraction de métadonnées.
+
+callout { type = info, La beauté de la conception de Tiramisu réside dans le fait que le parseur ne sait rien de la signification des fonctions. Toute la sémantique est définie par votre front-end compilateur\, vous donnant une liberté totale sur l'interprétation de votre balisage. }

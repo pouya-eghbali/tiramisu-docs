@@ -1,0 +1,180 @@
+meta { title = Éléments visuels, order = 7, icon = image }
+
+Composants pour afficher des données structurées et des médias.
+
+h2 { Tableaux }
+
+h3 { Tableaux par lignes }
+
+codeblock {
+  language = tiramisu,
+  """
+table {
+  row = [Name, Type, Default],
+  row = [title, String, Documentation],
+  row = [theme, Object, Default theme]
+}
+"""
+}
+
+demo {
+  table {
+    row = [Nom, Type, Défaut],
+    row = [title, String, Documentation],
+    row = [theme, Object, Thème par défaut]
+  }
+}
+
+La première ligne code { row } devient l'en-tête du tableau. Toutes les lignes suivantes sont des lignes de corps.
+
+h3 { Tableaux CSV }
+
+Vous pouvez afficher des tableaux à partir de données CSV en utilisant le paramètre code { csv }. Le plus simple est de charger depuis un fichier avec code { readfile } :
+
+codeblock {
+  language = tiramisu,
+  "table { csv = readfile { src = sample-data.csv } }"
+}
+
+demo { table { csv = readfile { src = sample-data.csv } } }
+
+Vous pouvez également passer des données CSV en ligne. L'analyse CSV prend en charge les champs entre guillemets avec des virgules et les guillemets échappés.
+
+Ceci est utile pour séparer les données du contenu de la documentation\, ou pour partager des données entre les pages.
+
+h2 { Listes }
+
+Listes non ordonnées :
+
+codeblock {
+  language = tiramisu,
+  "list { First item, Second item, Third item }"
+}
+
+demo { list { Premier élément, Deuxième élément, Troisième élément } }
+
+Listes ordonnées :
+
+codeblock {
+  language = tiramisu,
+  "list { type = ordered, First, Second, Third }"
+}
+
+demo { list { type = ordered, Premier, Deuxième, Troisième } }
+
+h2 { Images }
+
+codeblock {
+  language = tiramisu,
+  "image { src = /logo.svg, alt = Tiramisu logo }"
+}
+
+Les images supportent le zoom au clic. Vous pouvez ajouter une légende optionnelle :
+
+codeblock {
+  language = tiramisu,
+  "image { src = /logo.svg, alt = Tiramisu logo, caption = The Tiramisu logo }"
+}
+
+La légende apparaît en petit texte sous l'image.
+
+demo {
+  image {
+    src = /images/switzerland.jpg,
+    alt = "Matterhorn Glacier, Zermatt",
+    caption = "Glacier du Cervin, Zermatt, Suisse"
+  }
+}
+
+h2 { Cartes }
+
+Cartes de navigation pour créer des liens entre les pages :
+
+codeblock {
+  language = tiramisu,
+  """
+cards {
+  card { title = Getting Started, description = Set up your project, href = /docs },
+  card { title = Configuration, description = Customize your site, href = /docs }
+}
+"""
+}
+
+demo {
+  cards {
+    card {
+      title = Prise en main,
+      description = Configurez votre projet,
+      href = /docs
+    },
+    card {
+      title = Configuration,
+      description = Personnalisez votre site,
+      href = /docs
+    }
+  }
+}
+
+Les cartes supportent les paramètres optionnels code { icon } et code { image } :
+
+codeblock {
+  language = tiramisu,
+  """
+cards {
+  card { title = Quick Start, description = Get up and running, href = /docs, icon = rocket },
+  card { title = Gallery, description = Browse examples, href = /docs, image = /preview.png }
+}
+"""
+}
+
+demo {
+  cards {
+    card {
+      title = Démarrage rapide,
+      description = Soyez opérationnel rapidement,
+      href = /docs,
+      icon = rocket,
+      image = /images/rocket.jpg
+    },
+    card {
+      title = Galerie,
+      description = Parcourez les exemples,
+      href = /docs,
+      icon = book-image,
+      image = /images/gallery.jpg
+    }
+  }
+}
+
+Les icônes utilisent les noms d'icônes link { url = https://icon-sets.iconify.design/, Iconify } (voir link { url = /docs/framework/configuration/icons, Icônes }). Les images s'affichent comme image de couverture au-dessus du contenu de la carte.
+
+h2 { Arborescences de fichiers }
+
+Affichez des structures de répertoires :
+
+codeblock {
+  language = tiramisu,
+  """
+filetree {
+  folder { src,
+    folder { docs,
+      file { index.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { lib,
+      file { config.ts }
+    }
+  }
+}
+"""
+}
+
+demo {
+  filetree {
+    folder {
+      src,
+      folder { docs, file { index.tiramisu }, file { guide.tiramisu } },
+      folder { lib, file { config.ts } }
+    }
+  }
+}

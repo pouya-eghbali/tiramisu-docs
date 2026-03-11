@@ -1,0 +1,180 @@
+meta { title = Visuelle Elemente, order = 7, icon = image }
+
+Komponenten zur Anzeige strukturierter Daten und Medien.
+
+h2 { Tabellen }
+
+h3 { Zeilenbasierte Tabellen }
+
+codeblock {
+  language = tiramisu,
+  """
+table {
+  row = [Name, Type, Default],
+  row = [title, String, Documentation],
+  row = [theme, Object, Default theme]
+}
+"""
+}
+
+demo {
+  table {
+    row = [Name, Typ, Standard],
+    row = [title, String, Dokumentation],
+    row = [theme, Object, Standard-Theme]
+  }
+}
+
+Die erste code { row } wird zur Tabellenüberschrift. Alle nachfolgenden Zeilen sind Inhaltszeilen.
+
+h3 { CSV-Tabellen }
+
+Sie können Tabellen aus CSV-Daten mit dem Parameter code { csv } rendern. Am einfachsten ist das Laden aus einer Datei mit code { readfile }:
+
+codeblock {
+  language = tiramisu,
+  "table { csv = readfile { src = sample-data.csv } }"
+}
+
+demo { table { csv = readfile { src = sample-data.csv } } }
+
+Sie können CSV-Daten auch inline übergeben. Die CSV-Verarbeitung unterstützt Felder in Anführungszeichen mit Kommas und escapten Anführungszeichen.
+
+Dies ist nützlich\, um Daten vom Dokumentationsinhalt zu trennen oder um Daten zwischen Seiten zu teilen.
+
+h2 { Listen }
+
+Ungeordnete Listen:
+
+codeblock {
+  language = tiramisu,
+  "list { First item, Second item, Third item }"
+}
+
+demo { list { Erstes Element, Zweites Element, Drittes Element } }
+
+Geordnete Listen:
+
+codeblock {
+  language = tiramisu,
+  "list { type = ordered, First, Second, Third }"
+}
+
+demo { list { type = ordered, Erstens, Zweitens, Drittens } }
+
+h2 { Bilder }
+
+codeblock {
+  language = tiramisu,
+  "image { src = /logo.svg, alt = Tiramisu logo }"
+}
+
+Bilder unterstützen Klicken zum Vergrößern. Sie können eine optionale Bildunterschrift hinzufügen:
+
+codeblock {
+  language = tiramisu,
+  "image { src = /logo.svg, alt = Tiramisu logo, caption = The Tiramisu logo }"
+}
+
+Die Bildunterschrift erscheint als kleiner Text unter dem Bild.
+
+demo {
+  image {
+    src = /images/switzerland.jpg,
+    alt = "Matterhorn Glacier, Zermatt",
+    caption = "Matterhorn-Gletscher, Zermatt, Schweiz"
+  }
+}
+
+h2 { Karten }
+
+Navigationskarten zum Verlinken zwischen Seiten:
+
+codeblock {
+  language = tiramisu,
+  """
+cards {
+  card { title = Getting Started, description = Set up your project, href = /docs },
+  card { title = Configuration, description = Customize your site, href = /docs }
+}
+"""
+}
+
+demo {
+  cards {
+    card {
+      title = Erste Schritte,
+      description = Richten Sie Ihr Projekt ein,
+      href = /docs
+    },
+    card {
+      title = Konfiguration,
+      description = Passen Sie Ihre Website an,
+      href = /docs
+    }
+  }
+}
+
+Karten unterstützen optionale Parameter code { icon } und code { image }:
+
+codeblock {
+  language = tiramisu,
+  """
+cards {
+  card { title = Quick Start, description = Get up and running, href = /docs, icon = rocket },
+  card { title = Gallery, description = Browse examples, href = /docs, image = /preview.png }
+}
+"""
+}
+
+demo {
+  cards {
+    card {
+      title = Schnellstart,
+      description = Schnell loslegen,
+      href = /docs,
+      icon = rocket,
+      image = /images/rocket.jpg
+    },
+    card {
+      title = Galerie,
+      description = Beispiele durchsuchen,
+      href = /docs,
+      icon = book-image,
+      image = /images/gallery.jpg
+    }
+  }
+}
+
+Icons verwenden link { url = https://icon-sets.iconify.design/, Iconify }-Symbolnamen (siehe link { url = /docs/framework/configuration/icons, Icons }). Bilder werden als Titelbild über dem Karteninhalt angezeigt.
+
+h2 { Dateibäume }
+
+Verzeichnisstrukturen anzeigen:
+
+codeblock {
+  language = tiramisu,
+  """
+filetree {
+  folder { src,
+    folder { docs,
+      file { index.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { lib,
+      file { config.ts }
+    }
+  }
+}
+"""
+}
+
+demo {
+  filetree {
+    folder {
+      src,
+      folder { docs, file { index.tiramisu }, file { guide.tiramisu } },
+      folder { lib, file { config.ts } }
+    }
+  }
+}

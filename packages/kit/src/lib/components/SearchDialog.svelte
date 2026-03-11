@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation"
   import { fade, scale, fly } from "svelte/transition"
-  import MiniSearch from "minisearch"
+  import MiniSearch, { type SearchResult } from "minisearch"
   import { searchIndex, locales, defaultLocale } from "virtual:tiramisu-docs"
 
-  let { open = $bindable(false), locale } = $props()
+  let { open = $bindable(false), locale }: { open?: boolean; locale?: string } = $props()
   let query = $state("")
   let selectedIndex = $state(0)
-  let inputEl = $state(null)
+  let inputEl: HTMLInputElement | null = $state(null)
 
   const activeIndex = $derived(
     locale && locales?.[locale]
@@ -48,7 +48,7 @@
     selectedIndex = 0
   })
 
-  function handleKeydown(e) {
+  function handleKeydown(e: KeyboardEvent) {
     if (e.key === "Escape") {
       open = false
     } else if (e.key === "ArrowDown") {
@@ -63,7 +63,7 @@
     }
   }
 
-  function navigate(result) {
+  function navigate(result: SearchResult) {
     const prefix = locale ? `/docs/${locale}` : "/docs"
     const href = result.slug === "index" ? prefix : `${prefix}/${result.slug}`
     open = false
@@ -75,7 +75,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="fixed inset-0 z-50" onkeydown={handleKeydown}>
     <button
-      class="fixed inset-0 bg-background/80 backdrop-blur-sm"
+      class="fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm"
       onclick={() => (open = false)}
       aria-label="Close search"
       transition:fade={{ duration: 150 }}
@@ -85,7 +85,7 @@
       class="fixed left-1/2 top-[20%] z-50 w-full max-w-lg -translate-x-1/2 px-4"
       transition:scale={{ duration: 150, start: 0.96, opacity: 0 }}
     >
-      <div class="overflow-hidden rounded-xl border bg-background shadow-2xl">
+      <div class="overflow-hidden rounded-xl border bg-background dark:bg-card shadow-2xl">
         <div class="flex items-center gap-3 border-b px-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground">
             <circle cx="11" cy="11" r="8"></circle>

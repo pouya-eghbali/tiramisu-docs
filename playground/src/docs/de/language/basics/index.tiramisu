@@ -1,0 +1,38 @@
+meta {
+  title = Was ist Tiramisu?,
+  order = 1,
+  icon = graduation-cap
+}
+
+Tiramisu ist eine Auszeichnungssprache\, die auf einem einzigen Konzept aufbaut: bold { Funktionsaufrufen }. Alles in Tiramisu ist entweder einfacher Text oder ein Funktionsaufruf\, was die Syntax einfach und konsistent macht.
+
+Anders als Markdown oder HTML ist Tiramisu nicht an ein bestimmtes Ausgabeformat gebunden. Der Tiramisu-Parser (code { @timeleap/tiramisu }) liest Quelltext und erzeugt einen AST (Abstract Syntax Tree)\, der in alles kompiliert werden kann — HTML\, Svelte-Komponenten\, React\, PDF oder jedes andere Format.
+
+h3 { Grundprinzipien }
+
+list {
+  bold { Eine Syntax } — alles ist ein Funktionsaufruf. Keine Sonderfälle\, keine Kurzschreibweisen\, keine Mehrdeutigkeiten.,
+  bold { Komponierbar } — Funktionsaufrufe können beliebig tief in andere Funktionsaufrufe verschachtelt werden.,
+  bold { Ausgabeunabhängig } — der Parser erzeugt einen generischen AST. Was Sie damit machen\, entscheidet Ihr Compiler-Front-End.,
+  bold { Erweiterbar } — es gibt keine eingebauten Funktionen in der Sprache selbst. Alle Funktionen werden vom Compiler-Front-End definiert.
+}
+
+h3 { Tiramisu vs. Tiramisu Docs }
+
+Es ist wichtig\, zwischen beiden zu unterscheiden:
+
+table {
+  row = [bold { " " }, bold { Tiramisu (Sprache) }, bold { Tiramisu Docs (Framework) }],
+  row = [bold { Was }, Auszeichnungssprache + Parser, Dokumentationsframework],
+  row = [bold { Paket }, code { @timeleap/tiramisu }, code { @tiramisu-docs/kit }],
+  row = [bold { Funktionen }, Keine eingebauten, Definiert h1\, bold\, codeblock\, callout\, usw.],
+  row = [bold { Ausgabe }, Generischer AST, Svelte-Komponenten]
+}
+
+Alle Funktionen\, die Sie beim Schreiben von Dokumentation verwenden (code { h1 }\, code { bold }\, code { codeblock }\, code { callout } usw.)\, werden von Tiramisu Docs definiert\, nicht von der Tiramisu-Sprache selbst.
+
+h3 { Ein einfaches Beispiel }
+
+codeblock { language = tiramisu, "bold { Hello } world!" }
+
+Der Parser wandelt dies in einen AST mit einem code { FunctionCall }-Knoten (Name: bold\, Inhalt: Hello) um\, gefolgt von einem code { PureText }-Knoten (world!). Was als Nächstes passiert\, hängt von Ihrem Compiler-Front-End ab.

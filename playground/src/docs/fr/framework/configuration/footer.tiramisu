@@ -1,0 +1,45 @@
+meta {
+  title = Pied de page,
+  order = 5,
+  icon = footprints
+}
+
+Le pied de page apparaît en bas de chaque page et peut afficher des liens vers les réseaux sociaux\, un avis de droit d'auteur\, et un badge « Powered by Tiramisu ».
+
+h3 { Configuration }
+
+Ajoutez un bloc code { footer } à votre configuration :
+
+codeblock { language = typescript, """footer: {
+  socials: {
+    github: "https://github.com/user/repo",
+    x: "https://x.com/myproject",
+    discord: "https://discord.gg/myserver",
+  },
+  copyright: "© 2026 My Project",
+},""" }
+
+h3 { Liens sociaux }
+
+Les plateformes sociales suivantes sont prises en charge :
+
+table {
+  row = [bold { Plateforme }, bold { Clé de configuration }, bold { Icône }],
+  row = [GitHub, code { github }, Logo GitHub],
+  row = [X (Twitter), code { x }, Logo X],
+  row = [Discord, code { discord }, Logo Discord],
+  row = [Bluesky, code { bluesky }, Logo Bluesky],
+  row = [Mastodon, code { mastodon }, Logo Mastodon],
+  row = [YouTube, code { youtube }, Logo YouTube],
+  row = [LinkedIn, code { linkedin }, Logo LinkedIn]
+}
+
+Chaque entrée sociale est une chaîne URL. Seules les plateformes avec une URL afficheront une icône dans le pied de page.
+
+h3 { Droit d'auteur }
+
+La chaîne code { copyright } s'affiche centrée sous les icônes sociales. Utilisez-la pour votre avis de droit d'auteur ou tout texte court.
+
+h3 { Powered by Tiramisu }
+
+Le pied de page inclut automatiquement une pastille « Powered by Tiramisu » qui renvoie vers le site web de Tiramisu Docs. Ce badge contribue à soutenir le projet.

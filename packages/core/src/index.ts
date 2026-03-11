@@ -1,4 +1,5 @@
 export { extractMeta } from "./meta.js"
 export type { ExtractMetaResult } from "./meta.js"
 export { compileTiramisu } from "./compiler.js"
+export type { CompileOptions } from "./compiler.js"
 export type { DocMeta, CompileResult, Heading } from "./types.js"

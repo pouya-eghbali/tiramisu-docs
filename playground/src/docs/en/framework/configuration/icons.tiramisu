@@ -1,0 +1,105 @@
+meta { title = Icons, order = 7, icon = lucide:smile }
+
+h2 { Adding Icons }
+
+Tiramisu Docs uses link { url = https://iconify.design/, Iconify } for icons, giving you access to over 275,000 icons from 150+ icon sets. Icons are loaded on demand — no build-time bundling needed.
+
+h2 { Icon Format }
+
+Icons use the code { prefix:name } format from Iconify:
+
+table {
+  row = [bold { Format }, bold { Example }],
+  row = [code { lucide:icon-name }, Lucide icons (e.g. code { lucide:rocket })],
+  row = [code { mdi:icon-name }, Material Design Icons],
+  row = [code { simple-icons:icon-name }, Brand / simple icons],
+  row = [code { devicon-plain:icon-name }, Developer tool icons],
+  row = [code { heroicons:icon-name }, Heroicons]
+}
+
+callout {
+  type = info,
+  Icon names without a code { : } are automatically prefixed with code { lucide: }. So code { "icon = rocket" } works as code { lucide:rocket }.
+}
+
+h2 { Section Icons }
+
+Add an code { icon } field to your section config in code { tiramisu.config.ts }:
+
+codeblock {
+  language = typescript,
+  """
+sections: [
+  { label: "Guide", path: "guide", icon: "lucide:book-open" },
+  { label: "API", path: "api", icon: "lucide:code" },
+]
+"""
+}
+
+Section icons appear in the top bar next to the section label.
+
+h2 { Page and Group Icons }
+
+Add code { icon } to the code { meta } block of any code { .tiramisu } file:
+
+codeblock {
+  language = tiramisu,
+  "meta { title = Getting Started, order = 1, icon = lucide:rocket }"
+}
+
+For folder index pages (code { index.tiramisu }), the icon is applied to the sidebar group or subgroup heading. For regular pages, the icon appears next to the page title in the sidebar and in the page header.
+
+h2 { Page Header }
+
+When viewing a documentation page, the page header displays:
+
+list {
+  The parent group or subgroup name as a small label above the title,
+  The page icon (if set) next to the title,
+  The page title and description from meta
+}
+
+h2 { Browsing Icons }
+
+Use the link { url = https://icon-sets.iconify.design/, Iconify Icon Sets } browser to find icons. Some popular sets:
+
+table {
+  row = [bold { Set }, bold { Prefix }, bold { Style }],
+  row = [
+    link { url = https://lucide.dev/icons, Lucide },
+    code { lucide },
+    Clean line icons
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/mdi/, Material Design },
+    code { mdi },
+    Filled / outlined
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/heroicons/, Heroicons },
+    code { heroicons },
+    Outline / solid
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/simple-icons/, Simple Icons },
+    code { simple-icons },
+    Brand logos
+  ],
+  row = [
+    link {
+      url = https://icon-sets.iconify.design/devicon-plain/,
+      Devicon Plain
+    },
+    code { devicon-plain },
+    Dev tool icons
+  ]
+}
+
+h2 { Code Block Icons }
+
+Code blocks and tabbed code blocks automatically detect language icons using the code { devicon-plain } set. You can override the auto-detected icon:
+
+codeblock {
+  language = tiramisu,
+  "codeblock { language = typescript, icon = \"lucide:file-code\", \"\"\"const x = 1\"\"\" }"
+}

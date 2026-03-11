@@ -1,0 +1,36 @@
+meta { title = Erste Schritte, order = 1, icon = rocket }
+
+Tiramisu Docs ist ein Dokumentations-Framework basierend auf link { url = https://svelte.dev, SvelteKit } und der Tiramisu-Auszeichnungssprache. Schreiben Sie Ihre Dokumentation in code { .tiramisu }-Dateien und erhalten Sie eine elegante\, moderne Dokumentationsseite.
+
+h2 { Funktionen }
+
+list {
+  bold { Dateibasiertes Routing } — legen Sie code { .tiramisu }-Dateien in code { src/docs/ } ab und Seiten erscheinen automatisch,
+  bold { Integrierte Suche } — Volltextsuche über Ihre gesamte Dokumentation,
+  bold { Syntaxhervorhebung } — unterstützt von Shiki mit Unterstützung für Dutzende von Sprachen,
+  bold { Dunkelmodus } — automatischer Theme-Wechsel mit hellen und dunklen Varianten,
+  bold { Sektionen } — organisieren Sie Dokumentation in mehrere übergeordnete Sektionen mit unabhängigen Seitenleisten,
+  bold { i18n } — integrierte Internationalisierung mit Sprachwechsel und Fallback,
+  bold { SEO } — Sitemap\, llms.txt und skill.md-Generierung sofort einsatzbereit,
+  bold { MCP-Server } — lassen Sie KI-Assistenten Ihre Dokumentation über das Model Context Protocol durchsuchen,
+  bold { Eigene Komponenten } — erweitern Sie mit Ihren eigenen Svelte-Komponenten
+}
+
+h2 { Wie es funktioniert }
+
+Sie schreiben Dokumentation in Tiramisu-Auszeichnung — einer einfachen\, auf Funktionsaufrufen basierenden Syntax:
+
+codeblock { language = tiramisu, """meta { title = Welcome, order = 1 }
+
+This is a paragraph with bold { bold text } and code { inline code }.
+
+codeblock { language = bash, "npm install my-lib" }""" }
+
+Das Vite-Plugin kompiliert code { .tiramisu }-Dateien zur Build-Zeit in Svelte-Komponenten und generiert automatisch Seitenleisten-Navigation\, Suchindex und Seiten-Metadaten.
+
+h2 { Nächste Schritte }
+
+cards {
+  card { title = Installation, description = Ein neues Tiramisu-Docs-Projekt einrichten, href = /docs/framework/getting-started/installation },
+  card { title = Schnellstart, description = Erstellen Sie Ihre erste Dokumentationsseite, href = /docs/framework/getting-started/quick-start }
+}

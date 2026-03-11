@@ -1,0 +1,62 @@
+meta {
+  title = Sections,
+  order = 2,
+  icon = layout-grid
+}
+
+Sections let you split your documentation into separate top-level areas. Each section appears as a tab in the navigation bar and gets its own sidebar.
+
+h3 { Defining Sections }
+
+Add a code { sections } array to your config. Each section needs a code { label } (display name) and a code { path } (folder name inside your docs directory):
+
+codeblock { language = typescript, """sections: [
+  { label: "Framework", path: "framework" },
+  { label: "Language", path: "language" },
+],""" }
+
+With this config, your docs folder structure should look like:
+
+filetree {
+  folder { src/docs,
+    folder { framework,
+      folder { getting-started },
+      folder { writing }
+    },
+    folder { language,
+      folder { basics },
+      folder { internals }
+    }
+  }
+}
+
+Each folder name matches the code { path } value from your section config.
+
+h3 { How Sections Work }
+
+Each section maps to a subfolder in your docs directory. When a user clicks a section tab in the navbar, the sidebar updates to show only the pages within that section.
+
+callout { type = info, Sections are optional. If you don't define any\, all docs appear in a single sidebar. }
+
+h3 { External Links }
+
+You can also add sections that link to external URLs using code { href } instead of code { path }:
+
+codeblock { language = typescript, """sections: [
+  { label: "Guide", path: "guide" },
+  { label: "GitHub", href: "https://github.com/user/repo" },
+],""" }
+
+h3 { Dropdown Sections }
+
+Sections can have children for dropdown menus:
+
+codeblock { language = typescript, """sections: [
+  {
+    label: "Resources",
+    children: [
+      { label: "Blog", href: "https://blog.example.com" },
+      { label: "Changelog", href: "/changelog" },
+    ],
+  },
+],""" }

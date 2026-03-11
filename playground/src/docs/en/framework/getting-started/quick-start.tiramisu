@@ -1,0 +1,59 @@
+meta { title = Quick Start, order = 3, icon = zap }
+
+Once you have a project set up, create your first documentation page.
+
+h2 { Create a Page }
+
+Create a file at code { src/docs/getting-started.tiramisu }:
+
+codeblock { language = tiramisu, """meta { title = Getting Started, order = 1 }
+
+Welcome to my documentation!
+
+h2 { Installation }
+
+codeblock { language = bash, "bun add my-package" }
+
+h2 { Usage }
+
+Import and use the package:
+
+codeblock { language = typescript, "import { something } from 'my-package'" }""" }
+
+h2 { Understanding Meta }
+
+Every page starts with a code { meta } block that defines page metadata:
+
+table {
+  row = [Field, Description],
+  row = [code { title }, Page title shown in the sidebar],
+  row = [code { order }, Sort order — lower numbers appear first],
+  row = [code { group }, Sidebar group name (for root-level files)],
+  row = [code { description }, Page description for SEO],
+  row = [code { icon }, Icon name for the page heading],
+  row = [code { image }, OG image path or URL],
+  row = [code { author }, Author name shown below the page]
+}
+
+h2 { Run the Dev Server }
+
+Start the development server:
+
+codeblock { language = bash, "bun run dev" }
+
+Open link { url = http://localhost:5173/docs, http://localhost:5173/docs } in your browser. Your page appears in the sidebar automatically.
+
+h2 { File-Based Routing }
+
+The file path determines the URL:
+
+table {
+  row = [File, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/apidpoints.tiramisu }, code { /docs/apidpoints }]
+}
+
+Folders automatically create sidebar groups. An code { index.tiramisu } inside a folder sets the group's title.
+
+callout { type = info, Edit any code { .tiramisu } file and the browser reloads instantly — the Vite plugin handles hot module replacement. }

@@ -1,0 +1,64 @@
+meta {
+  title = Konfiguration,
+  order = 3,
+  icon = settings
+}
+
+h2 { Konfigurationsübersicht }
+
+Tiramisu Docs wird über eine einzige Datei konfiguriert: code { src/lib/tiramisu.config.ts }. Diese Datei definiert den Titel\, die Beschreibung\, die Sektionen\, das Sidebar-Verhalten\, die i18n-Einstellungen und mehr für Ihre Website.
+
+h3 { Die Konfigurationsdatei }
+
+Verwenden Sie den code { "defineConfig()" }-Helfer für typsichere Konfiguration:
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit";
+
+export default defineConfig({
+  title: "My Docs",
+  description: "Documentation for my project",
+  logo: { light: "/logo.svg", dark: "/logo-dark.svg" },
+  url: "https://docs.example.com",
+  nav: [{ label: "Docs", href: "/docs" }],
+  github: {
+    repo: "user/repo",
+    branch: "main",
+    dir: "src/docs",
+  },
+  sections: [
+    { label: "Guide", path: "guide" },
+    { label: "API", path: "api" },
+  ],
+  sidebar: {
+    groupOrder: ["Getting Started", "Advanced"],
+  },
+  instantOg: {
+    siteId: "site_xxxxxxxx",
+    template: "generic/standard",
+  },
+  footer: {
+    socials: {
+      github: "https://github.com/user/repo",
+    },
+    copyright: "© 2026 My Project",
+  },
+});"""}
+
+h3 { Konfiguration in Komponenten verwenden }
+
+Um auf die aufgelöste Konfiguration in Ihren Svelte-Komponenten zuzugreifen\, verwenden Sie code { "resolveConfig()" }:
+
+codeblock { language = typescript, """import { resolveConfig } from "@tiramisu-docs/kit";
+
+const config = resolveConfig(rawConfig);""" }
+
+h3 { Vite-Plugin }
+
+Das Vite-Plugin liest Ihre Konfiguration\, um das virtuelle Modul zu erstellen\, das dateibasiertes Routing und Sidebar-Generierung ermöglicht:
+
+codeblock { language = typescript, """import config from "./src/lib/tiramisu.config";
+import { tiramisuPlugin } from "@tiramisu-docs/kit";
+
+export default defineConfig({
+  plugins: [tiramisuPlugin({ config }), sveltekit()],
+});""" }

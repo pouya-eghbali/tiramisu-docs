@@ -1,0 +1,35 @@
+meta { title = Layout, order = 8, icon = columns-3 }
+
+Components for arranging content on the page.
+
+h2 { Columns }
+
+Place content side by side:
+
+codeblock { language = tiramisu, """columns {
+  col { This is the left column. },
+  col { This is the right column. }
+}""" }
+
+demo {
+  columns {
+    col { This is the left column with some content. },
+    col { This is the right column with different content. }
+  }
+}
+
+You can use any content inside columns, including code blocks, lists, and other components.
+
+h2 { Demo }
+
+The code { demo } component renders content in a preview container:
+
+codeblock { language = tiramisu, """demo { title = Preview,
+  callout { type = success, This renders inside a demo container. }
+}""" }
+
+demo { title = Preview,
+  callout { type = success, This renders inside a demo container. }
+}
+
+Demos are useful for showing how components look alongside their source code.

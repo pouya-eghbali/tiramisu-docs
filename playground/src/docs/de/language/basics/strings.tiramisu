@@ -1,0 +1,91 @@
+meta { title = Zeichenketten & Escaping, order = 4, icon = quote }
+
+Tiramisu bietet verschiedene Möglichkeiten\, Sonderzeichen in Ihrem Inhalt zu verarbeiten. Das Verständnis von Anführungszeichen und Escaping ist wichtig\, um Inhalte mit Kommas\, Gleichheitszeichen\, Klammern oder Anführungszeichen zu schreiben.
+
+h3 { Anführungszeichen mit doppelten Anführungszeichen }
+
+Umschließen Sie Text mit doppelten Anführungszeichen\, um zu verhindern\, dass Sonderzeichen geparst werden:
+
+codeblock { language = tiramisu, ""func { "text with, commas and = signs" }"" }
+
+Innerhalb von Anführungszeichen trennen Kommas keine Parameter und Gleichheitszeichen erzeugen keine benannten Parameter.
+
+h3 { Anführungszeichen escapen }
+
+Die einfachste Methode\, ein doppeltes Anführungszeichen in einer Zeichenkette einzufügen\, ist mit einem Backslash:
+
+codeblock { language = tiramisu, ""func { "text with \\"quotes\\" inside" }"" }
+
+Alternativ können Sie mehrere Anführungszeichen verwenden\, um die Zeichenkette einzuschließen. Das äußere Paar verwendet mehr Anführungszeichen als jede Sequenz im Inneren:
+
+codeblock { language = tiramisu, """func { ""text with "quotes" inside"" }""" }
+
+Für Text\, der doppelte Anführungszeichen enthält\, verwenden Sie dreifache Anführungszeichen:
+
+codeblock {
+  language = tiramisu,
+  """"func { """text with ""double quotes"" """ }""""
+}
+
+h3 { Backslash-Escaping }
+
+Für einzelne Sonderzeichen innerhalb von Funktionsparametern verwenden Sie Backslash-Escaping:
+
+table {
+  row = [bold { Escape }, bold { Ergebnis }, bold { Zweck }],
+  row = [code { "\," }, code { "," }, Verhindert Parametertrennung],
+  row = [code { "\=" }, code { "=" }, Verhindert benanntes Parameter-Parsing],
+  row = [code { "\{" }, code { "{" }, Verhindert Funktionsaufruf-Parsing],
+  row = [code { "\}" }, code { "}" }, Verhindert das Schließen eines Funktionsaufrufs],
+  row = [code { "\[" }, code { "[" }, Verhindert Array-Parsing],
+  row = [code { "\]" }, code { "]" }, Verhindert das Schließen eines Arrays],
+  row = [Backslash + Anführungszeichen, ein doppeltes Anführungszeichen, Escapet ein Anführungszeichen innerhalb einer Zeichenkette],
+  row = [
+    code { "\name" },
+    code { "name { ... }" },
+    Verhindert Funktionsaufruf — behandelt Name als wörtlichen Text
+  ]
+}
+
+h3 { Wann was verwenden }
+
+callout {
+  type = info,
+  bold { Kurzanleitung: } Verwenden Sie Backslash-Escaping für einzelne Zeichen (code { "\," }\, code { "\=" }). Verwenden Sie Anführungszeichen für längeren Text mit mehreren Sonderzeichen. Verwenden Sie mehrfache Anführungszeichen\, wenn Ihr Text selbst Anführungszeichen enthält.
+}
+
+Beispiele:
+
+codeblock {
+  language = tiramisu,
+  """"
+// Single comma - backslash is easiest
+func { hello\, world }
+
+// Multiple special chars - quotes are cleaner
+func { "text with, commas and = signs" }
+
+// Text with quotes - use double-double quotes
+func { ""She said "hello""" }
+""""
+}
+
+h3 { Häufige Muster }
+
+bold { Mathematische Formeln } mit Gleichheitszeichen:
+
+codeblock { language = tiramisu, ""math { "E = mc^2" }"" }
+
+bold { Code-Schnipsel } mit Sonderzeichen:
+
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = javascript, "const obj = { key: 'value' };" }""
+}
+
+bold { URLs } mit Query-Parametern:
+
+codeblock {
+  language = tiramisu,
+  ""link { url = "https://example.com/search?q=hello&lang=en", Search }""
+}

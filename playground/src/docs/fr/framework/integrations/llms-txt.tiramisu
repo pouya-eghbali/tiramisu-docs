@@ -1,0 +1,58 @@
+meta {
+  title = llms.txt,
+  order = 4,
+  icon = bot
+}
+
+Tiramisu Docs génère des fichiers de documentation lisibles par les machines qui aident les assistants IA à comprendre vos docs sans scraper votre site web.
+
+h3 { Points d'accès }
+
+Trois points d'accès sont générés automatiquement :
+
+table {
+  row = [bold { Point d'accès }, bold { Description }],
+  row = [code { /llms.txt }, Un résumé concis de la structure de votre documentation avec des liens vers chaque page],
+  row = [code { /llms-full.txt }, Le contenu complet de toutes les pages de documentation en texte brut],
+  row = [code { /skill.md }, Un fichier de compétence Claude Code qui enseigne à Claude comment utiliser votre documentation]
+}
+
+h3 { llms.txt }
+
+Le fichier code { /llms.txt } suit le bold { standard llms.txt } — un format léger qui aide les modèles d'IA à découvrir et naviguer dans votre documentation. Il contient :
+
+list {
+  Le titre et la description de votre site,
+  Une liste de toutes les pages de documentation avec leurs URL et descriptions,
+  Des liens vers la version texte intégral
+}
+
+h3 { llms-full.txt }
+
+Le point d'accès code { /llms-full.txt } fournit le contenu complet de chaque page de documentation en format texte brut. C'est utile pour les assistants IA qui ont besoin d'ingérer l'intégralité de votre documentation.
+
+h3 { skill.md }
+
+Le point d'accès code { /skill.md } génère un fichier de compétence Claude Code. Ce fichier peut être utilisé comme compétence Claude Code pour enseigner à Claude la structure et le contenu de votre documentation.
+
+h3 { Fonctions de génération }
+
+Ces points d'accès sont alimentés par trois fonctions que vous pouvez utiliser dans vos routes SvelteKit :
+
+codeblock { language = typescript, """import {
+  generateLlmsTxt,
+  generateLlmsFullTxt,
+  generateSkillMd,
+} from "@tiramisu-docs/kit";""" }
+
+Chaque fonction retourne une chaîne de caractères que vous pouvez servir depuis un point d'accès SvelteKit :
+
+codeblock { language = typescript, """// src/routes/llms.txt/+server.ts
+import { generateLlmsTxt } from "@tiramisu-docs/kit";
+
+export const GET = async () => {
+  const content = await generateLlmsTxt();
+  return new Response(content, {
+    headers: { "Content-Type": "text/plain" },
+  });
+};""" }

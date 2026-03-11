@@ -1,0 +1,103 @@
+meta { title = Blocs de code, order = 5, icon = code }
+
+Affichez du code avec coloration syntaxique en utilisant la fonction code { codeblock }. La coloration est assurée par Shiki.
+
+h2 { Utilisation de base }
+
+codeblock { language = tiramisu, """codeblock { language = typescript, "const x = 42" }""" }
+
+demo {
+  codeblock { language = typescript, "const x = 42" }
+}
+
+h2 { Code multi-lignes }
+
+Les guillemets simples fonctionnent aussi pour le code multi-lignes :
+
+codeblock { language = tiramisu, """codeblock { language = typescript, "function greet(name: string) {
+  return \\"Hello, \\" + name
+}
+
+greet(\\"World\\")" }""" }
+
+Vous pouvez également entourer vos exemples de code avec plusieurs guillemets afin de ne pas avoir à utiliser code { \\ }
+pour l'échappement :
+
+codeblock { language = tiramisu, """"codeblock { language = typescript, """function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")""" }"""" }
+
+demo {
+  codeblock { language = typescript, """function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")""" }
+}
+
+Le nombre de guillemets d'ouverture et de fermeture n'a pas d'importance\, tant qu'ils correspondent.
+
+h2 { Charger du code depuis des fichiers }
+
+Utilisez code { readfile } pour charger du code source depuis des fichiers externes au lieu de l'intégrer directement :
+
+codeblock { language = tiramisu, """codeblock { language = csv, readfile { src = sample-data.csv } }""" }
+
+Cela permet de garder votre documentation synchronisée avec les fichiers sources réels. Le chemin est relatif au fichier code { .tiramisu }.
+
+h2 { Icônes de langage }
+
+Les blocs de code et les blocs de code à onglets affichent automatiquement une icône de langage dans l'en-tête. Les icônes sont détectées à partir du nom du langage en utilisant le jeu d'icônes link { url = https://icon-sets.iconify.design/devicon-plain/, devicon-plain }.
+
+Vous pouvez remplacer l'icône détectée automatiquement avec le paramètre code { icon } :
+
+codeblock { language = tiramisu, """codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""" }
+
+Le paramètre code { icon } accepte n'importe quel nom d'icône link { url = https://icon-sets.iconify.design/, Iconify }.
+
+h2 { Blocs de code à onglets }
+
+Utilisez code { codetabs } pour regrouper des blocs de code associés avec une navigation par onglets :
+
+codeblock { language = tiramisu, """codetabs { group = pkg,
+  codetab { label = bun, language = bash, "bun add my-package" },
+  codetab { label = npm, language = bash, "npm install my-package" },
+  codetab { label = yarn, language = bash, "yarn add my-package" }
+}""" }
+
+demo {
+  codetabs { group = pkg,
+    codetab { label = bun, language = bash, "bun add my-package" },
+    codetab { label = npm, language = bash, "npm install my-package" },
+    codetab { label = yarn, language = bash, "yarn add my-package" }
+  }
+}
+
+h3 { Synchronisation des groupes }
+
+Lorsque plusieurs groupes d'onglets de code partagent le même nom code { group }\, sélectionner un onglet dans l'un synchronise automatiquement l'onglet correspondant dans tous les autres — même entre les pages. La sélection est conservée dans code { localStorage }.
+
+h2 { Langages pris en charge }
+
+Tous les langages supportés par Shiki fonctionnent. Exemples courants :
+
+table {
+  row = [Langage, Valeur],
+  row = [TypeScript, code { typescript } ou code { ts }],
+  row = [JavaScript, code { javascript } ou code { js }],
+  row = [Bash / Shell, code { bash } ou code { shell }],
+  row = [CSS, code { css }],
+  row = [HTML, code { html }],
+  row = [JSON, code { json }],
+  row = [Python, code { python }],
+  row = [Rust, code { rust }],
+  row = [Go, code { go }]
+}
+
+h2 { Code en ligne }
+
+Pour le code en ligne\, utilisez la fonction code { code } :
+
+codeblock { language = tiramisu, "Use code { myFunction() } in your code." }

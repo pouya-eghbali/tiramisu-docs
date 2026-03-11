@@ -1,0 +1,84 @@
+meta {
+  title = Format,
+  order = 2,
+  icon = paintbrush
+}
+
+The code { tiramisu format } command auto-formats code { .tiramisu } files for consistent style. It normalises whitespace\, indentation\, and parameter spacing.
+
+h3 { Usage }
+
+codeblock { language = bash, "tiramisu format [options] [files...]" }
+
+h3 { Options }
+
+table {
+  row = [bold { Flag }, bold { Default }, bold { Description }],
+  row = [code { --check }, —, Check if files are formatted without modifying them. Exits with code 1 if any file needs formatting.],
+  row = [code { --indent <n> }, code { 2 }, Number of spaces per indentation level.],
+  row = [code { --line-width <n> }, code { 80 }, Maximum line width before breaking function calls into multi-line format.]
+}
+
+h3 { Format Files In-Place }
+
+Pass one or more file paths to format them in-place:
+
+codeblock { language = bash, tiramisu format src/docs/**/*.tiramisu }
+
+Files that are already correctly formatted are skipped (no unnecessary writes).
+
+h3 { Stdin / Stdout }
+
+When no files are given and input is piped\, the formatter reads from stdin and writes to stdout:
+
+codeblock { language = bash, """echo 'bold{hello}' | tiramisu format
+# Output: bold { hello }""" }
+
+This is useful for editor integrations and scripting.
+
+h3 { Check Mode }
+
+Use code { --check } in CI to verify formatting without modifying files:
+
+codeblock { language = bash, tiramisu format --check src/docs/**/*.tiramisu }
+
+If any files need formatting\, the command lists them and exits with code 1.
+
+h3 { What It Does }
+
+The formatter applies the following rules:
+
+list {
+  bold { Trailing whitespace } — removed from all lines.,
+  bold { Trailing newline } — ensures a single trailing newline.,
+  bold { Paragraph spacing } — collapses 3+ blank lines to 2.,
+  bold { Inline functions } — normalises brace spacing: code { "bold{hello}" } → code { "bold { hello }" }.,
+  bold { Multi-line functions } — breaks long function calls across lines when they exceed the line width.,
+  bold { Parameters } — normalises spacing around code { "=" }: code { "level=1" } → code { "level = 1" }.,
+  bold { Arrays } — formats inline or multi-line based on line width.,
+  bold { String quoting } — uses the shortest valid quoting style.
+}
+
+h3 { Examples }
+
+Before formatting:
+
+codeblock { language = tiramisu, """callout{type=warning,Don't forget to install the peer dependencies.}
+
+h2{Quick  Start}
+
+list{First item,Second item,Third item}""" }
+
+After running code { tiramisu format }:
+
+codeblock { language = tiramisu, """callout { type = warning, Don't forget to install the peer dependencies. }
+
+h2 { Quick Start }
+
+list {
+  First item,
+  Second item,
+  Third item
+}""" }
+
+The formatter is idempotent — running it multiple times produces identical output.

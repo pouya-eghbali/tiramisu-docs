@@ -1,0 +1,92 @@
+meta {
+  title = InstantOG,
+  description = Automatic Open Graph images for every doc page.,
+  order = 4,
+  icon = image
+}
+
+link { url = https://instantog.com, InstantOG } is a service that automatically generates Open Graph images for your pages. When someone shares a link to your docs on social media\, InstantOG renders a beautiful 1200×630 preview image using your page's metadata — title\, description\, and favicon.
+
+Tiramisu Docs has a built-in integration. No build step\, no image files to manage. Just add your site ID and every doc page gets an code { og:image } tag automatically.
+
+h2 { Setup }
+
+h3 { 1. Create an account }
+
+Go to link { url = https://instantog.com, instantog.com } and register your site. You'll get a bold { site ID } (e.g. code { site_b6bc4c3f }).
+
+h3 { 2. Add to config }
+
+Add code { instantOg } to your code { tiramisu.config.ts }:
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit"
+
+export default defineConfig({
+  title: "My Docs",
+  url: "https://my-docs.dev",
+  instantOg: {
+    siteId: "site_b6bc4c3f",
+    template: "generic/standard",
+  },
+})""" }
+
+h3 { 3. Deploy }
+
+Deploy your site. InstantOG will generate images on-demand when social platforms request them.
+
+callout { type = info, The code { url } field in your config must be set to your production URL. InstantOG fetches your live pages to extract metadata\, so images are only generated for deployed sites. }
+
+h2 { How It Works }
+
+When code { instantOg } is configured\, every doc page gets an code { og:image } meta tag pointing to the InstantOG API:
+
+codeblock { language = html, """<meta property="og:image"
+  content="https://instantog.com/api/og?site=site_b6bc4c3f&template=generic/standard&url=https://my-docs.dev/docs/getting-started" />""" }
+
+When a social platform (Twitter\, Discord\, Slack\, etc.) fetches this URL\, InstantOG:
+
+list {
+  Reads your page's title\, description\, and favicon,
+  Renders them into the selected template,
+  Returns a cached 1200×630 PNG image
+}
+
+No API calls happen during development or build. The image is generated on-demand at share time.
+
+h2 { Options }
+
+table {
+  row = [bold { Option }, bold { Type }, bold { Description }],
+  row = [code { siteId }, code { string }, bold { Required. } Your site ID from the InstantOG dashboard.],
+  row = [code { template }, code { string }, Template ID. Defaults to your site's default template.],
+  row = [code { theme }, code { "light" | "dark" }, Color theme for the generated image.],
+  row = [code { accentColor }, code { string }, Hex color for accents (e.g. code { "#6366f1" }).],
+  row = [code { gradientBg }, code { boolean }, Enable gradient background on the image.]
+}
+
+h2 { Templates }
+
+InstantOG provides several templates:
+
+table {
+  row = [bold { ID }, bold { Style }],
+  row = [code { generic/standard }, Clean\, all-purpose layout],
+  row = [code { generic/minimal }, Stripped-down\, text-focused],
+  row = [code { article/blog-post }, Article-style with author info],
+  row = [code { article/magazine }, Editorial layout],
+  row = [code { article/newsletter }, Email-style header],
+  row = [code { news/headline }, Bold news-style],
+  row = [code { product/ecommerce }, Product showcase],
+  row = [code { product/luxury }, Premium feel],
+  row = [code { product/bold }, High-contrast product],
+  row = [code { product/playful }, Fun\, colorful product]
+}
+
+h2 { Per-Page Override }
+
+If a page sets code { image } in its frontmatter\, that takes priority over InstantOG:
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  image = /images/custom-og.png
+}""" }

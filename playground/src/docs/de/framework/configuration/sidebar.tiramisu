@@ -1,0 +1,67 @@
+meta {
+  title = Seitenleiste,
+  order = 3,
+  icon = panel-left
+}
+
+Die Seitenleiste wird automatisch aus Ihrer Dateistruktur generiert. Sie können die Reihenfolge und Gruppierung der Einträge über die Konfiguration und Datei-Metadaten steuern.
+
+h3 { Gruppenreihenfolge }
+
+Verwenden Sie code { sidebar.groupOrder }\, um die Reihenfolge zu steuern\, in der Gruppen in der Seitenleiste erscheinen:
+
+codeblock { language = typescript, """sidebar: {
+  groupOrder: ["Getting Started", "Writing", "Configuration", "Advanced"],
+},""" }
+
+Gruppen\, die nicht in code { groupOrder } aufgeführt sind\, erscheinen nach den aufgeführten\, alphabetisch sortiert.
+
+h3 { Ordnerbasierte Gruppierung }
+
+Ordner in Ihrem Docs-Verzeichnis werden automatisch zu Sidebar-Gruppen. Der Ordnername wird in einen Titel umgewandelt (z.B. wird code { getting-started } zu „Getting Started").
+
+Um das Label einer Gruppe anzupassen\, fügen Sie eine code { index.tiramisu }-Datei im Ordner hinzu:
+
+codeblock { language = tiramisu, """meta {
+  title = Mein benutzerdefinierter Gruppenname
+}""" }
+
+Der code { title } aus der Index-Datei wird zum Gruppenlabel in der Seitenleiste.
+
+h3 { Gruppierung auf Stammebene }
+
+Dateien im Stammverzeichnis einer Sektion (nicht in einem Unterordner) können mit dem code { group }-Feld in ihrem Meta-Block gruppiert werden:
+
+codeblock { language = tiramisu, """meta {
+  title = Meine Seite,
+  group = Getting Started,
+  order = 1
+}""" }
+
+h3 { Seiten sortieren }
+
+Seiten innerhalb einer Gruppe werden nach ihrem code { order }-Wert sortiert (niedrigere Zahlen erscheinen zuerst). Wenn keine Reihenfolge angegeben ist\, werden Seiten alphabetisch nach Titel sortiert.
+
+codeblock { language = tiramisu, """meta {
+  title = Installation,
+  order = 2
+}""" }
+
+h3 { Untergruppen }
+
+Verschachtelte Ordner erstellen Untergruppen in der Seitenleiste. Diese erscheinen als einklappbare Abschnitte innerhalb ihrer übergeordneten Gruppe:
+
+filetree {
+  folder { src/docs/framework,
+    folder { writing,
+      file { index.tiramisu },
+      file { basics.tiramisu },
+      folder { content,
+        file { index.tiramisu },
+        file { code-blocks.tiramisu }
+      }
+    }
+  }
+}
+
+Die code { index.tiramisu } in code { writing/ } definiert das Label der „Writing"-Gruppe. Die code { index.tiramisu } in code { content/ } definiert das Label der „Content"-Untergruppe.

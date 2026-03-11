@@ -1,0 +1,78 @@
+meta {
+  title = Language,
+  description = A markup language built around function calls that compiles to any output format.,
+  order = 0,
+  icon = terminal
+}
+
+Tiramisu is a markup language built around function calls. It produces a generic AST that can be compiled to any output format — HTML, Svelte, React, PDF, and more.
+
+h2 { Quick Look }
+
+Everything in Tiramisu is either plain text or a function call:
+
+codeblock { language = tiramisu, """h2 { Hello World }
+
+This is plain text. Use bold { function calls } to add structure.
+
+list {
+  Simple and readable,
+  No closing tags,
+  Compiles to anything
+}""" }
+
+Functions can take named parameters, positional parameters, or both. They nest naturally — any parameter value can contain other function calls.
+
+h2 { Design Principles }
+
+cards {
+  card {
+    title = Functions All The Way Down,
+    description = One concept to learn. Headings\, lists\, tables\, code blocks — everything is a function call.,
+    icon = braces
+  },
+  card {
+    title = Output Agnostic,
+    description = The parser produces a generic AST. Write a compiler for HTML\, Svelte\, React\, PDF\, or any format you need.,
+    icon = shuffle
+  },
+  card {
+    title = Readable by Default,
+    description = No angle brackets\, no closing tags. Tiramisu reads like structured prose.,
+    icon = eye
+  },
+  card {
+    title = Extensible,
+    description = Unknown function names become custom components. Add your own without touching the parser.,
+    icon = puzzle
+  }
+}
+
+h2 { Learn }
+
+cards {
+  card {
+    title = Syntax,
+    description = Function calls\, nesting\, and how text and structure mix.,
+    href = /docs/language/basics/syntax,
+    icon = braces
+  },
+  card {
+    title = Parameters,
+    description = Positional\, named\, arrays\, and nested parameters.,
+    href = /docs/language/basics/parameters,
+    icon = sliders-horizontal
+  },
+  card {
+    title = Strings & Escaping,
+    description = Quoting rules\, multi-line strings\, and special characters.,
+    href = /docs/language/basics/strings,
+    icon = quote
+  },
+  card {
+    title = Custom Front-Ends,
+    description = Build your own compiler targeting any output format.,
+    href = /docs/language/internals/custom-frontends,
+    icon = monitor
+  }
+}

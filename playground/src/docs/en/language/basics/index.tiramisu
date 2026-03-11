@@ -1,0 +1,38 @@
+meta {
+  title = What is Tiramisu?,
+  order = 1,
+  icon = graduation-cap
+}
+
+Tiramisu is a markup language built around a single concept: bold { function calls }. Everything in Tiramisu is either plain text or a function call, making the syntax simple and consistent.
+
+Unlike Markdown or HTML, Tiramisu is not tied to any specific output format. The Tiramisu parser (code { @timeleap/tiramisu }) reads source text and produces an AST (Abstract Syntax Tree) that can be compiled to anything — HTML, Svelte components, React, PDF, or any other format.
+
+h3 { Key Principles }
+
+list {
+  bold { One syntax } — everything is a function call. No special cases\, no shorthand\, no ambiguity.,
+  bold { Composable } — function calls can be nested inside other function calls to any depth.,
+  bold { Output-agnostic } — the parser produces a generic AST. What you do with it is up to your compiler front-end.,
+  bold { Extensible } — there are no built-in functions in the language itself. All functions are defined by the compiler front-end.
+}
+
+h3 { Tiramisu vs. Tiramisu Docs }
+
+It's important to distinguish between the two:
+
+table {
+  row = [bold { " " }, bold { Tiramisu (Language) }, bold { Tiramisu Docs (Framework) }],
+  row = [bold { What }, Markup language + parser, Documentation framework],
+  row = [bold { Package }, code { @timeleap/tiramisu }, code { @tiramisu-docs/kit }],
+  row = [bold { Functions }, None built-in, Defines h1\, bold\, codeblock\, callout\, etc.],
+  row = [bold { Output }, Generic AST, Svelte components]
+}
+
+All the functions you use when writing docs (code { h1 }, code { bold }, code { codeblock }, code { callout }, etc.) are defined by Tiramisu Docs, not by the Tiramisu language itself.
+
+h3 { A Simple Example }
+
+codeblock { language = tiramisu, "bold { Hello } world!" }
+
+The parser turns this into an AST with a code { FunctionCall } node (name: bold, content: Hello) followed by a code { PureText } node (world!). What happens next depends on your compiler front-end.

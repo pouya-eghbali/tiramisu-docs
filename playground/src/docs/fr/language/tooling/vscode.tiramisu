@@ -1,0 +1,55 @@
+meta { title = Extension VSCode, order = 4, icon = code }
+
+L'extension Tiramisu pour VSCode ajoute un support éditeur de premier plan pour les fichiers code { .tiramisu }\, incluant la coloration syntaxique et la configuration du langage.
+
+h2 { Fonctionnalités }
+
+list {
+  bold { Coloration syntaxique } pour le balisage Tiramisu — appels de fonctions,
+  paramètres,
+  chaînes,
+  et commentaires,
+  bold { Correspondance des crochets } et fermeture automatique pour les accolades et crochets,
+  bold { Basculement des commentaires } avec code { Ctrl+/ } (commentaires de ligne utilisant code { // })
+}
+
+h2 { Installation }
+
+L'extension n'est pas encore publiée sur le VSCode Marketplace. Vous pouvez la compiler et l'installer depuis les sources\, ou télécharger un fichier code { .vsix } pré-compilé depuis la link {
+  url = https://github.com/timeleaplabs/tiramisu/releases,
+  page des releases GitHub
+}.
+
+h3 { Depuis une release }
+
+Téléchargez le dernier fichier code { .vsix } depuis les link {
+  url = https://github.com/timeleaplabs/tiramisu/releases,
+  releases GitHub
+}\, puis installez-le :
+
+codeblock { language = bash, code --install-extension tiramisu-*.vsix }
+
+Ou dans VSCode\, ouvrez la Palette de commandes (code { Ctrl+Shift+P })\, sélectionnez bold { Extensions : Installer depuis un VSIX... }\, et choisissez le fichier téléchargé.
+
+h3 { Depuis les sources }
+
+Clonez le dépôt et compilez l'extension :
+
+codeblock {
+  language = bash,
+  """
+git clone https://github.com/timeleaplabs/tiramisu.git
+cd tiramisu/editors/vscode
+npm install
+npm run package
+"""
+}
+
+Cela produit un fichier code { .vsix } que vous pouvez installer :
+
+codeblock { language = bash, code --install-extension tiramisu-*.vsix }
+
+callout {
+  type = info,
+  Le code source de l'extension se trouve dans le répertoire code { editors/vscode } du link { url = https://github.com/timeleaplabs/tiramisu, dépôt Tiramisu }.
+}

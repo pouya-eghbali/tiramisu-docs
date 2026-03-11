@@ -1,0 +1,148 @@
+meta { title = Contenu riche, order = 6, icon = sparkles }
+
+Composants intégrés pour du contenu interactif et mis en valeur.
+
+h2 { Encadrés }
+
+Mettez en évidence les informations importantes avec des encadrés :
+
+codeblock {
+  language = tiramisu,
+  "callout { type = info, This is an informational callout. }"
+}
+
+Quatre types sont disponibles :
+
+demo {
+  callout { type = info, bold { Info } — informations générales et astuces. }
+  callout { type = warning, bold { Avertissement } — quelque chose à surveiller. }
+  callout {
+    type = error,
+    bold { Erreur } — problèmes critiques ou changements incompatibles.
+  }
+  callout {
+    type = success,
+    bold { Succès } — confirmations et résultats positifs.
+  }
+}
+
+h2 { Étapes }
+
+Instructions numérotées :
+
+codeblock {
+  language = tiramisu,
+  """
+steps {
+  Install the package:
+  codeblock { language = bash, npm i -S the-package },
+
+  Configure your project:
+  codeblock { language = bash, npx the-package --configure },
+
+  Start the dev server:
+  codeblock { language = bash, npm run dev}
+}
+"""
+}
+
+demo {
+  steps {
+    Installez le paquet :
+    codeblock { language = bash, npm i -S the-package },
+    Configurez votre projet :
+    codeblock { language = bash, npx the-package --configure },
+    Lancez le serveur de développement :
+    codeblock { language = bash, npm run dev }
+  }
+}
+
+h2 { Onglets }
+
+Sections de contenu à onglets avec persistance optionnelle par groupe :
+
+codeblock {
+  language = tiramisu,
+  """
+tabs { group = platforms,
+  tab { label = macOS, icon = uim:apple, Instructions for macOS. },
+  tab { label = Linux, icon = uim:linux, Instructions for Linux. },
+  tab { label = Windows, icon = uim:windows, Instructions for Windows. }
+}
+"""
+}
+
+demo {
+  tabs {
+    group = platforms,
+    tab { label = macOS, icon = uim:apple, Instructions pour macOS. },
+    tab { label = Linux, icon = uim:linux, Instructions pour Linux. },
+    tab { label = Windows, icon = uim:windows, Instructions pour Windows. }
+  }
+}
+
+Lorsque plusieurs blocs code { tabs } partagent la même valeur code { group }\, sélectionner un onglet dans l'un synchronise automatiquement la sélection dans tous les autres. Le choix est conservé dans localStorage.
+
+h2 { Accordéon }
+
+Contenu repliable :
+
+codeblock {
+  language = tiramisu,
+  "accordion { title = Click to expand, Hidden content goes here. }"
+}
+
+demo { accordion { title = Cliquer pour déplier, Le contenu masqué se trouve ici. } }
+
+h2 { Citations }
+
+codeblock {
+  language = tiramisu,
+  "quote { The best documentation is the documentation that exists., author = Unknown }"
+}
+
+demo {
+  quote {
+    La meilleure documentation est celle qui existe.,
+    author = Inconnu
+  }
+}
+
+h2 { Badges }
+
+Indicateurs de statut en ligne :
+
+codeblock {
+  language = tiramisu,
+  """
+badge { Stable }
+badge { variant = secondary, Beta }
+badge { variant = destructive, Deprecated }
+badge { variant = outline, v2.0 }
+"""
+}
+
+demo {
+  badge { Stable } badge { variant = secondary, Bêta } badge { variant = destructive, Obsolète } badge { variant = outline, v2.0 }
+}
+
+h2 { Listes de tâches }
+
+codeblock {
+  language = tiramisu,
+  """
+tasklist {
+  "[x] Write documentation",
+  "[x] Add examples",
+  "[ ] Review and publish"
+}
+"""
+}
+
+demo {
+  tasklist {
+    "[x] Rédiger la documentation",
+    "[x] Ajouter des exemples",
+    "[ ] Relire et publier"
+  }
+}

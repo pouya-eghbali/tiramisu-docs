@@ -3,13 +3,25 @@
 
   let { chart = "" }: { chart?: string } = $props()
   let container: HTMLElement
-  let id = `mermaid-${Math.random().toString(36).slice(2, 9)}`
+  let idBase = `mermaid-${Math.random().toString(36).slice(2, 9)}`
+  let renderCount = 0
 
   onMount(async () => {
     const mermaid = (await import("mermaid")).default
-    mermaid.initialize({ startOnLoad: false, theme: "default" })
-    const { svg } = await mermaid.render(id, chart)
-    container.innerHTML = svg
+
+    async function render() {
+      const isDark = document.documentElement.classList.contains("dark")
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" })
+      const rid = `${idBase}-${renderCount++}`
+      const { svg } = await mermaid.render(rid, chart)
+      container.innerHTML = svg
+    }
+
+    await render()
+
+    const observer = new MutationObserver(() => render())
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+    return () => observer.disconnect()
   })
 </script>
 

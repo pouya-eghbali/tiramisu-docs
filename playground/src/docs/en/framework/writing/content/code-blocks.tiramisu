@@ -1,0 +1,103 @@
+meta { title = Code Blocks, order = 5, icon = code }
+
+Display syntax-highlighted code using the code { codeblock } function. Highlighting is powered by Shiki.
+
+h2 { Basic Usage }
+
+codeblock { language = tiramisu, """codeblock { language = typescript, "const x = 42" }""" }
+
+demo {
+  codeblock { language = typescript, "const x = 42" }
+}
+
+h2 { Multi-line Code }
+
+Single quotes work for multi-line code, too:
+
+codeblock { language = tiramisu, """codeblock { language = typescript, "function greet(name: string) {
+  return \\"Hello, \\" + name
+}
+
+greet(\\"World\\")" }""" }
+
+Alternatively, you can wrap your code samples in multiple quotes so you don't have to use code { \\ }
+for escaping:
+
+codeblock { language = tiramisu, """"codeblock { language = typescript, """function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")""" }"""" }
+
+demo {
+  codeblock { language = typescript, """function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")""" }
+}
+
+The number of starting and ending quotes doesn't matter, as long as they match.
+
+h2 { Loading Code from Files }
+
+Use code { readfile } to load source code from external files instead of embedding it:
+
+codeblock { language = tiramisu, """codeblock { language = csv, readfile { src = sample-data.csv } }""" }
+
+This keeps your documentation in sync with actual source files. The path is relative to the code { .tiramisu } file.
+
+h2 { Language Icons }
+
+Code blocks and tabbed code blocks automatically display a language icon in the header. Icons are detected from the language name using the link { url = https://icon-sets.iconify.design/devicon-plain/, devicon-plain } icon set.
+
+You can override the auto-detected icon with the code { icon } parameter:
+
+codeblock { language = tiramisu, """codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""" }
+
+The code { icon } parameter accepts any link { url = https://icon-sets.iconify.design/, Iconify } icon name.
+
+h2 { Tabbed Code Blocks }
+
+Use code { codetabs } to group related code blocks with tab switching:
+
+codeblock { language = tiramisu, """codetabs { group = pkg,
+  codetab { label = bun, language = bash, "bun add my-package" },
+  codetab { label = npm, language = bash, "npm install my-package" },
+  codetab { label = yarn, language = bash, "yarn add my-package" }
+}""" }
+
+demo {
+  codetabs { group = pkg,
+    codetab { label = bun, language = bash, "bun add my-package" },
+    codetab { label = npm, language = bash, "npm install my-package" },
+    codetab { label = yarn, language = bash, "yarn add my-package" }
+  }
+}
+
+h3 { Group Syncing }
+
+When multiple code tab groups share the same code { group } name, selecting a tab in one automatically switches the matching tab in all others — even across pages. The selection is persisted in code { localStorage }.
+
+h2 { Supported Languages }
+
+Any language supported by Shiki works. Common examples:
+
+table {
+  row = [Language, Value],
+  row = [TypeScript, code { typescript } or code { ts }],
+  row = [JavaScript, code { javascript } or code { js }],
+  row = [Bash / Shell, code { bash } or code { shell }],
+  row = [CSS, code { css }],
+  row = [HTML, code { html }],
+  row = [JSON, code { json }],
+  row = [Python, code { python }],
+  row = [Rust, code { rust }],
+  row = [Go, code { go }]
+}
+
+h2 { Inline Code }
+
+For inline code, use the code { code } function:
+
+codeblock { language = tiramisu, "Use code { myFunction() } in your code." }

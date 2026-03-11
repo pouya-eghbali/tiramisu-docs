@@ -1,0 +1,86 @@
+meta { title = Parameter, order = 3, icon = sliders-horizontal }
+
+Funktionsaufrufe in Tiramisu können Parameter annehmen. Parameter werden durch Kommas getrennt und kommen in drei Formen vor: Positions-\, benannte und Array-Parameter.
+
+h3 { Positionsparameter }
+
+Durch Kommas getrennter Inhalt erzeugt Positionsparameter:
+
+codeblock { language = tiramisu, "func { first, second, third }" }
+
+Jeder kommagetrennte Wert wird im AST zu einem separaten Positionsparameter.
+
+h3 { Benannte Parameter }
+
+Verwenden Sie code { "=" }\, um benannte Parameter zu erstellen:
+
+codeblock {
+  language = tiramisu,
+  "link { url = https://example.com, Click here }"
+}
+
+In diesem Beispiel ist code { url } ein benannter Parameter mit dem Wert code { https://example.com }\, und "Click here" ist ein Positionsparameter.
+
+h3 { Parameter mischen }
+
+Benannte und Positionsparameter können frei gemischt werden:
+
+codeblock {
+  language = tiramisu,
+  """
+image {
+  src = /photo.jpg,
+  alt = A beautiful sunset,
+  My image caption
+}
+"""
+}
+
+h3 { Array-Parameter }
+
+Verwenden Sie eckige Klammern\, um Array-Werte zu erstellen:
+
+codeblock {
+  language = tiramisu,
+  """
+table {
+  row = [Name, Age, City],
+  row = [Alice, 30, Portland],
+  row = [Bob, 25, Seattle]
+}
+"""
+}
+
+Jedes code { "[]" } erzeugt einen Array-Wert. Array-Elemente werden durch Kommas getrennt.
+
+h3 { Leerzeichen }
+
+Leerzeichen um Parameter herum werden entfernt. Diese Formen sind gleichwertig:
+
+codeblock {
+  language = tiramisu,
+  """
+bold{text}
+bold { text }
+bold {
+  text
+}
+"""
+}
+
+h3 { Kommas im Inhalt }
+
+Wenn Ihr Inhalt Kommas enthält\, müssen Sie diese entweder escapen oder Anführungszeichen verwenden:
+
+codeblock {
+  language = tiramisu,
+  """
+// Escape with backslash
+func { hello\, world }
+
+// Or use quotes
+func { "hello, world" }
+"""
+}
+
+Ohne Escaping würde das Komma den Inhalt in zwei separate Parameter aufteilen.

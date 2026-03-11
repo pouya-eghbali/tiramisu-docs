@@ -1,0 +1,86 @@
+meta { title = Paramètres, order = 3, icon = sliders-horizontal }
+
+Les appels de fonctions dans Tiramisu peuvent accepter des paramètres. Les paramètres sont séparés par des virgules et se présentent sous trois formes : positionnels\, nommés et tableaux.
+
+h3 { Paramètres positionnels }
+
+Le contenu séparé par des virgules crée des paramètres positionnels :
+
+codeblock { language = tiramisu, "func { first, second, third }" }
+
+Chaque valeur séparée par une virgule devient un paramètre positionnel distinct dans l'AST.
+
+h3 { Paramètres nommés }
+
+Utilisez code { "=" } pour créer des paramètres nommés :
+
+codeblock {
+  language = tiramisu,
+  "link { url = https://example.com, Click here }"
+}
+
+Dans cet exemple\, code { url } est un paramètre nommé avec la valeur code { https://example.com }\, et "Click here" est un paramètre positionnel.
+
+h3 { Mélange de paramètres }
+
+Les paramètres nommés et positionnels peuvent être mélangés librement :
+
+codeblock {
+  language = tiramisu,
+  """
+image {
+  src = /photo.jpg,
+  alt = A beautiful sunset,
+  My image caption
+}
+"""
+}
+
+h3 { Paramètres de type tableau }
+
+Utilisez des crochets pour créer des valeurs de type tableau :
+
+codeblock {
+  language = tiramisu,
+  """
+table {
+  row = [Name, Age, City],
+  row = [Alice, 30, Portland],
+  row = [Bob, 25, Seattle]
+}
+"""
+}
+
+Chaque paire code { "[]" } crée une valeur de type tableau. Les éléments du tableau sont séparés par des virgules.
+
+h3 { Espaces }
+
+Les espaces autour des paramètres sont supprimés. Ces écritures sont équivalentes :
+
+codeblock {
+  language = tiramisu,
+  """
+bold{text}
+bold { text }
+bold {
+  text
+}
+"""
+}
+
+h3 { Virgules dans le contenu }
+
+Si votre contenu contient des virgules\, vous devez soit les échapper\, soit utiliser des guillemets :
+
+codeblock {
+  language = tiramisu,
+  """
+// Escape with backslash
+func { hello\, world }
+
+// Or use quotes
+func { "hello, world" }
+"""
+}
+
+Sans échappement\, la virgule diviserait le contenu en deux paramètres distincts.

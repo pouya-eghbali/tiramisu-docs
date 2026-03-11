@@ -18,6 +18,18 @@ describe("extractMeta", () => {
     expect(meta.description).toBe("A helpful guide")
   })
 
+  it("extracts image from meta block", () => {
+    const ast = compile("meta { title = My Page, image = /images/my-page.png }\n\nContent")
+    const { meta } = extractMeta(ast)
+    expect(meta.image).toBe("/images/my-page.png")
+  })
+
+  it("extracts icon from meta block", () => {
+    const ast = compile("meta { title = My Page, icon = book-open }\n\nContent")
+    const { meta } = extractMeta(ast)
+    expect(meta.icon).toBe("book-open")
+  })
+
   it("returns empty meta when no meta block", () => {
     const ast = compile("Hello world")
     const { meta, contentNodes } = extractMeta(ast)

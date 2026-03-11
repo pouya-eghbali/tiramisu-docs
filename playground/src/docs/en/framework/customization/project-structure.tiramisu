@@ -1,0 +1,102 @@
+meta { title = Project Structure, order = 3, icon = folder-tree }
+
+A Tiramisu Docs project follows a standard SvelteKit layout with a few Tiramisu-specific conventions.
+
+h3 { File Tree }
+
+filetree {
+  folder {
+    my-docs,
+    folder {
+      src,
+      folder {
+        docs,
+        folder {
+          en,
+          file { getting-started.tiramisu },
+          file { guide.tiramisu }
+        }
+      },
+      folder {
+        lib,
+        file { tiramisu.config.ts },
+        folder {
+          components,
+          file { index.ts },
+          folder { tiramisu, file { MyCustomWidget.svelte } }
+        }
+      },
+      folder {
+        routes,
+        folder { "docs/[...slug]", file { +page.svelte }, file { +page.ts } }
+      },
+      file { app.css }
+    },
+    file { svelte.config.js },
+    file { vite.config.ts },
+    file { package.json }
+  }
+}
+
+h3 { Key Files }
+
+table {
+  row = [bold { File }, bold { Purpose }],
+  row = [
+    code { src/lib/tiramisu.config.ts },
+    "Main configuration file. Defines title, sections, sidebar, i18n, and more."
+  ],
+  row = [
+    code { src/docs/ },
+    Documentation content. Each code { .tiramisu } file becomes a page.
+  ],
+  row = [
+    code { src/lib/components/index.ts },
+    Component barrel file. Re-exports all kit components. Edit to override any built-in.
+  ],
+  row = [
+    code { src/lib/components/tiramisu/ },
+    Custom components. Any Svelte component here can be used as a Tiramisu function.
+  ],
+  row = [
+    code { "src/routes/docs/[...slug]/" },
+    The catch-all route that renders documentation pages.
+  ],
+  row = [
+    code { vite.config.ts },
+    Vite configuration with the code { tiramisuPlugin() }.
+  ],
+  row = [code { svelte.config.js }, SvelteKit adapter configuration.],
+  row = [code { src/app.css }, Global styles. Import the Tiramisu theme here.]
+}
+
+h3 { The Docs Route }
+
+The code { "src/routes/docs/[...slug]/" } directory contains two files that power the documentation:
+
+bold { +page.ts } loads the compiled Tiramisu content and metadata:
+
+codeblock {
+  language = typescript,
+  """
+import { loadDoc } from "@tiramisu-docs/kit";
+
+export const load = loadDoc;
+"""
+}
+
+bold { +page.svelte } renders the documentation layout:
+
+codeblock {
+  language = svelte,
+  """
+<script>
+  import { DocsLayout } from "@tiramisu-docs/kit";
+  let { data } = $props();
+</script>
+
+<DocsLayout {...data}>
+  <data.component />
+</DocsLayout>
+"""
+}

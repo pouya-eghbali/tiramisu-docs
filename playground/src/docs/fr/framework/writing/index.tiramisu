@@ -1,0 +1,49 @@
+meta { title = Rédaction, order = 2, icon = pen-line }
+
+Les pages de documentation sont des fichiers code { .tiramisu } placés dans le répertoire code { src/docs/ }. Chaque fichier devient une page de votre site.
+
+h2 { Emplacement des fichiers }
+
+Placez vos fichiers dans code { src/docs/ } (ou dans un sous-dossier de langue comme code { src/docs/ } si vous utilisez l'i18n). Le chemin du fichier détermine l'URL :
+
+table {
+  row = [Chemin du fichier, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/api/auth.tiramisu }, code { /docs/api/auth }]
+}
+
+h2 { Structure des dossiers }
+
+Les dossiers créent automatiquement des groupes dans la barre latérale. Un dossier contenant un fichier code { index.tiramisu } utilise le titre de la page d'index comme libellé du groupe :
+
+filetree {
+  folder { src/docs,
+    file { index.tiramisu },
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu },
+      file { quick-start.tiramisu }
+    },
+    folder { api,
+      file { index.tiramisu },
+      file { endpoints.tiramisu }
+    }
+  }
+}
+
+h2 { Anatomie d'une page }
+
+Chaque page comporte deux parties : un bloc code { meta } et le contenu.
+
+codeblock { language = tiramisu, """meta { title = Ma Page, order = 2, group = Guide }
+
+Texte de paragraphe ici. Utilisez bold { gras } et italic { italique } pour mettre en valeur.
+
+h2 { Une section }
+
+Plus de contenu avec du code { code en ligne } et d'autres mises en forme.""" }
+
+callout { type = info, Le bloc code { meta } doit apparaître tout au début du fichier. Tout ce qui suit est affiché comme contenu de la page. }
+
+callout { type = warning, N'ajoutez pas de code { "h1 {}" } à votre page — le code { title } du bloc code { meta } est automatiquement affiché comme titre de la page. Ajouter un code { h1 } manuellement créerait un doublon. }

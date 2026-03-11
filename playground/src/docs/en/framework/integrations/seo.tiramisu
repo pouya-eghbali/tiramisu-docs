@@ -1,0 +1,81 @@
+meta {
+  title = SEO,
+  order = 2,
+  icon = search
+}
+
+Tiramisu Docs includes built-in SEO features to help your documentation rank well in search engines.
+
+h3 { Sitemap }
+
+A sitemap is automatically generated at code { /sitemap.xml }. It includes all documentation pages with their last-edited dates.
+
+To enable the sitemap, set the code { url } field in your config:
+
+codeblock { language = typescript, """export default defineConfig({
+  url: "https://docs.example.com",
+  // ...
+});""" }
+
+The code { url } is required for generating absolute URLs in the sitemap.
+
+h3 { Meta Tags }
+
+Each documentation page automatically gets meta tags derived from its code { "meta {}" } block:
+
+h4 { Open Graph }
+
+list {
+  code { og:title } — from the page title,
+  code { og:description } — from the page description,
+  code { og:type } — always code { "article" },
+  code { og:url } — canonical URL built from your site code { url } and the page slug,
+  code { og:site_name } — from the code { title } in your config,
+  code { og:image } — from the code { image } field in the page meta
+}
+
+h4 { Twitter Cards }
+
+list {
+  code { twitter:card } — code { "summary_large_image" } when an image is set\, otherwise code { "summary" },
+  code { twitter:title } — from the page title,
+  code { twitter:description } — from the page description,
+  code { twitter:image } — from the code { image } field in the page meta
+}
+
+h4 { OG Image }
+
+You can set an Open Graph image per page using the code { image } field in the page's code { "meta {}" } block:
+
+codeblock { language = tiramisu, """meta {
+  title = Getting Started,
+  description = Learn how to get started,
+  image = /images/getting-started.png
+}""" }
+
+The image path can be relative to your site root (e.g. code { /images/hero.png }) or an absolute URL (e.g. code { "https://example.com/og.png" }). Relative paths are resolved against your site code { url }.
+
+h4 { Canonical URL }
+
+A code { "<link rel=""canonical"">" } tag is added to each page when a site code { url } is configured. This helps search engines identify the preferred URL for each page.
+
+h4 { JSON-LD Structured Data }
+
+Each page includes a code { TechArticle } JSON-LD schema with:
+
+list {
+  code { headline } — the page title,
+  code { url } — the canonical page URL,
+  code { mainEntityOfPage } — a code { WebPage } reference,
+  code { isPartOf } — a code { WebSite } reference with your site name and URL,
+  code { description } — if a description is set in the page meta,
+  code { dateModified } — if last-edited tracking is enabled,
+  code { image } — if an image is set in the page meta,
+  code { author } — if an author is set in the page meta (as a code { Person } entity)
+}
+
+All of these tags are generated automatically. You only need to set code { url } and code { title } in your config and add code { title } and code { description } to each page's code { "meta {}" } block.
+
+h3 { Customizing the Sitemap }
+
+The sitemap route is included automatically when you scaffold a project. If you need to customize it\, the generated route is at code { src/routes/sitemap.xml/+server.ts } and uses the code { generateSitemap() } function from the kit.

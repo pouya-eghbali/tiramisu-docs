@@ -1,0 +1,105 @@
+meta { title = Icônes, order = 7, icon = lucide:smile }
+
+h2 { Ajouter des icônes }
+
+Tiramisu Docs utilise link { url = https://iconify.design/, Iconify } pour les icônes\, vous donnant accès à plus de 275 000 icônes provenant de plus de 150 jeux d'icônes. Les icônes sont chargées à la demande — aucune mise en paquet à la compilation n'est nécessaire.
+
+h2 { Format des icônes }
+
+Les icônes utilisent le format code { prefix:name } d'Iconify :
+
+table {
+  row = [bold { Format }, bold { Exemple }],
+  row = [code { lucide:icon-name }, Icônes Lucide (ex. code { lucide:rocket })],
+  row = [code { mdi:icon-name }, Material Design Icons],
+  row = [code { simple-icons:icon-name }, Icônes de marques / simples],
+  row = [code { devicon-plain:icon-name }, Icônes d'outils de développement],
+  row = [code { heroicons:icon-name }, Heroicons]
+}
+
+callout {
+  type = info,
+  Les noms d'icônes sans code { : } sont automatiquement préfixés par code { lucide: }. Ainsi code { "icon = rocket" } fonctionne comme code { lucide:rocket }.
+}
+
+h2 { Icônes de section }
+
+Ajoutez un champ code { icon } à la configuration de votre section dans code { tiramisu.config.ts } :
+
+codeblock {
+  language = typescript,
+  """
+sections: [
+  { label: "Guide", path: "guide", icon: "lucide:book-open" },
+  { label: "API", path: "api", icon: "lucide:code" },
+]
+"""
+}
+
+Les icônes de section apparaissent dans la barre supérieure à côté du libellé de la section.
+
+h2 { Icônes de page et de groupe }
+
+Ajoutez code { icon } au bloc code { meta } de n'importe quel fichier code { .tiramisu } :
+
+codeblock {
+  language = tiramisu,
+  "meta { title = Getting Started, order = 1, icon = lucide:rocket }"
+}
+
+Pour les pages d'index de dossier (code { index.tiramisu })\, l'icône est appliquée au titre du groupe ou sous-groupe dans la barre latérale. Pour les pages ordinaires\, l'icône apparaît à côté du titre de la page dans la barre latérale et dans l'en-tête de la page.
+
+h2 { En-tête de page }
+
+Lors de la consultation d'une page de documentation\, l'en-tête de la page affiche :
+
+list {
+  Le nom du groupe ou sous-groupe parent sous forme de petit libellé au-dessus du titre,
+  L'icône de la page (si définie) à côté du titre,
+  Le titre et la description de la page provenant du meta
+}
+
+h2 { Parcourir les icônes }
+
+Utilisez le navigateur link { url = https://icon-sets.iconify.design/, Iconify Icon Sets } pour trouver des icônes. Quelques jeux populaires :
+
+table {
+  row = [bold { Jeu }, bold { Préfixe }, bold { Style }],
+  row = [
+    link { url = https://lucide.dev/icons, Lucide },
+    code { lucide },
+    Icônes en trait fin
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/mdi/, Material Design },
+    code { mdi },
+    Pleines / contours
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/heroicons/, Heroicons },
+    code { heroicons },
+    Contours / pleines
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/simple-icons/, Simple Icons },
+    code { simple-icons },
+    Logos de marques
+  ],
+  row = [
+    link {
+      url = https://icon-sets.iconify.design/devicon-plain/,
+      Devicon Plain
+    },
+    code { devicon-plain },
+    Icônes d'outils de dev
+  ]
+}
+
+h2 { Icônes de blocs de code }
+
+Les blocs de code et les blocs de code à onglets détectent automatiquement les icônes de langage en utilisant le jeu code { devicon-plain }. Vous pouvez remplacer l'icône détectée automatiquement :
+
+codeblock {
+  language = tiramisu,
+  "codeblock { language = typescript, icon = \"lucide:file-code\", \"\"\"const x = 1\"\"\" }"
+}

@@ -1,0 +1,86 @@
+meta { title = Parameters, order = 3, icon = sliders-horizontal }
+
+Function calls in Tiramisu can accept parameters. Parameters are separated by commas and come in three forms: positional, named, and arrays.
+
+h3 { Positional Parameters }
+
+Content separated by commas creates positional parameters:
+
+codeblock { language = tiramisu, "func { first, second, third }" }
+
+Each comma-separated value becomes a separate positional parameter in the AST.
+
+h3 { Named Parameters }
+
+Use code { "=" } to create named parameters:
+
+codeblock {
+  language = tiramisu,
+  "link { url = https://example.com, Click here }"
+}
+
+In this example, code { url } is a named parameter with value code { https://example.com }, and "Click here" is a positional parameter.
+
+h3 { Mixing Parameters }
+
+Named and positional parameters can be mixed freely:
+
+codeblock {
+  language = tiramisu,
+  """
+image {
+  src = /photo.jpg,
+  alt = A beautiful sunset,
+  My image caption
+}
+"""
+}
+
+h3 { Array Parameters }
+
+Use square brackets to create array values:
+
+codeblock {
+  language = tiramisu,
+  """
+table {
+  row = [Name, Age, City],
+  row = [Alice, 30, Portland],
+  row = [Bob, 25, Seattle]
+}
+"""
+}
+
+Each code { "[]" } creates an array value. Array items are separated by commas.
+
+h3 { Whitespace }
+
+Whitespace around parameters is trimmed. These are equivalent:
+
+codeblock {
+  language = tiramisu,
+  """
+bold{text}
+bold { text }
+bold {
+  text
+}
+"""
+}
+
+h3 { Commas in Content }
+
+If your content contains commas, you need to either escape them or use quotes:
+
+codeblock {
+  language = tiramisu,
+  """
+// Escape with backslash
+func { hello\, world }
+
+// Or use quotes
+func { "hello, world" }
+"""
+}
+
+Without escaping, the comma would split the content into two separate parameters.

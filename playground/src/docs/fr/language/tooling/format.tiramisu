@@ -1,0 +1,84 @@
+meta {
+  title = Formatage,
+  order = 2,
+  icon = paintbrush
+}
+
+La commande code { tiramisu format } formate automatiquement les fichiers code { .tiramisu } pour un style cohérent. Elle normalise les espaces\, l'indentation et l'espacement des paramètres.
+
+h3 { Utilisation }
+
+codeblock { language = bash, "tiramisu format [options] [files...]" }
+
+h3 { Options }
+
+table {
+  row = [bold { Drapeau }, bold { Défaut }, bold { Description }],
+  row = [code { --check }, —, Vérifie si les fichiers sont formatés sans les modifier. Quitte avec le code 1 si un fichier nécessite un formatage.],
+  row = [code { --indent <n> }, code { 2 }, Nombre d'espaces par niveau d'indentation.],
+  row = [code { --line-width <n> }, code { 80 }, Largeur maximale de ligne avant de découper les appels de fonctions en format multi-lignes.]
+}
+
+h3 { Formater les fichiers sur place }
+
+Passez un ou plusieurs chemins de fichiers pour les formater sur place :
+
+codeblock { language = bash, tiramisu format src/docs/**/*.tiramisu }
+
+Les fichiers déjà correctement formatés sont ignorés (pas d'écritures inutiles).
+
+h3 { Stdin / Stdout }
+
+Lorsqu'aucun fichier n'est fourni et que l'entrée est envoyée par pipe\, le formateur lit depuis stdin et écrit sur stdout :
+
+codeblock { language = bash, """echo 'bold{hello}' | tiramisu format
+# Output: bold { hello }""" }
+
+Ceci est utile pour les intégrations d'éditeurs et le scripting.
+
+h3 { Mode vérification }
+
+Utilisez code { --check } en CI pour vérifier le formatage sans modifier les fichiers :
+
+codeblock { language = bash, tiramisu format --check src/docs/**/*.tiramisu }
+
+Si des fichiers nécessitent un formatage\, la commande les liste et quitte avec le code 1.
+
+h3 { Ce que fait le formateur }
+
+Le formateur applique les règles suivantes :
+
+list {
+  bold { Espaces en fin de ligne } — supprimés de toutes les lignes.,
+  bold { Saut de ligne final } — assure un unique saut de ligne final.,
+  bold { Espacement des paragraphes } — réduit 3+ lignes vides à 2.,
+  bold { Fonctions en ligne } — normalise l'espacement des accolades : code { "bold{hello}" } → code { "bold { hello }" }.,
+  bold { Fonctions multi-lignes } — découpe les appels de fonctions longs sur plusieurs lignes lorsqu'ils dépassent la largeur de ligne.,
+  bold { Paramètres } — normalise l'espacement autour de code { "=" } : code { "level=1" } → code { "level = 1" }.,
+  bold { Tableaux } — formate en ligne ou multi-lignes selon la largeur de ligne.,
+  bold { Guillemets de chaînes } — utilise le style de guillemets valide le plus court.
+}
+
+h3 { Exemples }
+
+Avant le formatage :
+
+codeblock { language = tiramisu, """callout{type=warning,Don't forget to install the peer dependencies.}
+
+h2{Quick  Start}
+
+list{First item,Second item,Third item}""" }
+
+Après exécution de code { tiramisu format } :
+
+codeblock { language = tiramisu, """callout { type = warning, Don't forget to install the peer dependencies. }
+
+h2 { Quick Start }
+
+list {
+  First item,
+  Second item,
+  Third item
+}""" }
+
+Le formateur est idempotent — l'exécuter plusieurs fois produit un résultat identique.

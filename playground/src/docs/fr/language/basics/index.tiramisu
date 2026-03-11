@@ -1,0 +1,38 @@
+meta {
+  title = Qu'est-ce que Tiramisu ?,
+  order = 1,
+  icon = graduation-cap
+}
+
+Tiramisu est un langage de balisage construit autour d'un seul concept : les bold { appels de fonctions }. Tout dans Tiramisu est soit du texte brut\, soit un appel de fonction\, ce qui rend la syntaxe simple et cohérente.
+
+Contrairement à Markdown ou HTML\, Tiramisu n'est pas lié à un format de sortie spécifique. Le parseur Tiramisu (code { @timeleap/tiramisu }) lit le texte source et produit un AST (Abstract Syntax Tree) qui peut être compilé vers n'importe quoi — HTML\, composants Svelte\, React\, PDF\, ou tout autre format.
+
+h3 { Principes clés }
+
+list {
+  bold { Une seule syntaxe } — tout est un appel de fonction. Pas de cas particuliers\, pas de raccourcis\, pas d'ambiguïté.,
+  bold { Composable } — les appels de fonctions peuvent être imbriqués dans d'autres appels de fonctions à n'importe quelle profondeur.,
+  bold { Indépendant du format de sortie } — le parseur produit un AST générique. Ce que vous en faites dépend de votre front-end compilateur.,
+  bold { Extensible } — il n'y a pas de fonctions intégrées dans le langage lui-même. Toutes les fonctions sont définies par le front-end compilateur.
+}
+
+h3 { Tiramisu vs. Tiramisu Docs }
+
+Il est important de distinguer les deux :
+
+table {
+  row = [bold { " " }, bold { Tiramisu (Langage) }, bold { Tiramisu Docs (Framework) }],
+  row = [bold { Quoi }, Langage de balisage + parseur, Framework de documentation],
+  row = [bold { Package }, code { @timeleap/tiramisu }, code { @tiramisu-docs/kit }],
+  row = [bold { Fonctions }, Aucune intégrée, Définit h1\, bold\, codeblock\, callout\, etc.],
+  row = [bold { Sortie }, AST générique, Composants Svelte]
+}
+
+Toutes les fonctions que vous utilisez pour écrire de la documentation (code { h1 }\, code { bold }\, code { codeblock }\, code { callout }\, etc.) sont définies par Tiramisu Docs\, pas par le langage Tiramisu lui-même.
+
+h3 { Un exemple simple }
+
+codeblock { language = tiramisu, "bold { Hello } world!" }
+
+Le parseur transforme ceci en un AST avec un nœud code { FunctionCall } (nom : bold\, contenu : Hello) suivi d'un nœud code { PureText } (world!). Ce qui se passe ensuite dépend de votre front-end compilateur.

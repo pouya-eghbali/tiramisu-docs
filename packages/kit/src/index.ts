@@ -1,2 +1,6 @@
 export { defineConfig, resolveConfig } from "./config.js"
-export type { TiramisuDocsConfig, ResolvedConfig, SectionConfig, LocaleConfig, I18nConfig } from "./config.js"
+export type { TiramisuDocsConfig, ResolvedConfig, SectionConfig, LocaleConfig, I18nConfig, GitHubConfig, FooterConfig, FooterSocials, InstantOgConfig } from "./config.js"
+export type { SidebarItem, SidebarSubgroup, SidebarEntry, SidebarGroup, VirtualDoc, SearchIndexEntry, ResolvedSection, LocaleData, VirtualModule } from "./types.js"
+export { generateSitemap, generateLlmsTxt, generateLlmsFullTxt, generateSkillMd, buildCanonicalUrl, buildPageJsonLd, buildInstantOgUrl } from "./seo.js"
+export { getOpenLinks, getGitHubEditUrl, getPageUrl } from "./lib/open-links.js"
+export type { OpenLink, OpenLinkOptions } from "./lib/open-links.js"

@@ -1,0 +1,45 @@
+meta {
+  title = Fußzeile,
+  order = 5,
+  icon = footprints
+}
+
+Die Fußzeile erscheint am Ende jeder Seite und kann Social-Media-Links\, einen Copyright-Hinweis und ein „Powered by Tiramisu"-Badge anzeigen.
+
+h3 { Konfiguration }
+
+Fügen Sie einen code { footer }-Block zu Ihrer Konfiguration hinzu:
+
+codeblock { language = typescript, """footer: {
+  socials: {
+    github: "https://github.com/user/repo",
+    x: "https://x.com/myproject",
+    discord: "https://discord.gg/myserver",
+  },
+  copyright: "© 2026 My Project",
+},""" }
+
+h3 { Soziale Links }
+
+Die folgenden sozialen Plattformen werden unterstützt:
+
+table {
+  row = [bold { Plattform }, bold { Konfigurationsschlüssel }, bold { Symbol }],
+  row = [GitHub, code { github }, GitHub-Logo],
+  row = [X (Twitter), code { x }, X-Logo],
+  row = [Discord, code { discord }, Discord-Logo],
+  row = [Bluesky, code { bluesky }, Bluesky-Logo],
+  row = [Mastodon, code { mastodon }, Mastodon-Logo],
+  row = [YouTube, code { youtube }, YouTube-Logo],
+  row = [LinkedIn, code { linkedin }, LinkedIn-Logo]
+}
+
+Jeder Social-Eintrag ist ein URL-String. Nur Plattformen mit einer URL zeigen ein Symbol in der Fußzeile an.
+
+h3 { Copyright }
+
+Der code { copyright }-String wird zentriert unter den Social-Symbolen dargestellt. Verwenden Sie ihn für Ihren Copyright-Hinweis oder einen kurzen Text.
+
+h3 { Powered by Tiramisu }
+
+Die Fußzeile enthält automatisch ein „Powered by Tiramisu"-Badge\, das zur Tiramisu-Docs-Website verlinkt. Dieses Badge hilft\, das Projekt zu unterstützen.

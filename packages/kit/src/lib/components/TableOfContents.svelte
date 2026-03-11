@@ -1,10 +1,12 @@
-<script>
-  let { headings } = $props()
+<script lang="ts">
+  import type { Heading } from "@tiramisu-docs/core"
+
+  let { headings }: { headings: Heading[] } = $props()
   let activeId = $state("")
 
   $effect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries: IntersectionObserverEntry[]) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             activeId = entry.target.id
@@ -15,8 +17,8 @@
     )
 
     const elements = headings
-      .map((h) => document.getElementById(h.id))
-      .filter(Boolean)
+      .map((h: Heading) => document.getElementById(h.id))
+      .filter((el): el is HTMLElement => el !== null)
 
     for (const el of elements) observer.observe(el)
 

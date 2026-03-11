@@ -1,0 +1,49 @@
+meta { title = Schreiben, order = 2, icon = pen-line }
+
+Dokumentationsseiten sind code { .tiramisu }-Dateien im Verzeichnis code { src/docs/ }. Jede Datei wird zu einer Seite auf Ihrer Website.
+
+h2 { Dateispeicherort }
+
+Platzieren Sie Ihre Dateien in code { src/docs/ } (oder in einem Gebietsschema-Unterordner wie code { src/docs/ }\, wenn Sie i18n verwenden). Der Dateipfad bestimmt die URL:
+
+table {
+  row = [Dateipfad, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/api/auth.tiramisu }, code { /docs/api/auth }]
+}
+
+h2 { Ordnerstruktur }
+
+Ordner erstellen automatisch Sidebar-Gruppen. Ein Ordner mit einer code { index.tiramisu }-Datei verwendet den Titel der Indexseite als Gruppenbezeichnung:
+
+filetree {
+  folder { src/docs,
+    file { index.tiramisu },
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu },
+      file { quick-start.tiramisu }
+    },
+    folder { api,
+      file { index.tiramisu },
+      file { endpoints.tiramisu }
+    }
+  }
+}
+
+h2 { Seitenaufbau }
+
+Jede Seite besteht aus zwei Teilen: einem code { meta }-Block und dem Inhalt.
+
+codeblock { language = tiramisu, """meta { title = Meine Seite, order = 2, group = Leitfaden }
+
+Absatztext kommt hierhin. Verwenden Sie bold { fett } und italic { kursiv } zur Hervorhebung.
+
+h2 { Ein Abschnitt }
+
+Weiterer Inhalt mit code { Inline-Code } und anderer Formatierung.""" }
+
+callout { type = info, Der code { meta }-Block muss ganz am Anfang der Datei stehen. Alles danach wird als Seiteninhalt gerendert. }
+
+callout { type = warning, Fügen Sie Ihrer Seite kein code { "h1 {}" } hinzu — der code { title } aus dem code { meta }-Block wird automatisch als Seitenüberschrift gerendert. Ein manuelles code { h1 } würde ein Duplikat erzeugen. }

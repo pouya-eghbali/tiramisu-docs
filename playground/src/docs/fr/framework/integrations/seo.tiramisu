@@ -1,0 +1,81 @@
+meta {
+  title = SEO,
+  order = 2,
+  icon = search
+}
+
+Tiramisu Docs inclut des fonctionnalités SEO intégrées pour aider votre documentation à bien se positionner dans les moteurs de recherche.
+
+h3 { Sitemap }
+
+Un sitemap est automatiquement généré à code { /sitemap.xml }. Il inclut toutes les pages de documentation avec leurs dates de dernière modification.
+
+Pour activer le sitemap\, définissez le champ code { url } dans votre configuration :
+
+codeblock { language = typescript, """export default defineConfig({
+  url: "https://docs.example.com",
+  // ...
+});""" }
+
+Le code { url } est requis pour générer des URL absolues dans le sitemap.
+
+h3 { Balises meta }
+
+Chaque page de documentation obtient automatiquement des balises meta dérivées de son bloc code { "meta {}" } :
+
+h4 { Open Graph }
+
+list {
+  code { og:title } — issu du titre de la page,
+  code { og:description } — issu de la description de la page,
+  code { og:type } — toujours code { "article" },
+  code { og:url } — URL canonique construite à partir du code { url } de votre site et du slug de la page,
+  code { og:site_name } — issu du code { title } dans votre configuration,
+  code { og:image } — issu du champ code { image } dans les métadonnées de la page
+}
+
+h4 { Twitter Cards }
+
+list {
+  code { twitter:card } — code { "summary_large_image" } lorsqu'une image est définie\, sinon code { "summary" },
+  code { twitter:title } — issu du titre de la page,
+  code { twitter:description } — issu de la description de la page,
+  code { twitter:image } — issu du champ code { image } dans les métadonnées de la page
+}
+
+h4 { Image OG }
+
+Vous pouvez définir une image Open Graph par page en utilisant le champ code { image } dans le bloc code { "meta {}" } de la page :
+
+codeblock { language = tiramisu, """meta {
+  title = Getting Started,
+  description = Learn how to get started,
+  image = /images/getting-started.png
+}""" }
+
+Le chemin de l'image peut être relatif à la racine de votre site (par ex. code { /images/hero.png }) ou une URL absolue (par ex. code { "https://example.com/og.png" }). Les chemins relatifs sont résolus par rapport au code { url } de votre site.
+
+h4 { URL canonique }
+
+Une balise code { "<link rel=""canonical"">" } est ajoutée à chaque page lorsqu'un code { url } de site est configuré. Cela aide les moteurs de recherche à identifier l'URL préférée pour chaque page.
+
+h4 { Données structurées JSON-LD }
+
+Chaque page inclut un schéma JSON-LD code { TechArticle } avec :
+
+list {
+  code { headline } — le titre de la page,
+  code { url } — l'URL canonique de la page,
+  code { mainEntityOfPage } — une référence code { WebPage },
+  code { isPartOf } — une référence code { WebSite } avec le nom et l'URL de votre site,
+  code { description } — si une description est définie dans les métadonnées de la page,
+  code { dateModified } — si le suivi des dernières modifications est activé,
+  code { image } — si une image est définie dans les métadonnées de la page,
+  code { author } — si un auteur est défini dans les métadonnées de la page (en tant qu'entité code { Person })
+}
+
+Toutes ces balises sont générées automatiquement. Vous devez uniquement définir code { url } et code { title } dans votre configuration et ajouter code { title } et code { description } au bloc code { "meta {}" } de chaque page.
+
+h3 { Personnaliser le sitemap }
+
+La route du sitemap est incluse automatiquement lorsque vous créez un projet avec le scaffolder. Si vous avez besoin de la personnaliser\, la route générée se trouve à code { src/routes/sitemap.xml/+server.ts } et utilise la fonction code { generateSitemap() } du kit.

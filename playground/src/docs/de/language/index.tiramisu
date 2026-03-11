@@ -1,0 +1,78 @@
+meta {
+  title = Sprache,
+  description = Eine Auszeichnungssprache basierend auf Funktionsaufrufen\, die in jedes Ausgabeformat kompiliert werden kann.,
+  order = 0,
+  icon = terminal
+}
+
+Tiramisu ist eine Auszeichnungssprache\, die auf Funktionsaufrufen basiert. Sie erzeugt einen generischen AST\, der in jedes Ausgabeformat kompiliert werden kann — HTML\, Svelte\, React\, PDF und mehr.
+
+h2 { Schnellüberblick }
+
+Alles in Tiramisu ist entweder einfacher Text oder ein Funktionsaufruf:
+
+codeblock { language = tiramisu, """h2 { Hello World }
+
+This is plain text. Use bold { function calls } to add structure.
+
+list {
+  Simple and readable,
+  No closing tags,
+  Compiles to anything
+}""" }
+
+Funktionen können benannte Parameter\, Positionsparameter oder beides annehmen. Sie lassen sich natürlich verschachteln — jeder Parameterwert kann weitere Funktionsaufrufe enthalten.
+
+h2 { Designprinzipien }
+
+cards {
+  card {
+    title = Funktionen bis ganz nach unten,
+    description = Ein einziges Konzept zu lernen. Überschriften\, Listen\, Tabellen\, Codeblöcke — alles ist ein Funktionsaufruf.,
+    icon = braces
+  },
+  card {
+    title = Ausgabeunabhängig,
+    description = Der Parser erzeugt einen generischen AST. Schreiben Sie einen Compiler für HTML\, Svelte\, React\, PDF oder jedes andere Format\, das Sie benötigen.,
+    icon = shuffle
+  },
+  card {
+    title = Standardmäßig lesbar,
+    description = Keine spitzen Klammern\, keine schließenden Tags. Tiramisu liest sich wie strukturierte Prosa.,
+    icon = eye
+  },
+  card {
+    title = Erweiterbar,
+    description = Unbekannte Funktionsnamen werden zu eigenen Komponenten. Fügen Sie Ihre eigenen hinzu\, ohne den Parser anzupassen.,
+    icon = puzzle
+  }
+}
+
+h2 { Lernen }
+
+cards {
+  card {
+    title = Syntax,
+    description = Funktionsaufrufe\, Verschachtelung und wie Text und Struktur zusammenwirken.,
+    href = /docs/language/basics/syntax,
+    icon = braces
+  },
+  card {
+    title = Parameter,
+    description = Positions-\, benannte\, Array- und verschachtelte Parameter.,
+    href = /docs/language/basics/parameters,
+    icon = sliders-horizontal
+  },
+  card {
+    title = Zeichenketten & Escaping,
+    description = Anführungsregeln\, mehrzeilige Zeichenketten und Sonderzeichen.,
+    href = /docs/language/basics/strings,
+    icon = quote
+  },
+  card {
+    title = Eigene Front-Ends,
+    description = Erstellen Sie Ihren eigenen Compiler für ein beliebiges Ausgabeformat.,
+    href = /docs/language/internals/custom-frontends,
+    icon = monitor
+  }
+}

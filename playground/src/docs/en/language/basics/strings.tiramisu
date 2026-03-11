@@ -1,0 +1,91 @@
+meta { title = Strings & Escaping, order = 4, icon = quote }
+
+Tiramisu provides several ways to handle special characters in your content. Understanding quoting and escaping is essential for writing content that contains commas, equals signs, brackets, or quotes.
+
+h3 { Quoting with Double Quotes }
+
+Wrap text in double quotes to prevent special characters from being parsed:
+
+codeblock { language = tiramisu, ""func { "text with, commas and = signs" }"" }
+
+Inside quotes, commas don't split parameters and equals signs don't create named parameters.
+
+h3 { Escaping Quotes }
+
+The simplest way to include a double quote inside a string is with a backslash:
+
+codeblock { language = tiramisu, ""func { "text with \\"quotes\\" inside" }"" }
+
+Alternatively, use multiple quote characters to wrap the string. The outer pair uses more quotes than any sequence inside:
+
+codeblock { language = tiramisu, """func { ""text with "quotes" inside"" }""" }
+
+For text that contains double-double quotes, use triple quotes:
+
+codeblock {
+  language = tiramisu,
+  """"func { """text with ""double quotes"" """ }""""
+}
+
+h3 { Backslash Escaping }
+
+For individual special characters inside function parameters, use backslash escaping:
+
+table {
+  row = [bold { Escape }, bold { Result }, bold { Purpose }],
+  row = [code { "\," }, code { "," }, Prevents parameter separation],
+  row = [code { "\=" }, code { "=" }, Prevents named parameter parsing],
+  row = [code { "\{" }, code { "{" }, Prevents function call parsing],
+  row = [code { "\}" }, code { "}" }, Prevents closing a function call],
+  row = [code { "\[" }, code { "[" }, Prevents array parsing],
+  row = [code { "\]" }, code { "]" }, Prevents closing an array],
+  row = [backslash + quote, a double quote, Escapes a quote inside a quoted string],
+  row = [
+    code { "\name" },
+    code { "name { ... }" },
+    Prevents function call — treats name as literal text
+  ]
+}
+
+h3 { When to Use What }
+
+callout {
+  type = info,
+  bold { Quick guide: } Use backslash escaping for single characters (code { "\," }\, code { "\=" }). Use quotes for longer text with multiple special characters. Use multiple quotes when your text itself contains quotes.
+}
+
+Examples:
+
+codeblock {
+  language = tiramisu,
+  """"
+// Single comma - backslash is easiest
+func { hello\, world }
+
+// Multiple special chars - quotes are cleaner
+func { "text with, commas and = signs" }
+
+// Text with quotes - use double-double quotes
+func { ""She said "hello""" }
+""""
+}
+
+h3 { Common Patterns }
+
+bold { Math formulas } with equals signs:
+
+codeblock { language = tiramisu, ""math { "E = mc^2" }"" }
+
+bold { Code snippets } with special characters:
+
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = javascript, "const obj = { key: 'value' };" }""
+}
+
+bold { URLs } with query parameters:
+
+codeblock {
+  language = tiramisu,
+  ""link { url = "https://example.com/search?q=hello&lang=en", Search }""
+}

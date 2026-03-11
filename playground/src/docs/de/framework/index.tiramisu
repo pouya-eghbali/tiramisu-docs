@@ -1,0 +1,102 @@
+meta {
+  title = Framework,
+  description = Ein Dokumentations-Framework basierend auf SvelteKit und der Tiramisu-Auszeichnungssprache.,
+  order = 0,
+  icon = layers
+}
+
+Tiramisu Docs ist ein Dokumentations-Framework\, das auf link { url = https://svelte.dev, SvelteKit } und der link { url = /docs/language, Tiramisu-Auszeichnungssprache } aufgebaut ist. Schreiben Sie Ihre Dokumentation in code { .tiramisu }-Dateien — das Framework übernimmt Routing\, Navigation\, Suche und alles Weitere.
+
+callout {
+  type = warning,
+  bold { Beta } — Tiramisu Docs befindet sich in aktiver Entwicklung. APIs und Funktionen können sich ändern. Bei Problemen oder wenn Sie beitragen möchten\, besuchen Sie das link {
+    url = https://github.com/pouya-eghbali/tiramisu-docs,
+    GitHub-Repository
+  }.
+}
+
+h2 { Kurzüberblick }
+
+Erstellen Sie eine Datei\, erhalten Sie eine Seite:
+
+codeblock {
+  language = tiramisu,
+  """
+meta { title = Getting Started, order = 1, icon = rocket }
+
+Welcome to my docs! Here's how to install:
+
+codeblock { language = bash, "npm install my-library" }
+
+And here's a basic example:
+
+codeblock { language = typescript, "import { create } from 'my-library'
+const instance = create({ debug: true })" }
+"""
+}
+
+Das war's. Keine Konfigurationsdateien\, kein Routing-Setup\, keine Build-Skripte. Legen Sie eine code { .tiramisu }-Datei in code { src/docs/ } ab und sie wird zu einer Seite.
+
+h2 { Funktionen }
+
+cards {
+  card {
+    title = Dateibasiertes Routing,
+    description = Seiten werden aus Ihrer Dateistruktur erstellt. Ordner werden automatisch zu Seitenleistengruppen.,
+    icon = folder-tree
+  },
+  card {
+    title = Integrierte Suche,
+    description = Volltextsuche über Ihre gesamte Dokumentation ohne Konfiguration.,
+    icon = search
+  },
+  card {
+    title = Syntaxhervorhebung,
+    description = Unterstützt von Shiki mit Unterstützung für Dutzende von Sprachen und zwei Themes.,
+    icon = paintbrush
+  },
+  card {
+    title = Dunkelmodus,
+    description = Automatischer Wechsel zwischen hellem und dunklem Theme sofort einsatzbereit.,
+    icon = moon
+  },
+  card {
+    title = Sektionen & i18n,
+    description = Teilen Sie Dokumentation in unabhängige Sektionen auf. Fügen Sie Übersetzungen mit einem Ordner pro Sprache hinzu.,
+    icon = globe
+  },
+  card {
+    title = KI-bereit,
+    description = Integrierter MCP-Server und llms.txt-Generierung für KI-Assistenten.,
+    icon = bot
+  }
+}
+
+h2 { Erste Schritte }
+
+cards {
+  card {
+    title = Installation,
+    description = Erstellen Sie ein neues Projekt mit einem Befehl.,
+    href = /docs/framework/getting-started/installation,
+    icon = download
+  },
+  card {
+    title = Schnellstart,
+    description = Schreiben Sie Ihre erste Dokumentationsseite.,
+    href = /docs/framework/getting-started/quick-start,
+    icon = zap
+  },
+  card {
+    title = Konfiguration,
+    description = Passen Sie Sektionen\, Seitenleiste\, Theme und mehr an.,
+    href = /docs/framework/configuration,
+    icon = settings
+  },
+  card {
+    title = Dokumentation schreiben,
+    description = Lernen Sie die Tiramisu-Auszeichnungssyntax.,
+    href = /docs/framework/writing,
+    icon = text
+  }
+}

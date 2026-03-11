@@ -1,18 +1,20 @@
-<script>
+<script lang="ts">
   import { page } from "$app/stores"
-  import { SheetContent } from "./ui/sheet/index.js"
-  import { ScrollArea } from "./ui/scroll-area/index.js"
-  import { Collapsible } from "./ui/collapsible/index.js"
+  import { SheetContent } from "$lib/components/ui/sheet/index.js"
+  import { ScrollArea } from "$lib/components/ui/scroll-area/index.js"
+  import { Collapsible } from "$lib/components/ui/collapsible/index.js"
+  import type { ResolvedConfig } from "../../config.js"
+  import type { SidebarGroup, SidebarEntry, SidebarSubgroup } from "../../types.js"
 
-  let { config, sidebar = [], onSearchClick, locale } = $props()
+  let { config, sidebar = [], onSearchClick, locale }: { config: ResolvedConfig; sidebar?: SidebarGroup[]; onSearchClick: () => void; locale?: string } = $props()
   let mobileOpen = $state(false)
 
-  function docHref(slug) {
+  function docHref(slug: string): string {
     const prefix = locale ? `/docs/${locale}` : "/docs"
     return slug === "index" ? prefix : `${prefix}/${slug}`
   }
 
-  function isSubgroupActive(entry, pathname) {
+  function isSubgroupActive(entry: SidebarSubgroup, pathname: string): boolean {
     if (entry.slug) {
       const href = docHref(entry.slug)
       if (pathname === href) return true
@@ -20,7 +22,7 @@
     return hasActiveDescendant(entry.items, pathname)
   }
 
-  function hasActiveDescendant(items, pathname) {
+  function hasActiveDescendant(items: SidebarEntry[], pathname: string): boolean {
     for (const entry of items) {
       if (entry.type === "item") {
         const href = docHref(entry.slug)
@@ -33,7 +35,7 @@
   }
 </script>
 
-{#snippet renderMobileEntries(entries, depth)}
+{#snippet renderMobileEntries(entries: SidebarEntry[], depth: number)}
   {#each entries as entry}
     {#if entry.type === "item"}
       <a
@@ -54,7 +56,7 @@
               class="text-sm font-medium transition-colors
                 {subActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}"
               style:padding-left="{0.5 + depth * 0.75}rem"
-              onclick={(e) => { e.stopPropagation(); mobileOpen = false; }}
+              onclick={(e: MouseEvent) => { e.stopPropagation(); mobileOpen = false; }}
             >
               {entry.label}
             </a>

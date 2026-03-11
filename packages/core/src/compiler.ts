@@ -14,20 +14,27 @@ import { extractMeta } from "./meta.js"
 import type { CompileResult, Heading } from "./types.js"
 import { builtins, type EmitContext } from "./builtins.js"
 
-/** Escape HTML special characters in plain text */
+/** Escape HTML special characters and Svelte expression delimiters in plain text */
 function escapeHtml(text: string): string {
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
+    .replace(/\{/g, "&#123;")
+    .replace(/\}/g, "&#125;")
 }
 
 /**
  * Compile a tiramisu source string into a Svelte component.
  * Returns the compiled svelte markup, extracted meta, and headings for TOC.
  */
-export function compileTiramisu(source: string): CompileResult {
+export interface CompileOptions {
+  /** Resolve a file path relative to the current .tiramisu file. Used by readfile(). */
+  resolveFile?: (src: string) => string
+}
+
+export function compileTiramisu(source: string, options?: CompileOptions): CompileResult {
   const ast = compile(source)
   const { meta, contentNodes } = extractMeta(ast)
 
@@ -40,6 +47,7 @@ export function compileTiramisu(source: string): CompileResult {
     customImports,
     scriptVars,
     emitNode,
+    resolveFile: options?.resolveFile,
   }
 
   function emitNode(node: Node): string {

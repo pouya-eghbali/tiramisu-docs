@@ -1,0 +1,35 @@
+meta { title = Mise en page, order = 8, icon = columns-3 }
+
+Composants pour organiser le contenu sur la page.
+
+h2 { Colonnes }
+
+Placez du contenu côte à côte :
+
+codeblock { language = tiramisu, """columns {
+  col { This is the left column. },
+  col { This is the right column. }
+}""" }
+
+demo {
+  columns {
+    col { Ceci est la colonne de gauche avec du contenu. },
+    col { Ceci est la colonne de droite avec un contenu différent. }
+  }
+}
+
+Vous pouvez utiliser n'importe quel contenu dans les colonnes\, y compris des blocs de code\, des listes et d'autres composants.
+
+h2 { Démonstration }
+
+Le composant code { demo } affiche le contenu dans un conteneur d'aperçu :
+
+codeblock { language = tiramisu, """demo { title = Preview,
+  callout { type = success, This renders inside a demo container. }
+}""" }
+
+demo { title = Preview,
+  callout { type = success, Ceci s'affiche dans un conteneur de démonstration. }
+}
+
+Les démonstrations sont utiles pour montrer l'apparence des composants à côté de leur code source.

@@ -1,0 +1,12 @@
+meta {
+  title = Anpassung,
+  order = 4,
+  icon = palette
+}
+
+Tiramisu Docs ist vollständig anpassbar. Sie können eingebaute Komponenten überschreiben\, eigene benutzerdefinierte Funktionen erstellen und das gesamte Erscheinungsbild an Ihre Marke anpassen.
+
+list {
+  link { url = /docs/framework/customization/custom-components, Benutzerdefinierte Komponenten } — Erstellen Sie eigene Tiramisu-Funktionen als Svelte-Komponenten,
+  link { url = /docs/framework/customization/project-structure, Projektstruktur } — Verstehen Sie die wichtigsten Dateien und Ordner in einem Tiramisu Docs-Projekt
+}

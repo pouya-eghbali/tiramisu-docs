@@ -3,6 +3,10 @@ export interface DocMeta {
   description?: string
   order?: number
   group?: string
+  lastEdited?: string
+  icon?: string
+  image?: string
+  author?: string
 }
 
 export interface CompileResult {

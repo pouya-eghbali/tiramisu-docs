@@ -1,0 +1,85 @@
+meta { title = Syntax, order = 2, icon = braces }
+
+Tiramisu has one fundamental construct: the bold { function call }.
+
+h3 { Function Calls }
+
+A function call has a name followed by content in curly braces:
+
+codeblock { language = tiramisu, "name { content }" }
+
+The name can be any text before the opening brace. The content can include plain text, other function calls, or a mix of both.
+
+h3 { Nesting }
+
+Function calls can be nested to any depth:
+
+codeblock {
+  language = tiramisu,
+  "bold { italic { underline { deeply nested } } }"
+}
+
+Each function call can contain plain text, other function calls, or both:
+
+codeblock {
+  language = tiramisu,
+  "bold { This is italic { partially } formatted }"
+}
+
+h3 { Paragraphs }
+
+Plain text outside of function calls becomes paragraph content. Paragraphs are separated by blank lines:
+
+codeblock {
+  language = tiramisu,
+  """
+This is the first paragraph.
+
+This is the second paragraph.
+
+This is the third.
+"""
+}
+
+h3 { Function Names }
+
+A function name is any text immediately before an opening code { "{" }. This means function names can include spaces, numbers, and special characters — though by convention most function names are simple identifiers:
+
+codeblock {
+  language = tiramisu,
+  """
+bold { works }
+myWidget { works }
+"""
+}
+
+h3 { Escaping }
+
+To prevent a function call from being parsed, prefix the function name with a backslash:
+
+codeblock { language = tiramisu, \bold { this is literal text } }
+
+This renders as: code { "bold { this is literal text }" } — the backslash tells the parser to treat code { bold } as plain text rather than a function call.
+
+h3 { Special Characters }
+
+Some characters have special meaning inside function call parameters. You only need to escape them when they appear inside code { "{ }" } — in plain paragraph text, they are treated literally and need no escaping.
+
+table {
+  row = [bold { Escape }, bold { Character }, bold { Why }],
+  row = [code { "\," }, Comma, Prevents parameter separation],
+  row = [code { "\=" }, Equals, Prevents named parameter parsing],
+  row = [code { "\{" }, Opening brace, Prevents function call parsing],
+  row = [code { "\}" }, Closing brace, Prevents closing a function call],
+  row = [code { "\[" }, Opening bracket, Prevents array parsing],
+  row = [code { "\]" }, Closing bracket, Prevents closing an array],
+  row = [code { \name }, Function name, Treats name as literal text]
+}
+
+callout {
+  type = info,
+  These escapes are only needed inside function parameters. In plain text outside of code { "{ }" },
+  commas,
+  equals signs,
+  and brackets are just regular characters.
+}

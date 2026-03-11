@@ -1,0 +1,76 @@
+meta {
+  title = Vue d'ensemble de l'AST,
+  order = 3,
+  icon = cpu
+}
+
+Le parseur Tiramisu (code { @timeleap/tiramisu }) prend du texte source et produit un arbre syntaxique abstrait (AST). L'AST est un arbre de nœuds typés qui représente la structure de votre document.
+
+h3 { Types de nœuds }
+
+L'AST est composé des types de nœuds suivants :
+
+table {
+  row = [bold { Nœud }, bold { Description }],
+  row = [code { Tiramisu }, Nœud racine du document. Contient tous les nœuds de premier niveau.],
+  row = [code { Paragraph }, Un paragraphe de texte. Créé par la séparation par ligne vide.],
+  row = [code { MixedText }, Du texte qui contient à la fois du texte brut et des appels de fonctions.],
+  row = [code { PureText }, Un segment de texte brut sans appels de fonctions.],
+  row = [code { FunctionCall }, Un appel de fonction avec un nom et des paramètres.],
+  row = [code { Parameters }, La liste des paramètres d'un appel de fonction.],
+  row = [code { Parameter }, Un seul paramètre positionnel.],
+  row = [code { NamedParameter }, Un paramètre nommé (code { "key = value" }).],
+  row = [code { ArrayValue }, Une valeur de type tableau (code { "[a, b, c]" }).],
+  row = [code { ArrayItem }, Un seul élément dans un tableau.]
+}
+
+h3 { Exemple }
+
+Étant donné ce source Tiramisu :
+
+codeblock { language = tiramisu, "bold { Hello } world" }
+
+Le parseur produit cet AST :
+
+codeblock { language = typescript, "Tiramisu
+└── Paragraph
+    └── MixedText
+        ├── FunctionCall (name: \"bold\")
+        │   └── Parameters
+        │       └── Parameter
+        │           └── PureText (\"Hello\")
+        └── PureText (\" world\")" }
+
+h3 { Structure de FunctionCall }
+
+Le nœud code { FunctionCall } est le cœur de Tiramisu. Il possède :
+
+list {
+  code { functionName } — le nom de la fonction (texte avant le code { "{" }),
+  code { parameters } — un nœud code { Parameters } contenant les arguments de la fonction
+}
+
+Les paramètres contiennent une liste de nœuds code { Parameter } et code { NamedParameter }. Chaque paramètre peut contenir du texte\, des appels de fonctions imbriqués\, ou des tableaux.
+
+h3 { Importer les types de nœuds }
+
+Tous les types de nœuds sont disponibles depuis le package du parseur :
+
+codeblock { language = typescript, "import {
+  Tiramisu,
+  Paragraph,
+  MixedText,
+  PureText,
+  FunctionCall,
+  Parameters,
+  Parameter,
+  NamedParameter,
+  ArrayValue,
+  ArrayItem,
+} from \"@timeleap/tiramisu/src/types/nodes\";" }
+
+La vérification du type de nœud utilise code { instanceof } :
+
+codeblock { language = typescript, "if (node instanceof FunctionCall) {
+  console.log(node.functionName);
+}" }

@@ -1,0 +1,61 @@
+meta { title = Seiten-Metadaten, order = 3, icon = file-text }
+
+Jede Dokumentationsseite beginnt mit einem code { meta }-Block\, der Metadaten für die Sidebar\, die Suche und SEO definiert.
+
+h2 { Syntax }
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  description = A brief description,
+  order = 2,
+  group = Guide,
+  icon = book,
+  author = Jane Doe
+}""" }
+
+h2 { Felder }
+
+table {
+  row = [Feld, Typ, Beschreibung],
+  row = [code { title }, String, Seitentitel — wird in der Sidebar und im Browser-Tab angezeigt],
+  row = [code { description }, String, Kurzbeschreibung für SEO-Meta-Tags],
+  row = [code { order }, Number, Sortierposition in der Sidebar (niedrigere Werte erscheinen zuerst)],
+  row = [code { group }, String, Name der Sidebar-Gruppe (nur für Dateien auf der obersten Ebene)],
+  row = [code { lastEdited }, Date string, Überschreibt das Datum der letzten Bearbeitung (ansonsten wird Git oder die Datei-Änderungszeit verwendet)],
+  row = [code { icon }, String, Symbolname (Lucide-Symbol oder vollständige Iconify-ID wie code { "mdi:home" })],
+  row = [code { image }, String, OG-Bildpfad (relativ zum Site-Root) oder absolute URL],
+  row = [code { author }, String, Autorenname — wird unter der Seite angezeigt und in JSON-LD eingebunden]
+}
+
+h2 { Titel }
+
+Das Feld code { title } ist das wichtigste — es bestimmt\, was in der Sidebar-Navigation angezeigt wird. Wenn es weggelassen wird\, wird stattdessen der Slug der Datei verwendet.
+
+h2 { Reihenfolge }
+
+Verwenden Sie code { order }\, um die Position von Seiten innerhalb ihrer Sidebar-Gruppe zu steuern. Seiten werden aufsteigend nach Reihenfolge sortiert — code { "order = 1" } erscheint zuerst\, code { "order = 2" } als Zweites\, und so weiter. Seiten ohne Reihenfolge haben standardmäßig den Wert 999.
+
+h2 { Gruppen }
+
+Für Dateien auf der obersten Ebene (nicht in einem Ordner) bestimmt das Feld code { group }\, zu welcher Sidebar-Gruppe die Seite gehört:
+
+codeblock { language = tiramisu, "meta { title = Getting Started, group = Guide, order = 1 }" }
+
+Für Dateien in Ordnern wird die Gruppe automatisch durch den Ordnernamen bestimmt — Sie müssen code { group } nicht setzen.
+
+h2 { Ordner-Indexseiten }
+
+Eine code { index.tiramisu }-Datei in einem Ordner legt den Anzeigenamen der Gruppe fest:
+
+filetree {
+  folder { src/docs,
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu }
+    }
+  }
+}
+
+Wenn code { index.tiramisu } den Wert code { "title = Getting Started" } hat\, wird dies zur Sidebar-Gruppenüberschrift. Ohne diese Angabe wird der Ordnername automatisch in Titelschreibweise umgewandelt — code { getting-started } wird zu "Getting Started".
+
+callout { type = info, Verschachtelte Ordner erstellen Untergruppen in der Sidebar. Eine code { index.tiramisu } in einem Unterordner macht die Untergruppe zu einem klickbaren Link. }

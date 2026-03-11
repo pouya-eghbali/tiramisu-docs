@@ -1,0 +1,148 @@
+meta { title = Reichhaltige Inhalte, order = 6, icon = sparkles }
+
+Eingebaute Komponenten für interaktive und hervorgehobene Inhalte.
+
+h2 { Hinweise }
+
+Heben Sie wichtige Informationen mit Hinweisen hervor:
+
+codeblock {
+  language = tiramisu,
+  "callout { type = info, This is an informational callout. }"
+}
+
+Vier Typen sind verfügbar:
+
+demo {
+  callout { type = info, bold { Info } — allgemeine Informationen und Tipps. }
+  callout { type = warning, bold { Warnung } — worauf man achten sollte. }
+  callout {
+    type = error,
+    bold { Fehler } — kritische Probleme oder Breaking Changes.
+  }
+  callout {
+    type = success,
+    bold { Erfolg } — Bestätigungen und positive Ergebnisse.
+  }
+}
+
+h2 { Schritte }
+
+Nummerierte Anleitungen:
+
+codeblock {
+  language = tiramisu,
+  """
+steps {
+  Install the package:
+  codeblock { language = bash, npm i -S the-package },
+
+  Configure your project:
+  codeblock { language = bash, npx the-package --configure },
+
+  Start the dev server:
+  codeblock { language = bash, npm run dev}
+}
+"""
+}
+
+demo {
+  steps {
+    Installieren Sie das Paket:
+    codeblock { language = bash, npm i -S the-package },
+    Konfigurieren Sie Ihr Projekt:
+    codeblock { language = bash, npx the-package --configure },
+    Starten Sie den Entwicklungsserver:
+    codeblock { language = bash, npm run dev }
+  }
+}
+
+h2 { Tabs }
+
+Tab-basierte Inhaltsbereiche mit optionaler gruppenbasierter Persistenz:
+
+codeblock {
+  language = tiramisu,
+  """
+tabs { group = platforms,
+  tab { label = macOS, icon = uim:apple, Instructions for macOS. },
+  tab { label = Linux, icon = uim:linux, Instructions for Linux. },
+  tab { label = Windows, icon = uim:windows, Instructions for Windows. }
+}
+"""
+}
+
+demo {
+  tabs {
+    group = platforms,
+    tab { label = macOS, icon = uim:apple, Anleitung für macOS. },
+    tab { label = Linux, icon = uim:linux, Anleitung für Linux. },
+    tab { label = Windows, icon = uim:windows, Anleitung für Windows. }
+  }
+}
+
+Wenn mehrere code { tabs }-Blöcke denselben code { group }-Wert teilen\, wird durch die Auswahl eines Tabs in einem Block automatisch die Auswahl in allen anderen synchronisiert. Die Auswahl wird in localStorage gespeichert.
+
+h2 { Akkordeon }
+
+Einklappbarer Inhalt:
+
+codeblock {
+  language = tiramisu,
+  "accordion { title = Click to expand, Hidden content goes here. }"
+}
+
+demo { accordion { title = Zum Aufklappen klicken, Versteckter Inhalt kommt hierhin. } }
+
+h2 { Blockzitate }
+
+codeblock {
+  language = tiramisu,
+  "quote { The best documentation is the documentation that exists., author = Unknown }"
+}
+
+demo {
+  quote {
+    Die beste Dokumentation ist die Dokumentation\, die existiert.,
+    author = Unbekannt
+  }
+}
+
+h2 { Badges }
+
+Inline-Statusanzeigen:
+
+codeblock {
+  language = tiramisu,
+  """
+badge { Stable }
+badge { variant = secondary, Beta }
+badge { variant = destructive, Deprecated }
+badge { variant = outline, v2.0 }
+"""
+}
+
+demo {
+  badge { Stabil } badge { variant = secondary, Beta } badge { variant = destructive, Veraltet } badge { variant = outline, v2.0 }
+}
+
+h2 { Aufgabenlisten }
+
+codeblock {
+  language = tiramisu,
+  """
+tasklist {
+  "[x] Write documentation",
+  "[x] Add examples",
+  "[ ] Review and publish"
+}
+"""
+}
+
+demo {
+  tasklist {
+    "[x] Dokumentation schreiben",
+    "[x] Beispiele hinzufügen",
+    "[ ] Überprüfen und veröffentlichen"
+  }
+}

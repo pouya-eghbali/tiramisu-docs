@@ -1,0 +1,11 @@
+meta { title = Inhalte, order = 4, icon = layout }
+
+Tiramisu Docs bietet eine umfangreiche Sammlung eingebauter Komponenten für Dokumentationsinhalte. Diese sind als Tiramisu-Funktionen implementiert\, die zu Svelte-Komponenten kompiliert werden.
+
+cards {
+  card { title = Codeblöcke, description = Syntaxhervorgehobener Code mit Sprachunterstützung, href = /docs/framework/writing/content/code-blocks },
+  card { title = Reichhaltige Inhalte, description = Hinweise\, Tabs\, Schritte und mehr, href = /docs/framework/writing/content/rich-content },
+  card { title = Visuelle Elemente, description = Tabellen\, Bilder\, Listen\, Karten und Dateibäume, href = /docs/framework/writing/content/visual-elements },
+  card { title = Layout, description = Spalten und Vorschau-Container, href = /docs/framework/writing/content/layout },
+  card { title = Diagramme & Mathematik, description = Mermaid-Diagramme und KaTeX-Formeln, href = /docs/framework/writing/content/diagrams-math }
+}

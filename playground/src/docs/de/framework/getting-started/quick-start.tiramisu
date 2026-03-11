@@ -1,0 +1,59 @@
+meta { title = Schnellstart, order = 3, icon = zap }
+
+Sobald Sie ein Projekt eingerichtet haben\, erstellen Sie Ihre erste Dokumentationsseite.
+
+h2 { Eine Seite erstellen }
+
+Erstellen Sie eine Datei unter code { src/docs/getting-started.tiramisu }:
+
+codeblock { language = tiramisu, """meta { title = Getting Started, order = 1 }
+
+Welcome to my documentation!
+
+h2 { Installation }
+
+codeblock { language = bash, "bun add my-package" }
+
+h2 { Usage }
+
+Import and use the package:
+
+codeblock { language = typescript, "import { something } from 'my-package'" }""" }
+
+h2 { Meta verstehen }
+
+Jede Seite beginnt mit einem code { meta }-Block\, der die Seiten-Metadaten definiert:
+
+table {
+  row = [Feld, Beschreibung],
+  row = [code { title }, Seitentitel\, der in der Seitenleiste angezeigt wird],
+  row = [code { order }, Sortierreihenfolge — niedrigere Zahlen erscheinen zuerst],
+  row = [code { group }, Name der Seitenleistengruppe (für Dateien auf oberster Ebene)],
+  row = [code { description }, Seitenbeschreibung für SEO],
+  row = [code { icon }, Icon-Name für die Seitenüberschrift],
+  row = [code { image }, OG-Bildpfad oder URL],
+  row = [code { author }, Autorenname\, der unter der Seite angezeigt wird]
+}
+
+h2 { Entwicklungsserver starten }
+
+Starten Sie den Entwicklungsserver:
+
+codeblock { language = bash, "bun run dev" }
+
+Öffnen Sie link { url = http://localhost:5173/docs, http://localhost:5173/docs } in Ihrem Browser. Ihre Seite erscheint automatisch in der Seitenleiste.
+
+h2 { Dateibasiertes Routing }
+
+Der Dateipfad bestimmt die URL:
+
+table {
+  row = [Datei, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/apidpoints.tiramisu }, code { /docs/apidpoints }]
+}
+
+Ordner erstellen automatisch Seitenleistengruppen. Eine code { index.tiramisu } innerhalb eines Ordners legt den Titel der Gruppe fest.
+
+callout { type = info, Bearbeiten Sie eine beliebige code { .tiramisu }-Datei und der Browser lädt sofort neu — das Vite-Plugin übernimmt das Hot Module Replacement. }

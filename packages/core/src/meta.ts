@@ -92,6 +92,18 @@ function extractMetaFromFunctionCall(fc: FunctionCall, meta: DocMeta): void {
       case "group":
         meta.group = rawValue
         break
+      case "lastEdited":
+        meta.lastEdited = rawValue
+        break
+      case "icon":
+        meta.icon = rawValue
+        break
+      case "image":
+        meta.image = rawValue
+        break
+      case "author":
+        meta.author = rawValue
+        break
     }
   }
 }

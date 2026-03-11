@@ -1,0 +1,91 @@
+meta { title = Chaînes & Échappement, order = 4, icon = quote }
+
+Tiramisu offre plusieurs façons de gérer les caractères spéciaux dans votre contenu. Comprendre les guillemets et l'échappement est essentiel pour écrire du contenu qui contient des virgules\, des signes égal\, des crochets ou des guillemets.
+
+h3 { Guillemets doubles }
+
+Entourez le texte de guillemets doubles pour empêcher l'analyse des caractères spéciaux :
+
+codeblock { language = tiramisu, ""func { "text with, commas and = signs" }"" }
+
+À l'intérieur des guillemets\, les virgules ne séparent pas les paramètres et les signes égal ne créent pas de paramètres nommés.
+
+h3 { Échapper les guillemets }
+
+La façon la plus simple d'inclure un guillemet double dans une chaîne est avec un antislash :
+
+codeblock { language = tiramisu, ""func { "text with \\"quotes\\" inside" }"" }
+
+Alternativement\, utilisez plusieurs caractères de guillemets pour encadrer la chaîne. La paire extérieure utilise plus de guillemets que toute séquence à l'intérieur :
+
+codeblock { language = tiramisu, """func { ""text with "quotes" inside"" }""" }
+
+Pour du texte qui contient des guillemets doubles-doubles\, utilisez des guillemets triples :
+
+codeblock {
+  language = tiramisu,
+  """"func { """text with ""double quotes"" """ }""""
+}
+
+h3 { Échappement par antislash }
+
+Pour les caractères spéciaux individuels à l'intérieur des paramètres de fonctions\, utilisez l'échappement par antislash :
+
+table {
+  row = [bold { Échappement }, bold { Résultat }, bold { Objectif }],
+  row = [code { "\," }, code { "," }, Empêche la séparation des paramètres],
+  row = [code { "\=" }, code { "=" }, Empêche l'analyse des paramètres nommés],
+  row = [code { "\{" }, code { "{" }, Empêche l'analyse d'appel de fonction],
+  row = [code { "\}" }, code { "}" }, Empêche la fermeture d'un appel de fonction],
+  row = [code { "\[" }, code { "[" }, Empêche l'analyse de tableau],
+  row = [code { "\]" }, code { "]" }, Empêche la fermeture d'un tableau],
+  row = [antislash + guillemet, un guillemet double, Échappe un guillemet dans une chaîne entre guillemets],
+  row = [
+    code { "\name" },
+    code { "name { ... }" },
+    Empêche l'appel de fonction — traite le nom comme du texte littéral
+  ]
+}
+
+h3 { Quand utiliser quoi }
+
+callout {
+  type = info,
+  bold { Guide rapide : } Utilisez l'échappement par antislash pour les caractères individuels (code { "\," }\, code { "\=" }). Utilisez les guillemets pour du texte plus long avec plusieurs caractères spéciaux. Utilisez des guillemets multiples lorsque votre texte contient lui-même des guillemets.
+}
+
+Exemples :
+
+codeblock {
+  language = tiramisu,
+  """"
+// Single comma - backslash is easiest
+func { hello\, world }
+
+// Multiple special chars - quotes are cleaner
+func { "text with, commas and = signs" }
+
+// Text with quotes - use double-double quotes
+func { ""She said "hello""" }
+""""
+}
+
+h3 { Motifs courants }
+
+bold { Formules mathématiques } avec des signes égal :
+
+codeblock { language = tiramisu, ""math { "E = mc^2" }"" }
+
+bold { Extraits de code } avec des caractères spéciaux :
+
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = javascript, "const obj = { key: 'value' };" }""
+}
+
+bold { URLs } avec des paramètres de requête :
+
+codeblock {
+  language = tiramisu,
+  ""link { url = "https://example.com/search?q=hello&lang=en", Search }""
+}

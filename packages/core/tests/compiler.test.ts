@@ -26,7 +26,12 @@ describe("compileTiramisu", () => {
     expect(result.svelte).toContain('language="python"')
     expect(result.svelte).toContain('const __code_0 = "def hello(): pass"')
     expect(result.svelte).toContain("code={__code_0}")
-    expect(result.svelte).toContain("@tiramisu-docs/kit/components/tiramisu/CodeBlock.svelte")
+    expect(result.svelte).toContain('import { CodeBlock } from "$lib/components"')
+  })
+
+  it("imports custom components from $lib/components/tiramisu", () => {
+    const result = compileTiramisu("MyWidget { hello = world, content }")
+    expect(result.svelte).toContain('import MyWidget from "$lib/components/tiramisu/MyWidget.svelte"')
   })
 
   it("compiles links", () => {
@@ -102,7 +107,7 @@ describe("compileTiramisu", () => {
     expect(result.svelte).toContain("<Accordion")
     expect(result.svelte).toContain('title="FAQ"')
     expect(result.svelte).toContain("Some answer")
-    expect(result.svelte).toContain("import Accordion from")
+    expect(result.svelte).toContain('import { Accordion } from "$lib/components"')
   })
 
   it("compiles cards grid", () => {
@@ -113,7 +118,7 @@ describe("compileTiramisu", () => {
     expect(result.svelte).toContain("<NavCard")
     expect(result.svelte).toContain('title="Start"')
     expect(result.svelte).toContain('href="/start"')
-    expect(result.svelte).toContain("import NavCard from")
+    expect(result.svelte).toContain('import { NavCard } from "$lib/components"')
   })
 
   it("compiles filetree", () => {
@@ -121,27 +126,27 @@ describe("compileTiramisu", () => {
     expect(result.svelte).toContain("<FileTree>")
     expect(result.svelte).toContain('class="tree-file"')
     expect(result.svelte).toContain('class="tree-folder"')
-    expect(result.svelte).toContain("import FileTree from")
+    expect(result.svelte).toContain('import { FileTree } from "$lib/components"')
   })
 
   it("compiles image with ZoomImage", () => {
     const result = compileTiramisu('image { src = /img.png, alt = A photo }')
     expect(result.svelte).toContain("<ZoomImage")
     expect(result.svelte).toContain('src="/img.png"')
-    expect(result.svelte).toContain("import ZoomImage from")
+    expect(result.svelte).toContain('import { ZoomImage } from "$lib/components"')
   })
 
   it("compiles math block", () => {
     const result = compileTiramisu("math { E = mc^2 }")
     expect(result.svelte).toContain("<MathBlock")
-    expect(result.svelte).toContain("import MathBlock from")
+    expect(result.svelte).toContain('import { MathBlock } from "$lib/components"')
     expect(result.svelte).toContain("__math_")
   })
 
   it("compiles mermaid diagram", () => {
     const result = compileTiramisu('mermaid { """graph TD; A-->B""" }')
     expect(result.svelte).toContain("<Mermaid")
-    expect(result.svelte).toContain("import Mermaid from")
+    expect(result.svelte).toContain('import { Mermaid } from "$lib/components"')
     expect(result.svelte).toContain("__mermaid_")
   })
 })

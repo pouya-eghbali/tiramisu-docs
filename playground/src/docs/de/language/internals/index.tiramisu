@@ -1,0 +1,76 @@
+meta {
+  title = AST-Überblick,
+  order = 3,
+  icon = cpu
+}
+
+Der Tiramisu-Parser (code { @timeleap/tiramisu }) nimmt Quelltext entgegen und erzeugt einen Abstract Syntax Tree (AST). Der AST ist ein Baum aus typisierten Knoten\, der die Struktur Ihres Dokuments abbildet.
+
+h3 { Knotentypen }
+
+Der AST besteht aus den folgenden Knotentypen:
+
+table {
+  row = [bold { Knoten }, bold { Beschreibung }],
+  row = [code { Tiramisu }, Wurzelknoten des Dokuments. Enthält alle Knoten der obersten Ebene.],
+  row = [code { Paragraph }, Ein Textabsatz. Wird durch Leerzeilen erzeugt.],
+  row = [code { MixedText }, Text\, der sowohl einfachen Text als auch Funktionsaufrufe enthält.],
+  row = [code { PureText }, Ein reines Textsegment ohne Funktionsaufrufe.],
+  row = [code { FunctionCall }, Ein Funktionsaufruf mit einem Namen und Parametern.],
+  row = [code { Parameters }, Die Parameterliste eines Funktionsaufrufs.],
+  row = [code { Parameter }, Ein einzelner Positionsparameter.],
+  row = [code { NamedParameter }, Ein benannter Parameter (code { "key = value" }).],
+  row = [code { ArrayValue }, Ein Array-Wert (code { "[a, b, c]" }).],
+  row = [code { ArrayItem }, Ein einzelnes Element innerhalb eines Arrays.]
+}
+
+h3 { Beispiel }
+
+Gegeben folgender Tiramisu-Quelltext:
+
+codeblock { language = tiramisu, "bold { Hello } world" }
+
+Der Parser erzeugt diesen AST:
+
+codeblock { language = typescript, "Tiramisu
+└── Paragraph
+    └── MixedText
+        ├── FunctionCall (name: \"bold\")
+        │   └── Parameters
+        │       └── Parameter
+        │           └── PureText (\"Hello\")
+        └── PureText (\" world\")" }
+
+h3 { FunctionCall-Struktur }
+
+Der code { FunctionCall }-Knoten ist das Herzstück von Tiramisu. Er hat:
+
+list {
+  code { functionName } — den Namen der Funktion (Text vor der code { "{" }),
+  code { parameters } — einen code { Parameters }-Knoten\, der die Argumente der Funktion enthält
+}
+
+Parameter enthalten eine Liste von code { Parameter }- und code { NamedParameter }-Knoten. Jeder Parameter kann Text\, verschachtelte Funktionsaufrufe oder Arrays enthalten.
+
+h3 { Knotentypen importieren }
+
+Alle Knotentypen sind aus dem Parser-Paket verfügbar:
+
+codeblock { language = typescript, "import {
+  Tiramisu,
+  Paragraph,
+  MixedText,
+  PureText,
+  FunctionCall,
+  Parameters,
+  Parameter,
+  NamedParameter,
+  ArrayValue,
+  ArrayItem,
+} from \"@timeleap/tiramisu/src/types/nodes\";" }
+
+Die Typprüfung von Knoten verwendet code { instanceof }:
+
+codeblock { language = typescript, "if (node instanceof FunctionCall) {
+  console.log(node.functionName);
+}" }

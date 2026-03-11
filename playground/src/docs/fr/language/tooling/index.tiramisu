@@ -1,0 +1,27 @@
+meta {
+  title = CLI,
+  order = 2,
+  icon = terminal
+}
+
+Le CLI Tiramisu (code { @timeleap/tiramisu }) fournit des commandes pour travailler avec les fichiers code { .tiramisu } depuis le terminal. Installez-le globalement ou utilisez-le via code { bunx } / code { npx }.
+
+h3 { Installation }
+
+codetabs { group = package-manager,
+  codetab { label = bun, language = bash, bun add -g @timeleap/tiramisu },
+  codetab { label = npm, language = bash, npm install -g @timeleap/tiramisu },
+  codetab { label = pnpm, language = bash, pnpm add -g @timeleap/tiramisu }
+}
+
+Ou exécutez sans installer :
+
+codeblock { language = bash, bunx tiramisu --help }
+
+h3 { Commandes }
+
+table {
+  row = [bold { Commande }, bold { Description }],
+  row = [code { tiramisu compile <file> }, Compile un fichier code { .tiramisu } et affiche l'AST en JSON],
+  row = [code { tiramisu format }, Formate les fichiers code { .tiramisu }]
+}

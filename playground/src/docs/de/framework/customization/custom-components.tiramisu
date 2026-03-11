@@ -1,0 +1,129 @@
+meta { title = Benutzerdefinierte Komponenten, order = 2, icon = puzzle }
+
+Jeder Funktionsaufruf in Tiramisu\, der keiner eingebauten Funktion entspricht\, wird automatisch zu einer benutzerdefinierten Svelte-Komponente. So können Sie Ihre Dokumentation mit interaktiven Widgets\, benutzerdefinierten Layouts oder jeder beliebigen UI erweitern\, die Sie mit Svelte erstellen können.
+
+h3 { So funktioniert es }
+
+Wenn der Tiramisu-Compiler auf einen unbekannten Funktionsnamen trifft\, generiert er nach Konvention einen Import für eine Svelte-Komponente:
+
+list {
+  code { "myWidget { }" } importiert code { src/lib/components/tiramisu/MyWidget.svelte },
+  code { "apiPlayground { }" } importiert code { src/lib/components/tiramisu/ApiPlayground.svelte },
+  code { "videoPlayer { }" } importiert code { src/lib/components/tiramisu/VideoPlayer.svelte }
+}
+
+Der Funktionsname wird für den Komponentendateinamen in PascalCase umgewandelt.
+
+h3 { Parameter werden zu Props }
+
+Benannte Parameter im Funktionsaufruf werden zu Komponenten-Props. Positionaler Inhalt wird zum Standard-Slot (children):
+
+codeblock {
+  language = tiramisu,
+  """
+myCard {
+  title = My Feature,
+  icon = rocket,
+  This is the card body content with bold { bold text } and other formatting.
+}
+"""
+}
+
+Dies entspricht:
+
+codeblock {
+  language = svelte,
+  """
+<MyCard title="My Feature" icon="rocket">
+  <p>This is the card body content with <strong>bold text</strong> and other formatting.</p>
+</MyCard>
+"""
+}
+
+h3 { Eine Komponente erstellen }
+
+steps {
+  Erstellen Sie eine Datei unter code { src/lib/components/tiramisu/MyCard.svelte },
+  Definieren Sie Ihre Komponente mit den erwarteten Props,
+  Verwenden Sie sie in jeder code { .tiramisu }-Datei
+}
+
+Definieren Sie Ihre Komponente mit den erwarteten Props:
+
+codeblock {
+  language = svelte,
+  """
+<script>
+  let { title, icon, children } = $props()
+</script>
+
+<div class="my-card">
+  <h3>{title}</h3>
+  {@render children()}
+</div>
+
+<style>
+  .my-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+</style>
+"""
+}
+
+Verwenden Sie sie dann in jeder code { .tiramisu }-Datei:
+
+codeblock {
+  language = tiramisu,
+  """
+myCard {
+  title = Hello World,
+  This content will be rendered as children.
+}
+"""
+}
+
+h3 { Eingebaute Komponenten überschreiben }
+
+Alle Komponenten — Layout und eingebaute — werden über eine Barrel-Datei unter code { src/lib/components/index.ts } importiert. Diese Datei re-exportiert die Kit-Standardwerte:
+
+codeblock {
+  language = typescript,
+  """
+// src/lib/components/index.ts
+export { default as DocsLayout } from "@tiramisu-docs/kit/components/DocsLayout.svelte"
+export { default as CodeBlock } from "@tiramisu-docs/kit/components/tiramisu/CodeBlock.svelte"
+export { default as Callout } from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"
+// ... other components
+"""
+}
+
+Um eine beliebige Komponente zu überschreiben\, erstellen Sie Ihre eigene Version und ändern Sie den Export:
+
+steps {
+  Erstellen Sie Ihre benutzerdefinierte Komponente (z.B. code { src/lib/components/MyCallout.svelte }),
+  Aktualisieren Sie den Export in code { src/lib/components/index.ts }:
+}
+
+codeblock {
+  language = typescript,
+  """
+// Before
+export { default as Callout } from "@tiramisu-docs/kit/components/tiramisu/Callout.svelte"
+
+// After
+export { default as Callout } from "./MyCallout.svelte"
+"""
+}
+
+Ihre benutzerdefinierte Komponente erhält die gleichen Props wie die eingebaute Version. Dies funktioniert für jede Komponente — Layout-Komponenten wie code { DocsLayout } und code { DocPage } oder eingebaute Inhaltskomponenten wie code { CodeBlock }\, code { Tabs } und code { NavCard }.
+
+callout {
+  type = info,
+  Die Barrel-Datei wird vom Scaffolder generiert. Wenn Sie Ihr Projekt manuell einrichten\,
+  siehe link {
+    url = /docs/framework/customization/project-structure,
+    Projektstruktur
+  } für die vollständige Liste der Re-Exports.
+}

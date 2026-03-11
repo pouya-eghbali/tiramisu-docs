@@ -1,0 +1,81 @@
+meta {
+  title = SEO,
+  order = 2,
+  icon = search
+}
+
+Tiramisu Docs enthält eingebaute SEO-Funktionen\, die Ihrer Dokumentation helfen\, in Suchmaschinen gut zu ranken.
+
+h3 { Sitemap }
+
+Eine Sitemap wird automatisch unter code { /sitemap.xml } generiert. Sie enthält alle Dokumentationsseiten mit ihrem letzten Bearbeitungsdatum.
+
+Um die Sitemap zu aktivieren\, setzen Sie das Feld code { url } in Ihrer Konfiguration:
+
+codeblock { language = typescript, """export default defineConfig({
+  url: "https://docs.example.com",
+  // ...
+});""" }
+
+Die code { url } ist erforderlich\, um absolute URLs in der Sitemap zu generieren.
+
+h3 { Meta-Tags }
+
+Jede Dokumentationsseite erhält automatisch Meta-Tags\, die aus ihrem code { "meta {}" }-Block abgeleitet werden:
+
+h4 { Open Graph }
+
+list {
+  code { og:title } — vom Seitentitel,
+  code { og:description } — von der Seitenbeschreibung,
+  code { og:type } — immer code { "article" },
+  code { og:url } — kanonische URL\, zusammengesetzt aus Ihrer Website-code { url } und dem Seiten-Slug,
+  code { og:site_name } — vom code { title } in Ihrer Konfiguration,
+  code { og:image } — vom Feld code { image } in den Seiten-Metadaten
+}
+
+h4 { Twitter Cards }
+
+list {
+  code { twitter:card } — code { "summary_large_image" } wenn ein Bild gesetzt ist\, sonst code { "summary" },
+  code { twitter:title } — vom Seitentitel,
+  code { twitter:description } — von der Seitenbeschreibung,
+  code { twitter:image } — vom Feld code { image } in den Seiten-Metadaten
+}
+
+h4 { OG-Bild }
+
+Sie können ein Open-Graph-Bild pro Seite über das Feld code { image } im code { "meta {}" }-Block der Seite setzen:
+
+codeblock { language = tiramisu, """meta {
+  title = Getting Started,
+  description = Learn how to get started,
+  image = /images/getting-started.png
+}""" }
+
+Der Bildpfad kann relativ zu Ihrem Website-Stammverzeichnis sein (z.B. code { /images/hero.png }) oder eine absolute URL (z.B. code { "https://example.com/og.png" }). Relative Pfade werden gegen Ihre Website-code { url } aufgelöst.
+
+h4 { Kanonische URL }
+
+Ein code { "<link rel=""canonical"">" }-Tag wird jeder Seite hinzugefügt\, wenn eine Website-code { url } konfiguriert ist. Dies hilft Suchmaschinen\, die bevorzugte URL für jede Seite zu identifizieren.
+
+h4 { JSON-LD Strukturierte Daten }
+
+Jede Seite enthält ein code { TechArticle }-JSON-LD-Schema mit:
+
+list {
+  code { headline } — der Seitentitel,
+  code { url } — die kanonische Seiten-URL,
+  code { mainEntityOfPage } — eine code { WebPage }-Referenz,
+  code { isPartOf } — eine code { WebSite }-Referenz mit Ihrem Websitenamen und URL,
+  code { description } — falls eine Beschreibung in den Seiten-Metadaten gesetzt ist,
+  code { dateModified } — falls die Nachverfolgung der letzten Bearbeitung aktiviert ist,
+  code { image } — falls ein Bild in den Seiten-Metadaten gesetzt ist,
+  code { author } — falls ein Autor in den Seiten-Metadaten gesetzt ist (als code { Person }-Entität)
+}
+
+All diese Tags werden automatisch generiert. Sie müssen nur code { url } und code { title } in Ihrer Konfiguration setzen und code { title } sowie code { description } zum code { "meta {}" }-Block jeder Seite hinzufügen.
+
+h3 { Sitemap anpassen }
+
+Die Sitemap-Route wird beim Erstellen eines Projekts automatisch eingebunden. Wenn Sie sie anpassen müssen\, befindet sich die generierte Route unter code { src/routes/sitemap.xml/+server.ts } und verwendet die Funktion code { generateSitemap() } aus dem Kit.

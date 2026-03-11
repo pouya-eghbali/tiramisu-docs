@@ -1,0 +1,58 @@
+meta {
+  title = llms.txt,
+  order = 4,
+  icon = bot
+}
+
+Tiramisu Docs generates machine-readable documentation files that help AI assistants understand your docs without scraping your website.
+
+h3 { Endpoints }
+
+Three endpoints are automatically generated:
+
+table {
+  row = [bold { Endpoint }, bold { Description }],
+  row = [code { /llms.txt }, A concise summary of your documentation structure with links to each page],
+  row = [code { /llms-full.txt }, The complete content of all documentation pages in plain text],
+  row = [code { /skill.md }, A Claude Code skill file that teaches Claude how to use your documentation]
+}
+
+h3 { llms.txt }
+
+The code { /llms.txt } file follows the bold { llms.txt standard } — a lightweight format that helps AI models discover and navigate your documentation. It contains:
+
+list {
+  Your site title and description,
+  A list of all documentation pages with their URLs and descriptions,
+  Links to the full-text version
+}
+
+h3 { llms-full.txt }
+
+The code { /llms-full.txt } endpoint provides the complete content of every documentation page in plain text format. This is useful for AI assistants that need to ingest your full documentation.
+
+h3 { skill.md }
+
+The code { /skill.md } endpoint generates a Claude Code skill file. This file can be used as a Claude Code skill to teach Claude about your documentation structure and content.
+
+h3 { Generator Functions }
+
+These endpoints are powered by three functions you can use in your SvelteKit routes:
+
+codeblock { language = typescript, """import {
+  generateLlmsTxt,
+  generateLlmsFullTxt,
+  generateSkillMd,
+} from "@tiramisu-docs/kit";""" }
+
+Each function returns a string that you can serve from a SvelteKit endpoint:
+
+codeblock { language = typescript, """// src/routes/llms.txt/+server.ts
+import { generateLlmsTxt } from "@tiramisu-docs/kit";
+
+export const GET = async () => {
+  const content = await generateLlmsTxt();
+  return new Response(content, {
+    headers: { "Content-Type": "text/plain" },
+  });
+};""" }

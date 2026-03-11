@@ -1,0 +1,43 @@
+meta { title = Diagramme & Mathematik, order = 9, icon = chart-no-axes-combined }
+
+Rendern Sie Diagramme und mathematische Formeln clientseitig.
+
+h2 { Mermaid-Diagramme }
+
+Erstellen Sie Flussdiagramme\, Sequenzdiagramme und mehr mit code { mermaid }:
+
+codeblock { language = tiramisu, """mermaid { """"""graph TD
+    A[Start] --> B[Process]
+    B --> C[End]"""""" }""" }
+
+demo {
+  mermaid { """graph TD
+    A[Start] --> B[Process]
+    B --> C[End]""" }
+}
+
+h3 { Unterstützte Diagrammtypen }
+
+table {
+  row = [Typ, Syntax],
+  row = [Flussdiagramm, code { graph TD } oder code { graph LR }],
+  row = [Sequenz, code { sequenceDiagram }],
+  row = [Klasse, code { classDiagram }],
+  row = [Zustand, code { stateDiagram-v2 }],
+  row = [Gantt, code { gantt }],
+  row = [Kreis, code { pie }]
+}
+
+callout { type = info, Mermaid-Inhalte enthalten häufig Sonderzeichen. Schließen Sie sie in dreifache Anführungszeichen (code { """...""" }) ein\, um Parsing-Probleme zu vermeiden. Diagramme werden clientseitig gerendert und passen sich automatisch an den Dunkelmodus an. }
+
+h2 { Mathematische Formeln }
+
+Rendern Sie LaTeX-Mathematik mit code { math }. Formeln werden mit KaTeX gerendert:
+
+codeblock { language = tiramisu, """math { "E = mc^2" }""" }
+
+demo {
+  math { "E = mc^2" }
+}
+
+callout { type = warning, Mathematische Formeln\, die code { "=" } enthalten\, müssen in Anführungszeichen stehen\, da ein nicht umschlossenes code { "=" } als Trennzeichen für benannte Parameter interpretiert wird. }

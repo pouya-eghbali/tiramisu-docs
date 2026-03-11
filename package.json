@@ -1,6 +1,7 @@
 {
   "name": "tiramisu-docs-monorepo",
   "private": true,
+  "license": "Apache-2.0",
   "workspaces": [
     "packages/*",
     "playground"
@@ -10,6 +11,6 @@
     "test": "bun run --filter '*' test"
   },
   "dependencies": {
-    "@timeleap/tiramisu": "^1.7.1"
+    "@timeleap/tiramisu": "^1.9.0"
   }
 }

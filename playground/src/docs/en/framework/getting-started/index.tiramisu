@@ -1,0 +1,36 @@
+meta { title = Getting Started, order = 1, icon = rocket }
+
+Tiramisu Docs is a documentation framework powered by link { url = https://svelte.dev, SvelteKit } and the Tiramisu markup language. Write your docs in code { .tiramisu } files and get a polished, modern documentation site.
+
+h2 { Features }
+
+list {
+  bold { File-based routing } — drop code { .tiramisu } files in code { src/docs/ } and pages appear automatically,
+  bold { Built-in search } — full-text search across all your documentation,
+  bold { Syntax highlighting } — powered by Shiki with support for dozens of languages,
+  bold { Dark mode } — automatic theme switching with light and dark variants,
+  bold { Sections } — organize docs into multiple top-level sections with independent sidebars,
+  bold { i18n } — built-in internationalization with locale switching and fallback,
+  bold { SEO } — sitemap\, llms.txt\, and skill.md generation out of the box,
+  bold { MCP server } — let AI assistants browse your docs via Model Context Protocol,
+  bold { Custom components } — extend with your own Svelte components
+}
+
+h2 { How It Works }
+
+You write documentation in Tiramisu markup — a simple, function-call-based syntax:
+
+codeblock { language = tiramisu, """meta { title = Welcome, order = 1 }
+
+This is a paragraph with bold { bold text } and code { inline code }.
+
+codeblock { language = bash, "npm install my-lib" }""" }
+
+The Vite plugin compiles code { .tiramisu } files into Svelte components at build time, generating sidebar navigation, search index, and page metadata automatically.
+
+h2 { Next Steps }
+
+cards {
+  card { title = Installation, description = Set up a new Tiramisu Docs project, href = /docs/framework/getting-started/installation },
+  card { title = Quick Start, description = Create your first documentation page, href = /docs/framework/getting-started/quick-start }
+}

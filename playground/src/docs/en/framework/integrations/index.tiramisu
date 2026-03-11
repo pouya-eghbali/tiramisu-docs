@@ -1,0 +1,13 @@
+meta {
+  title = Integrations,
+  order = 5,
+  icon = plug
+}
+
+Tiramisu Docs integrates with SEO tools, AI assistants, and development workflows out of the box.
+
+list {
+  link { url = /docs/framework/integrations/seo, SEO } — Sitemap generation and meta tags,
+  link { url = /docs/framework/integrations/mcp-server, MCP Server } — AI-assisted documentation browsing,
+  link { url = /docs/framework/integrations/llms-txt, llms.txt } — Machine-readable documentation for AI assistants
+}

@@ -1,0 +1,12 @@
+meta {
+  title = Customization,
+  order = 4,
+  icon = palette
+}
+
+Tiramisu Docs is designed to be fully customizable. You can override built-in components, create your own custom functions, and tailor the entire look and feel to match your brand.
+
+list {
+  link { url = /docs/framework/customization/custom-components, Custom Components } — Create your own Tiramisu functions as Svelte components,
+  link { url = /docs/framework/customization/project-structure, Project Structure } — Understand the key files and folders in a Tiramisu Docs project
+}

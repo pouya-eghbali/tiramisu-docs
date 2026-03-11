@@ -1,0 +1,62 @@
+meta {
+  title = Internationalization,
+  order = 4,
+  icon = globe
+}
+
+h2 { Internationalization (i18n) }
+
+Tiramisu Docs supports multiple languages out of the box. Each locale gets its own folder, and the framework handles routing, fallback, and locale switching.
+
+h3 { Configuration }
+
+Add an code { i18n } block to your config:
+
+codeblock { language = typescript, """i18n: {
+  defaultLocale: "en",
+  locales: [
+    { code: "en", label: "English", flag: "🇬🇧" },
+    { code: "fr", label: "Français", flag: "🇫🇷" },
+    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  ],
+},""" }
+
+h3 { Folder Structure }
+
+Each locale has its own folder inside code { src/docs/ }:
+
+filetree {
+  folder { src/docs,
+    folder { en,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { fr,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { de,
+      file { getting-started.tiramisu }
+    }
+  }
+}
+
+Each folder (code { en }, code { fr }, code { de }) corresponds to a locale code from your config.
+
+h3 { URL Structure }
+
+Pages are served under their locale prefix:
+
+list {
+  code { /docs/getting-started } — English version,
+  code { /docs/fr/getting-started } — French version,
+  code { /docs/de/getting-started } — German version
+}
+
+h3 { Fallback Behavior }
+
+If a page doesn't exist in the selected locale, Tiramisu Docs falls back to the default locale and shows a banner indicating the page is not available in the selected language.
+
+h3 { Locale Switcher }
+
+When multiple locales are configured, a locale switcher appears in the sidebar. Users can switch languages and the framework navigates to the equivalent page in the selected locale.

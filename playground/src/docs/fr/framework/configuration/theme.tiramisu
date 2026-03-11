@@ -1,0 +1,65 @@
+meta {
+  title = Thème,
+  order = 6,
+  icon = paintbrush
+}
+
+h2 { Thème et apparence }
+
+Tiramisu Docs utilise un thème personnalisable basé sur Tailwind CSS et shadcn-svelte. Vous pouvez ajuster les couleurs\, l'image de marque et l'apparence via votre fichier de configuration.
+
+h3 { Logo }
+
+Définissez votre logo sous forme de chaîne (identique pour les modes clair et sombre) ou sous forme d'objet avec des variantes distinctes :
+
+codeblock { language = typescript, """// Single logo
+logo: "/logo.svg",
+
+// Light and dark variants
+logo: {
+  light: "/logo.svg",
+  dark: "/logo-dark.svg",
+},""" }
+
+Le logo apparaît en haut à gauche de la barre latérale (ou de la barre supérieure lorsque les sections sont activées).
+
+h3 { Liens de navigation }
+
+Ajoutez des liens à la barre de navigation supérieure :
+
+codeblock { language = typescript, """nav: [
+  { label: "Docs", href: "/docs" },
+  { label: "Blog", href: "/blog" },
+],""" }
+
+h3 { Intégration GitHub }
+
+Configurez GitHub pour activer les liens « Modifier sur GitHub » sur les pages de documentation :
+
+codeblock { language = typescript, """github: {
+  repo: "user/repo",
+  branch: "main",
+  dir: "src/docs",
+},""" }
+
+Le champ code { dir } spécifie l'emplacement de votre documentation par rapport à la racine du dépôt.
+
+h3 { Serveur MCP }
+
+Définissez une URL pour le serveur MCP intégré :
+
+codeblock { language = typescript, """mcp: "https://mcp.example.com",""" }
+
+Consultez la page link { url = /docs/framework/integrations/mcp-server, Serveur MCP } pour plus de détails sur la configuration de la navigation de documentation assistée par IA.
+
+h3 { Mode sombre }
+
+Le mode sombre est intégré et fonctionne automatiquement. Les utilisateurs peuvent basculer entre les thèmes clair et sombre à l'aide du sélecteur de thème dans la barre latérale ou la barre supérieure. La préférence de thème est enregistrée dans le stockage local.
+
+h3 { Personnalisation CSS }
+
+Importez le thème Tiramisu dans votre fichier code { src/app.css } :
+
+codeblock { language = css, """@import "@tiramisu-docs/kit/theme.css";""" }
+
+Vous pouvez surcharger les propriétés CSS personnalisées ou ajouter vos propres classes Tailwind pour personnaliser davantage l'apparence.

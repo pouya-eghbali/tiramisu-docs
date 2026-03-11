@@ -1,0 +1,62 @@
+meta {
+  title = Sections,
+  order = 2,
+  icon = layout-grid
+}
+
+Les sections vous permettent de diviser votre documentation en zones distinctes de premier niveau. Chaque section apparaît sous forme d'onglet dans la barre de navigation et dispose de sa propre barre latérale.
+
+h3 { Définir des sections }
+
+Ajoutez un tableau code { sections } à votre configuration. Chaque section nécessite un code { label } (nom affiché) et un code { path } (nom du dossier dans votre répertoire de documentation) :
+
+codeblock { language = typescript, """sections: [
+  { label: "Framework", path: "framework" },
+  { label: "Language", path: "language" },
+],""" }
+
+Avec cette configuration\, la structure de votre dossier de documentation devrait ressembler à ceci :
+
+filetree {
+  folder { src/docs,
+    folder { framework,
+      folder { getting-started },
+      folder { writing }
+    },
+    folder { language,
+      folder { basics },
+      folder { internals }
+    }
+  }
+}
+
+Chaque nom de dossier correspond à la valeur code { path } de la configuration de votre section.
+
+h3 { Fonctionnement des sections }
+
+Chaque section correspond à un sous-dossier dans votre répertoire de documentation. Lorsqu'un utilisateur clique sur un onglet de section dans la barre de navigation\, la barre latérale se met à jour pour afficher uniquement les pages de cette section.
+
+callout { type = info, Les sections sont optionnelles. Si vous n'en définissez aucune\, toute la documentation apparaît dans une seule barre latérale. }
+
+h3 { Liens externes }
+
+Vous pouvez également ajouter des sections qui renvoient vers des URL externes en utilisant code { href } au lieu de code { path } :
+
+codeblock { language = typescript, """sections: [
+  { label: "Guide", path: "guide" },
+  { label: "GitHub", href: "https://github.com/user/repo" },
+],""" }
+
+h3 { Sections déroulantes }
+
+Les sections peuvent avoir des éléments enfants pour les menus déroulants :
+
+codeblock { language = typescript, """sections: [
+  {
+    label: "Resources",
+    children: [
+      { label: "Blog", href: "https://blog.example.com" },
+      { label: "Changelog", href: "/changelog" },
+    ],
+  },
+],""" }

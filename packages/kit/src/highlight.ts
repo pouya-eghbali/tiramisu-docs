@@ -46,6 +46,17 @@ export async function highlightCodeBlocks(svelte: string): Promise<string> {
     langMap.set(match[2], match[1])
   }
 
+  // Find CodeTabs usages to map varName -> language
+  const codeTabsRegex =
+    /<CodeTabs\s[^>]*codes=\{\[([^\]]*)\]\}\s+langMap=\{\[([^\]]*)\]\}\s*\/>/g
+  while ((match = codeTabsRegex.exec(svelte)) !== null) {
+    const vars = match[1].split(/,\s*/).map(s => s.trim())
+    const langs = match[2].split(/,\s*/).map(s => s.replace(/^"|"$/g, ""))
+    for (let i = 0; i < vars.length; i++) {
+      if (vars[i] && langs[i]) langMap.set(vars[i], langs[i])
+    }
+  }
+
   if (langMap.size === 0) return svelte
 
   const hl = await getHighlighter()

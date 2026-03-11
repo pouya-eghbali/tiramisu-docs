@@ -1,0 +1,62 @@
+meta {
+  title = Internationalisierung,
+  order = 4,
+  icon = globe
+}
+
+h2 { Internationalisierung (i18n) }
+
+Tiramisu Docs unterstützt mehrere Sprachen von Haus aus. Jede Sprache erhält ihren eigenen Ordner\, und das Framework kümmert sich um Routing\, Fallback und Sprachwechsel.
+
+h3 { Konfiguration }
+
+Fügen Sie einen code { i18n }-Block zu Ihrer Konfiguration hinzu:
+
+codeblock { language = typescript, """i18n: {
+  defaultLocale: "en",
+  locales: [
+    { code: "en", label: "English", flag: "🇬🇧" },
+    { code: "fr", label: "Français", flag: "🇫🇷" },
+    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  ],
+},""" }
+
+h3 { Ordnerstruktur }
+
+Jede Sprache hat ihren eigenen Ordner innerhalb von code { src/docs/ }:
+
+filetree {
+  folder { src/docs,
+    folder { en,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { fr,
+      file { getting-started.tiramisu },
+      file { guide.tiramisu }
+    },
+    folder { de,
+      file { getting-started.tiramisu }
+    }
+  }
+}
+
+Jeder Ordner (code { en }\, code { fr }\, code { de }) entspricht einem Sprachcode aus Ihrer Konfiguration.
+
+h3 { URL-Struktur }
+
+Seiten werden unter ihrem Sprach-Präfix bereitgestellt:
+
+list {
+  code { /docs/getting-started } — Englische Version,
+  code { /docs/fr/getting-started } — Französische Version,
+  code { /docs/de/getting-started } — Deutsche Version
+}
+
+h3 { Fallback-Verhalten }
+
+Wenn eine Seite in der ausgewählten Sprache nicht existiert\, greift Tiramisu Docs auf die Standardsprache zurück und zeigt ein Banner an\, das darauf hinweist\, dass die Seite in der ausgewählten Sprache nicht verfügbar ist.
+
+h3 { Sprachwechsler }
+
+Wenn mehrere Sprachen konfiguriert sind\, erscheint ein Sprachwechsler in der Seitenleiste. Benutzer können die Sprache wechseln\, und das Framework navigiert zur entsprechenden Seite in der ausgewählten Sprache.

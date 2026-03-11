@@ -1,7 +1,8 @@
-<script>
-  import { Card, CardContent, CardHeader, CardTitle } from "../ui/card/index.js"
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card/index.js"
 
-  let { title = "Preview", children } = $props()
+  let { title = "Preview", children }: { title?: string; children: Snippet } = $props()
 </script>
 
 <Card class="my-4">

@@ -1,0 +1,43 @@
+meta { title = Diagrams & Math, order = 9, icon = chart-no-axes-combined }
+
+Render diagrams and mathematical formulas client-side.
+
+h2 { Mermaid Diagrams }
+
+Create flowcharts, sequence diagrams, and more with code { mermaid }:
+
+codeblock { language = tiramisu, """mermaid { """"""graph TD
+    A[Start] --> B[Process]
+    B --> C[End]"""""" }""" }
+
+demo {
+  mermaid { """graph TD
+    A[Start] --> B[Process]
+    B --> C[End]""" }
+}
+
+h3 { Supported Diagram Types }
+
+table {
+  row = [Type, Syntax],
+  row = [Flowchart, code { graph TD } or code { graph LR }],
+  row = [Sequence, code { sequenceDiagram }],
+  row = [Class, code { classDiagram }],
+  row = [State, code { stateDiagram-v2 }],
+  row = [Gantt, code { gantt }],
+  row = [Pie, code { pie }]
+}
+
+callout { type = info, Mermaid content often contains special characters. Wrap it in triple quotes (code { """...""" }) to avoid parsing issues. Diagrams render client-side and adapt to dark mode automatically. }
+
+h2 { Math Formulas }
+
+Render LaTeX math with code { math }. Formulas are rendered using KaTeX:
+
+codeblock { language = tiramisu, """math { "E = mc^2" }""" }
+
+demo {
+  math { "E = mc^2" }
+}
+
+callout { type = warning, Math formulas containing code { "=" } must be quoted\, since unquoted code { "=" } is interpreted as a named parameter separator. }

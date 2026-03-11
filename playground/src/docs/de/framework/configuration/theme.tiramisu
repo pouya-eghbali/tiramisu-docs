@@ -1,0 +1,65 @@
+meta {
+  title = Design,
+  order = 6,
+  icon = paintbrush
+}
+
+h2 { Design & Erscheinungsbild }
+
+Tiramisu Docs verwendet ein anpassbares Design\, das auf Tailwind CSS und shadcn-svelte basiert. Sie können Farben\, Branding und Erscheinungsbild über Ihre Konfigurationsdatei anpassen.
+
+h3 { Logo }
+
+Setzen Sie Ihr Logo als String (gleich für Hell und Dunkel) oder als Objekt mit separaten Varianten:
+
+codeblock { language = typescript, """// Single logo
+logo: "/logo.svg",
+
+// Light and dark variants
+logo: {
+  light: "/logo.svg",
+  dark: "/logo-dark.svg",
+},""" }
+
+Das Logo erscheint oben links in der Seitenleiste (oder in der oberen Leiste\, wenn Sektionen aktiviert sind).
+
+h3 { Navigationslinks }
+
+Fügen Sie Links zur oberen Navigationsleiste hinzu:
+
+codeblock { language = typescript, """nav: [
+  { label: "Docs", href: "/docs" },
+  { label: "Blog", href: "/blog" },
+],""" }
+
+h3 { GitHub-Integration }
+
+Konfigurieren Sie GitHub\, um „Auf GitHub bearbeiten"-Links auf Dokumentationsseiten zu aktivieren:
+
+codeblock { language = typescript, """github: {
+  repo: "user/repo",
+  branch: "main",
+  dir: "src/docs",
+},""" }
+
+Das code { dir }-Feld gibt an\, wo sich Ihre Docs relativ zum Repository-Stammverzeichnis befinden.
+
+h3 { MCP-Server }
+
+Legen Sie eine URL für den integrierten MCP-Server fest:
+
+codeblock { language = typescript, """mcp: "https://mcp.example.com",""" }
+
+Weitere Informationen zur Konfiguration des KI-gestützten Dokumentationsbrowsings finden Sie auf der Seite link { url = /docs/framework/integrations/mcp-server, MCP-Server }.
+
+h3 { Dunkelmodus }
+
+Der Dunkelmodus ist integriert und funktioniert automatisch. Benutzer können über den Theme-Umschalter in der Seitenleiste oder oberen Leiste zwischen hellem und dunklem Design wechseln. Die Theme-Einstellung wird im lokalen Speicher gespeichert.
+
+h3 { CSS-Anpassung }
+
+Importieren Sie das Tiramisu-Theme in Ihre code { src/app.css }:
+
+codeblock { language = css, """@import "@tiramisu-docs/kit/theme.css";""" }
+
+Sie können CSS-Custom-Properties überschreiben oder eigene Tailwind-Klassen hinzufügen\, um das Erscheinungsbild weiter anzupassen.

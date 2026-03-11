@@ -1,0 +1,92 @@
+meta {
+  title = InstantOG,
+  description = Images Open Graph automatiques pour chaque page de documentation.,
+  order = 4,
+  icon = image
+}
+
+link { url = https://instantog.com, InstantOG } est un service qui génère automatiquement des images Open Graph pour vos pages. Lorsque quelqu'un partage un lien vers votre documentation sur les réseaux sociaux\, InstantOG produit une belle image d'aperçu 1200×630 en utilisant les métadonnées de votre page — titre\, description et favicon.
+
+Tiramisu Docs dispose d'une intégration native. Pas d'étape de build\, pas de fichiers image à gérer. Ajoutez simplement votre identifiant de site et chaque page de documentation obtient automatiquement une balise code { og:image }.
+
+h2 { Configuration }
+
+h3 { 1. Créer un compte }
+
+Rendez-vous sur link { url = https://instantog.com, instantog.com } et enregistrez votre site. Vous obtiendrez un bold { identifiant de site } (par ex. code { site_b6bc4c3f }).
+
+h3 { 2. Ajouter à la configuration }
+
+Ajoutez code { instantOg } à votre code { tiramisu.config.ts } :
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit"
+
+export default defineConfig({
+  title: "My Docs",
+  url: "https://my-docs.dev",
+  instantOg: {
+    siteId: "site_b6bc4c3f",
+    template: "generic/standard",
+  },
+})""" }
+
+h3 { 3. Déployer }
+
+Déployez votre site. InstantOG générera les images à la demande lorsque les plateformes sociales les demanderont.
+
+callout { type = info, Le champ code { url } dans votre configuration doit être défini sur votre URL de production. InstantOG récupère vos pages en ligne pour extraire les métadonnées\, donc les images ne sont générées que pour les sites déployés. }
+
+h2 { Comment ça fonctionne }
+
+Lorsque code { instantOg } est configuré\, chaque page de documentation obtient une balise meta code { og:image } pointant vers l'API InstantOG :
+
+codeblock { language = html, """<meta property="og:image"
+  content="https://instantog.com/api/og?site=site_b6bc4c3f&template=generic/standard&url=https://my-docs.dev/docs/getting-started" />""" }
+
+Lorsqu'une plateforme sociale (Twitter\, Discord\, Slack\, etc.) récupère cette URL\, InstantOG :
+
+list {
+  Lit le titre\, la description et le favicon de votre page,
+  Les intègre dans le modèle sélectionné,
+  Retourne une image PNG 1200×630 mise en cache
+}
+
+Aucun appel API n'est effectué pendant le développement ou le build. L'image est générée à la demande au moment du partage.
+
+h2 { Options }
+
+table {
+  row = [bold { Option }, bold { Type }, bold { Description }],
+  row = [code { siteId }, code { string }, bold { Requis. } Votre identifiant de site depuis le tableau de bord InstantOG.],
+  row = [code { template }, code { string }, Identifiant du modèle. Par défaut\, le modèle de votre site.],
+  row = [code { theme }, code { "light" | "dark" }, Thème de couleur pour l'image générée.],
+  row = [code { accentColor }, code { string }, Couleur hexadécimale pour les accents (par ex. code { "#6366f1" }).],
+  row = [code { gradientBg }, code { boolean }, Activer l'arrière-plan dégradé sur l'image.]
+}
+
+h2 { Modèles }
+
+InstantOG propose plusieurs modèles :
+
+table {
+  row = [bold { ID }, bold { Style }],
+  row = [code { generic/standard }, Mise en page épurée\, polyvalente],
+  row = [code { generic/minimal }, Dépouillée\, axée sur le texte],
+  row = [code { article/blog-post }, Style article avec informations sur l'auteur],
+  row = [code { article/magazine }, Mise en page éditoriale],
+  row = [code { article/newsletter }, En-tête style e-mail],
+  row = [code { news/headline }, Style actualités en gras],
+  row = [code { product/ecommerce }, Vitrine produit],
+  row = [code { product/luxury }, Sensation premium],
+  row = [code { product/bold }, Produit à fort contraste],
+  row = [code { product/playful }, Produit ludique et coloré]
+}
+
+h2 { Remplacement par page }
+
+Si une page définit code { image } dans son frontmatter\, cela a la priorité sur InstantOG :
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  image = /images/custom-og.png
+}""" }

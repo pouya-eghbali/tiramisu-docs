@@ -1,0 +1,102 @@
+meta { title = Structure du projet, order = 3, icon = folder-tree }
+
+Un projet Tiramisu Docs suit une structure SvelteKit standard avec quelques conventions spécifiques à Tiramisu.
+
+h3 { Arborescence des fichiers }
+
+filetree {
+  folder {
+    my-docs,
+    folder {
+      src,
+      folder {
+        docs,
+        folder {
+          en,
+          file { getting-started.tiramisu },
+          file { guide.tiramisu }
+        }
+      },
+      folder {
+        lib,
+        file { tiramisu.config.ts },
+        folder {
+          components,
+          file { index.ts },
+          folder { tiramisu, file { MyCustomWidget.svelte } }
+        }
+      },
+      folder {
+        routes,
+        folder { "docs/[...slug]", file { +page.svelte }, file { +page.ts } }
+      },
+      file { app.css }
+    },
+    file { svelte.config.js },
+    file { vite.config.ts },
+    file { package.json }
+  }
+}
+
+h3 { Fichiers clés }
+
+table {
+  row = [bold { Fichier }, bold { Rôle }],
+  row = [
+    code { src/lib/tiramisu.config.ts },
+    "Fichier de configuration principal. Définit le titre, les sections, la barre latérale, l'i18n et plus encore."
+  ],
+  row = [
+    code { src/docs/ },
+    Contenu de la documentation. Chaque fichier code { .tiramisu } devient une page.
+  ],
+  row = [
+    code { src/lib/components/index.ts },
+    Fichier barrel des composants. Réexporte tous les composants du kit. Modifiez-le pour remplacer n'importe quel composant intégré.
+  ],
+  row = [
+    code { src/lib/components/tiramisu/ },
+    Composants personnalisés. Tout composant Svelte ici peut être utilisé comme fonction Tiramisu.
+  ],
+  row = [
+    code { "src/routes/docs/[...slug]/" },
+    La route attrape-tout qui affiche les pages de documentation.
+  ],
+  row = [
+    code { vite.config.ts },
+    Configuration Vite avec le code { tiramisuPlugin() }.
+  ],
+  row = [code { svelte.config.js }, Configuration de l'adaptateur SvelteKit.],
+  row = [code { src/app.css }, Styles globaux. Importez le thème Tiramisu ici.]
+}
+
+h3 { La route de documentation }
+
+Le répertoire code { "src/routes/docs/[...slug]/" } contient deux fichiers qui alimentent la documentation :
+
+bold { +page.ts } charge le contenu Tiramisu compilé et les métadonnées :
+
+codeblock {
+  language = typescript,
+  """
+import { loadDoc } from "@tiramisu-docs/kit";
+
+export const load = loadDoc;
+"""
+}
+
+bold { +page.svelte } affiche la mise en page de la documentation :
+
+codeblock {
+  language = svelte,
+  """
+<script>
+  import { DocsLayout } from "@tiramisu-docs/kit";
+  let { data } = $props();
+</script>
+
+<DocsLayout {...data}>
+  <data.component />
+</DocsLayout>
+"""
+}

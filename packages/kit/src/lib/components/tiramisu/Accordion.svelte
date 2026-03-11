@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Collapsible from "../ui/collapsible/collapsible.svelte"
+  import Collapsible from "$lib/components/ui/collapsible/collapsible.svelte"
 
   let { title = "Details", children }: { title?: string; children?: import("svelte").Snippet } =
     $props()

@@ -1,0 +1,91 @@
+meta {
+  title = MCP Server,
+  order = 3,
+  icon = server
+}
+
+Tiramisu Docs enthält einen eingebauten MCP-Server (Model Context Protocol)\, der es KI-Assistenten wie Claude\, Cursor und anderen MCP-kompatiblen Tools ermöglicht\, Ihre Dokumentation programmatisch zu durchsuchen.
+
+Der Server wird als HTTP-JSON-RPC-Endpunkt unter code { /mcp } auf Ihrer bereitgestellten Docs-Website gehostet. Er wird als SvelteKit-Route ausgeliefert — kein CLI\, kein separater Prozess\, kein lokales Setup. Stellen Sie Ihre Website bereit und der MCP-Server ist live.
+
+h2 { Server aktivieren }
+
+Setzen Sie code { mcp: true } in Ihrer Konfiguration\, um eine code { /mcp }-POST-Route zu generieren und „Verbinden"-Buttons in Ihrer Docs-UI anzuzeigen:
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit";
+
+export default defineConfig({
+  mcp: true,
+  // ...
+});""" }
+
+Wenn aktiviert\, bewirkt dies zwei Dinge:
+
+list {
+  Generiert eine code { /mcp }-POST-Route\, die JSON-RPC-2.0-Anfragen von KI-Tools verarbeitet,
+  Zeigt bold { Connect with MCP }- und bold { Connect to VSCode }-Buttons auf Ihren Docs-Seiten an — die URL wird automatisch aus dem Origin Ihrer Website abgeleitet
+}
+
+h2 { Benutzerdefinierte Server-URL }
+
+Wenn Sie Ihren MCP-Server separat hosten oder die UI-Buttons auf einen anderen Endpunkt verweisen lassen möchten\, übergeben Sie stattdessen einen URL-String:
+
+codeblock { language = typescript, """export default defineConfig({
+  mcp: "https://docs.example.com/mcp",
+  // ...
+});""" }
+
+Wenn ein String angegeben wird:
+
+list {
+  Die UI-Buttons verweisen auf die angegebene URL,
+  Es wird keine code { /mcp }-Route generiert — Sie sind für das Hosting des Servers unter dieser URL verantwortlich
+}
+
+h2 { KI-Tools verbinden }
+
+Sobald Ihre Website mit code { mcp: true } bereitgestellt ist\, können sich KI-Tools über die gehostete URL verbinden.
+
+h3 { Claude Code }
+
+Fügen Sie Folgendes zu Ihrer code { .mcp.json }-Datei im Projektstamm hinzu:
+
+codeblock { language = json, """{
+  "mcpServers": {
+    "my-docs": {
+      "type": "streamableHttp",
+      "url": "https://docs.example.com/mcp"
+    }
+  }
+}""" }
+
+Ersetzen Sie code { docs.example.com } durch Ihre tatsächliche Docs-Domain.
+
+h3 { Cursor }
+
+Fügen Sie in den MCP-Einstellungen von Cursor einen neuen Server hinzu und fügen Sie Ihre Docs-MCP-URL ein (z.B. code { https://docs.example.com/mcp }). Cursor unterstützt HTTP-MCP-Endpunkte nativ.
+
+h3 { VSCode }
+
+Ihre Docs-Website zeigt im Open-Dropdown einen bold { Connect to VSCode }-Button an. Durch Klicken wird der code { "vscode:mcp/install" }-Protokoll-Handler verwendet\, um den Server automatisch zu registrieren — keine manuelle Konfiguration erforderlich.
+
+h2 { Verfügbare Tools }
+
+Der Server stellt KI-Assistenten fünf Tools zur Verfügung:
+
+table {
+  row = [bold { Tool }, bold { Beschreibung }],
+  row = [code { search_docs }, Seiten nach Schlüsselwort durchsuchen],
+  row = [code { read_doc }, Eine bestimmte Seite anhand ihres Slugs lesen],
+  row = [code { list_pages }, Alle Dokumentationsseiten auflisten\, optional nach Abschnitt gefiltert],
+  row = [code { list_sections }, Alle Abschnitte mit Seitenanzahl auflisten],
+  row = [code { get_table_of_contents }, Überschriften einer bestimmten Seite abrufen]
+}
+
+h2 { So funktioniert es }
+
+Der MCP-Server ist eine Standard-SvelteKit-POST-Route unter code { /mcp }. Er spricht JSON-RPC 2.0 über HTTP — jede Anfrage ist ein einzelner POST mit einem JSON-Body\, und die Antwort ist JSON.
+
+Die Dokumentationsdaten stammen aus dem Modul code { virtual:tiramisu-docs } zur Build-Zeit. Der Server durchsucht das Dateisystem zur Laufzeit nicht\, was bedeutet\, dass er auf jedem Deployment-Ziel funktioniert: Serverless Functions\, Edge Runtimes\, statische Adapter mit Prerendering oder traditionelle Node.js-Server. Wo auch immer SvelteKit läuft\, läuft der MCP-Server.
+
+callout { type = info, Da der Server in Ihre Website integriert ist\, bleibt er automatisch mit Ihrer Dokumentation synchron. Jedes Deployment aktualisiert sowohl die Dokumentation als auch den MCP-Endpunkt. }

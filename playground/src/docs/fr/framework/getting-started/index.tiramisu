@@ -1,0 +1,36 @@
+meta { title = Premiers pas, order = 1, icon = rocket }
+
+Tiramisu Docs est un framework de documentation propulsé par link { url = https://svelte.dev, SvelteKit } et le langage de balisage Tiramisu. Rédigez vos documents dans des fichiers code { .tiramisu } et obtenez un site de documentation moderne et soigné.
+
+h2 { Fonctionnalités }
+
+list {
+  bold { Routage basé sur les fichiers } — déposez des fichiers code { .tiramisu } dans code { src/docs/ } et les pages apparaissent automatiquement,
+  bold { Recherche intégrée } — recherche plein texte dans toute votre documentation,
+  bold { Coloration syntaxique } — propulsée par Shiki avec la prise en charge de dizaines de langages,
+  bold { Mode sombre } — basculement automatique du thème avec les variantes claire et sombre,
+  bold { Sections } — organisez la documentation en plusieurs sections de premier niveau avec des barres latérales indépendantes,
+  bold { i18n } — internationalisation intégrée avec changement de langue et système de repli,
+  bold { SEO } — génération de sitemap\, llms.txt\, et skill.md dès l'installation,
+  bold { Serveur MCP } — permettez aux assistants IA de parcourir votre documentation via le Model Context Protocol,
+  bold { Composants personnalisés } — étendez avec vos propres composants Svelte
+}
+
+h2 { Comment ça marche }
+
+Vous rédigez la documentation en balisage Tiramisu — une syntaxe simple basée sur des appels de fonctions :
+
+codeblock { language = tiramisu, """meta { title = Welcome, order = 1 }
+
+This is a paragraph with bold { bold text } and code { inline code }.
+
+codeblock { language = bash, "npm install my-lib" }""" }
+
+Le plugin Vite compile les fichiers code { .tiramisu } en composants Svelte au moment du build\, générant automatiquement la navigation de la barre latérale\, l'index de recherche et les métadonnées des pages.
+
+h2 { Étapes suivantes }
+
+cards {
+  card { title = Installation, description = Configurez un nouveau projet Tiramisu Docs, href = /docs/framework/getting-started/installation },
+  card { title = Démarrage rapide, description = Créez votre première page de documentation, href = /docs/framework/getting-started/quick-start }
+}

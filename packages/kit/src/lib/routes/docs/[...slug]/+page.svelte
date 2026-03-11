@@ -1,8 +1,7 @@
-<script>
-  import DocsLayout from "$lib/components/DocsLayout.svelte";
-  import DocPage from "$lib/components/DocPage.svelte";
+<script lang="ts">
+  import { DocsLayout, DocPage } from "$lib/components";
 
-  let { data } = $props();
+  let { data }: { data: Record<string, any> } = $props();
 </script>
 
 <DocsLayout
@@ -14,7 +13,14 @@
   locales={data.locales}
   showFallbackBanner={data.showFallbackBanner}
 >
-  <DocPage meta={data.meta}>
+  <DocPage
+    meta={data.meta}
+    lastEdited={data.lastEdited}
+    slug={data.slug}
+    baseUrl={data.config?.url}
+    sidebar={data.activeSidebar}
+    siteName={data.config?.title}
+  >
     <svelte:component this={data.component} />
   </DocPage>
 </DocsLayout>

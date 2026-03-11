@@ -1,0 +1,102 @@
+meta {
+  title = Framework,
+  description = A documentation framework powered by SvelteKit and the Tiramisu markup language.,
+  order = 0,
+  icon = layers
+}
+
+Tiramisu Docs is a documentation framework built on link { url = https://svelte.dev, SvelteKit } and the link { url = /docs/language, Tiramisu markup language }. Write your docs in code { .tiramisu } files — the framework handles routing, navigation, search, and everything else.
+
+callout {
+  type = warning,
+  bold { Beta } — Tiramisu Docs is under active development. APIs and features may change. If you run into issues or want to contribute\, visit the link {
+    url = https://github.com/pouya-eghbali/tiramisu-docs,
+    GitHub repository
+  }.
+}
+
+h2 { Quick Look }
+
+Create a file, get a page:
+
+codeblock {
+  language = tiramisu,
+  """
+meta { title = Getting Started, order = 1, icon = rocket }
+
+Welcome to my docs! Here's how to install:
+
+codeblock { language = bash, "npm install my-library" }
+
+And here's a basic example:
+
+codeblock { language = typescript, "import { create } from 'my-library'
+const instance = create({ debug: true })" }
+"""
+}
+
+That's it. No config files, no routing setup, no build scripts. Drop a code { .tiramisu } file in code { src/docs/ } and it becomes a page.
+
+h2 { Features }
+
+cards {
+  card {
+    title = File-Based Routing,
+    description = Pages are created from your file structure. Folders become sidebar groups automatically.,
+    icon = folder-tree
+  },
+  card {
+    title = Built-In Search,
+    description = Full-text search across all your documentation with zero configuration.,
+    icon = search
+  },
+  card {
+    title = Syntax Highlighting,
+    description = Powered by Shiki with support for dozens of languages and dual themes.,
+    icon = paintbrush
+  },
+  card {
+    title = Dark Mode,
+    description = Automatic light and dark theme switching out of the box.,
+    icon = moon
+  },
+  card {
+    title = Sections & i18n,
+    description = Split docs into independent sections. Add translations with a folder per locale.,
+    icon = globe
+  },
+  card {
+    title = AI-Ready,
+    description = Built-in MCP server and llms.txt generation for AI assistants.,
+    icon = bot
+  }
+}
+
+h2 { Get Started }
+
+cards {
+  card {
+    title = Installation,
+    description = Create a new project in one command.,
+    href = /docs/framework/getting-started/installation,
+    icon = download
+  },
+  card {
+    title = Quick Start,
+    description = Write your first documentation page.,
+    href = /docs/framework/getting-started/quick-start,
+    icon = zap
+  },
+  card {
+    title = Configuration,
+    description = Customize sections\, sidebar\, theme\, and more.,
+    href = /docs/framework/configuration,
+    icon = settings
+  },
+  card {
+    title = Writing Docs,
+    description = Learn the Tiramisu markup syntax.,
+    href = /docs/framework/writing,
+    icon = text
+  }
+}

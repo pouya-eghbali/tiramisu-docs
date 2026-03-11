@@ -1,0 +1,76 @@
+meta {
+  title = AST Overview,
+  order = 3,
+  icon = cpu
+}
+
+The Tiramisu parser (code { @timeleap/tiramisu }) takes source text and produces an Abstract Syntax Tree (AST). The AST is a tree of typed nodes that represents the structure of your document.
+
+h3 { Node Types }
+
+The AST consists of the following node types:
+
+table {
+  row = [bold { Node }, bold { Description }],
+  row = [code { Tiramisu }, Root node of the document. Contains all top-level nodes.],
+  row = [code { Paragraph }, A paragraph of text. Created by blank line separation.],
+  row = [code { MixedText }, Text that contains both plain text and function calls.],
+  row = [code { PureText }, A plain text segment with no function calls.],
+  row = [code { FunctionCall }, A function call with a name and parameters.],
+  row = [code { Parameters }, The parameter list of a function call.],
+  row = [code { Parameter }, A single positional parameter.],
+  row = [code { NamedParameter }, A named parameter (code { "key = value" }).],
+  row = [code { ArrayValue }, An array value (code { "[a, b, c]" }).],
+  row = [code { ArrayItem }, A single item within an array.]
+}
+
+h3 { Example }
+
+Given this Tiramisu source:
+
+codeblock { language = tiramisu, "bold { Hello } world" }
+
+The parser produces this AST:
+
+codeblock { language = typescript, "Tiramisu
+└── Paragraph
+    └── MixedText
+        ├── FunctionCall (name: \"bold\")
+        │   └── Parameters
+        │       └── Parameter
+        │           └── PureText (\"Hello\")
+        └── PureText (\" world\")" }
+
+h3 { FunctionCall Structure }
+
+The code { FunctionCall } node is the core of Tiramisu. It has:
+
+list {
+  code { functionName } — the name of the function (text before the code { "{" }),
+  code { parameters } — a code { Parameters } node containing the function's arguments
+}
+
+Parameters contain a list of code { Parameter } and code { NamedParameter } nodes. Each parameter can contain text, nested function calls, or arrays.
+
+h3 { Importing Node Types }
+
+All node types are available from the parser package:
+
+codeblock { language = typescript, "import {
+  Tiramisu,
+  Paragraph,
+  MixedText,
+  PureText,
+  FunctionCall,
+  Parameters,
+  Parameter,
+  NamedParameter,
+  ArrayValue,
+  ArrayItem,
+} from \"@timeleap/tiramisu/src/types/nodes\";" }
+
+Node type checking uses code { instanceof }:
+
+codeblock { language = typescript, "if (node instanceof FunctionCall) {
+  console.log(node.functionName);
+}" }

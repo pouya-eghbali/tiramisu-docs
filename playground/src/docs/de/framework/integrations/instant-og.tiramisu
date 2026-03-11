@@ -1,0 +1,92 @@
+meta {
+  title = InstantOG,
+  description = Automatische Open-Graph-Bilder für jede Dokumentationsseite.,
+  order = 4,
+  icon = image
+}
+
+link { url = https://instantog.com, InstantOG } ist ein Dienst\, der automatisch Open-Graph-Bilder für Ihre Seiten generiert. Wenn jemand einen Link zu Ihrer Dokumentation in sozialen Medien teilt\, rendert InstantOG ein ansprechendes 1200×630-Vorschaubild anhand der Metadaten Ihrer Seite — Titel\, Beschreibung und Favicon.
+
+Tiramisu Docs hat eine eingebaute Integration. Kein Build-Schritt\, keine Bilddateien zu verwalten. Fügen Sie einfach Ihre Site-ID hinzu und jede Dokumentationsseite erhält automatisch ein code { og:image }-Tag.
+
+h2 { Einrichtung }
+
+h3 { 1. Konto erstellen }
+
+Gehen Sie zu link { url = https://instantog.com, instantog.com } und registrieren Sie Ihre Website. Sie erhalten eine bold { Site-ID } (z.B. code { site_b6bc4c3f }).
+
+h3 { 2. Zur Konfiguration hinzufügen }
+
+Fügen Sie code { instantOg } zu Ihrer code { tiramisu.config.ts } hinzu:
+
+codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit"
+
+export default defineConfig({
+  title: "My Docs",
+  url: "https://my-docs.dev",
+  instantOg: {
+    siteId: "site_b6bc4c3f",
+    template: "generic/standard",
+  },
+})""" }
+
+h3 { 3. Bereitstellen }
+
+Stellen Sie Ihre Website bereit. InstantOG generiert Bilder bei Bedarf\, wenn Social-Media-Plattformen sie anfordern.
+
+callout { type = info, Das Feld code { url } in Ihrer Konfiguration muss auf Ihre Produktions-URL gesetzt sein. InstantOG ruft Ihre Live-Seiten ab\, um Metadaten zu extrahieren\, daher werden Bilder nur für bereitgestellte Websites generiert. }
+
+h2 { So funktioniert es }
+
+Wenn code { instantOg } konfiguriert ist\, erhält jede Dokumentationsseite ein code { og:image }-Meta-Tag\, das auf die InstantOG-API verweist:
+
+codeblock { language = html, """<meta property="og:image"
+  content="https://instantog.com/api/og?site=site_b6bc4c3f&template=generic/standard&url=https://my-docs.dev/docs/getting-started" />""" }
+
+Wenn eine Social-Media-Plattform (Twitter\, Discord\, Slack\, usw.) diese URL abruft\, macht InstantOG Folgendes:
+
+list {
+  Liest Titel\, Beschreibung und Favicon Ihrer Seite,
+  Rendert sie in das ausgewählte Template,
+  Gibt ein gecachtes 1200×630-PNG-Bild zurück
+}
+
+Während der Entwicklung oder beim Build werden keine API-Aufrufe getätigt. Das Bild wird bei Bedarf zum Zeitpunkt des Teilens generiert.
+
+h2 { Optionen }
+
+table {
+  row = [bold { Option }, bold { Typ }, bold { Beschreibung }],
+  row = [code { siteId }, code { string }, bold { Erforderlich. } Ihre Site-ID aus dem InstantOG-Dashboard.],
+  row = [code { template }, code { string }, Template-ID. Standardmäßig das Standard-Template Ihrer Website.],
+  row = [code { theme }, code { "light" | "dark" }, Farbschema für das generierte Bild.],
+  row = [code { accentColor }, code { string }, Hex-Farbe für Akzente (z.B. code { "#6366f1" }).],
+  row = [code { gradientBg }, code { boolean }, Verlaufshintergrund auf dem Bild aktivieren.]
+}
+
+h2 { Templates }
+
+InstantOG bietet mehrere Templates:
+
+table {
+  row = [bold { ID }, bold { Stil }],
+  row = [code { generic/standard }, Sauberes\, vielseitiges Layout],
+  row = [code { generic/minimal }, Reduziert\, textfokussiert],
+  row = [code { article/blog-post }, Artikel-Stil mit Autoreninfo],
+  row = [code { article/magazine }, Redaktionelles Layout],
+  row = [code { article/newsletter }, E-Mail-Stil-Header],
+  row = [code { news/headline }, Fetter Nachrichten-Stil],
+  row = [code { product/ecommerce }, Produktpräsentation],
+  row = [code { product/luxury }, Premium-Ausstrahlung],
+  row = [code { product/bold }, Kontrastreiche Produktdarstellung],
+  row = [code { product/playful }, Verspielt\, farbenfrohes Produkt]
+}
+
+h2 { Seitenspezifische Überschreibung }
+
+Wenn eine Seite code { image } in ihrem Frontmatter setzt\, hat dies Vorrang vor InstantOG:
+
+codeblock { language = tiramisu, """meta {
+  title = My Page,
+  image = /images/custom-og.png
+}""" }

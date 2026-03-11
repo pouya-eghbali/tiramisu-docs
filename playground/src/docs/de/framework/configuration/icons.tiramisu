@@ -1,0 +1,105 @@
+meta { title = Symbole, order = 7, icon = lucide:smile }
+
+h2 { Symbole hinzufügen }
+
+Tiramisu Docs verwendet link { url = https://iconify.design/, Iconify } für Symbole und bietet Zugriff auf über 275.000 Symbole aus mehr als 150 Icon-Sets. Symbole werden bei Bedarf geladen — kein Build-Time-Bundling erforderlich.
+
+h2 { Symbol-Format }
+
+Symbole verwenden das code { prefix:name }-Format von Iconify:
+
+table {
+  row = [bold { Format }, bold { Beispiel }],
+  row = [code { lucide:icon-name }, Lucide-Symbole (z.B. code { lucide:rocket })],
+  row = [code { mdi:icon-name }, Material Design Icons],
+  row = [code { simple-icons:icon-name }, Marken- / einfache Symbole],
+  row = [code { devicon-plain:icon-name }, Entwicklertool-Symbole],
+  row = [code { heroicons:icon-name }, Heroicons]
+}
+
+callout {
+  type = info,
+  Symbolnamen ohne code { : } erhalten automatisch das Präfix code { lucide: }. So funktioniert code { "icon = rocket" } als code { lucide:rocket }.
+}
+
+h2 { Sektions-Symbole }
+
+Fügen Sie ein code { icon }-Feld zu Ihrer Sektionskonfiguration in code { tiramisu.config.ts } hinzu:
+
+codeblock {
+  language = typescript,
+  """
+sections: [
+  { label: "Guide", path: "guide", icon: "lucide:book-open" },
+  { label: "API", path: "api", icon: "lucide:code" },
+]
+"""
+}
+
+Sektions-Symbole erscheinen in der oberen Leiste neben dem Sektionsnamen.
+
+h2 { Seiten- und Gruppensymbole }
+
+Fügen Sie code { icon } zum code { meta }-Block einer beliebigen code { .tiramisu }-Datei hinzu:
+
+codeblock {
+  language = tiramisu,
+  "meta { title = Getting Started, order = 1, icon = lucide:rocket }"
+}
+
+Bei Ordner-Indexseiten (code { index.tiramisu }) wird das Symbol auf die Sidebar-Gruppe oder Untergruppe angewendet. Bei regulären Seiten erscheint das Symbol neben dem Seitentitel in der Seitenleiste und im Seitenkopf.
+
+h2 { Seitenkopf }
+
+Beim Betrachten einer Dokumentationsseite zeigt der Seitenkopf Folgendes an:
+
+list {
+  Den übergeordneten Gruppen- oder Untergruppennamen als kleines Label über dem Titel,
+  Das Seitensymbol (falls gesetzt) neben dem Titel,
+  Den Seitentitel und die Beschreibung aus meta
+}
+
+h2 { Symbole durchsuchen }
+
+Verwenden Sie den link { url = https://icon-sets.iconify.design/, Iconify Icon Sets }-Browser\, um Symbole zu finden. Einige beliebte Sets:
+
+table {
+  row = [bold { Set }, bold { Präfix }, bold { Stil }],
+  row = [
+    link { url = https://lucide.dev/icons, Lucide },
+    code { lucide },
+    Klare Liniensymbole
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/mdi/, Material Design },
+    code { mdi },
+    Gefüllt / umrandet
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/heroicons/, Heroicons },
+    code { heroicons },
+    Umriss / ausgefüllt
+  ],
+  row = [
+    link { url = https://icon-sets.iconify.design/simple-icons/, Simple Icons },
+    code { simple-icons },
+    Markenlogos
+  ],
+  row = [
+    link {
+      url = https://icon-sets.iconify.design/devicon-plain/,
+      Devicon Plain
+    },
+    code { devicon-plain },
+    Entwicklertool-Symbole
+  ]
+}
+
+h2 { Code-Block-Symbole }
+
+Code-Blöcke und Code-Blöcke mit Tabs erkennen automatisch Sprachsymbole mithilfe des code { devicon-plain }-Sets. Sie können das automatisch erkannte Symbol überschreiben:
+
+codeblock {
+  language = tiramisu,
+  "codeblock { language = typescript, icon = \"lucide:file-code\", \"\"\"const x = 1\"\"\" }"
+}

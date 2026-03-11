@@ -1,21 +1,37 @@
 import { compileTiramisu } from "@tiramisu-docs/core"
 import type { DocMeta, Heading } from "@tiramisu-docs/core"
+import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
-import type { Plugin, ResolvedConfig, HmrContext } from "vite"
+import type { Plugin, ResolvedConfig as ViteConfig, HmrContext } from "vite"
 import { highlightCodeBlocks } from "./highlight.js"
-import type { SectionConfig } from "./config.js"
+import type { SectionConfig, TiramisuDocsConfig } from "./config.js"
+import { findTiramisuFiles, extractPlainText, titleCase } from "./scan.js"
+import type { SidebarItem, SidebarSubgroup, SidebarEntry, SidebarGroup, ResolvedSection } from "./types.js"
+
+export type { SidebarItem, SidebarSubgroup, SidebarEntry, SidebarGroup, ResolvedSection } from "./types.js"
 
 /** Wrap compileTiramisu to produce Vite-friendly errors with file location */
 function compileWithLocation(source: string, filePath: string) {
+  const dir = path.dirname(filePath)
   try {
-    return compileTiramisu(source)
-  } catch (err: any) {
-    if (err.line != null) {
-      const enhanced = new Error(err.hint ?? err.message)
-      ;(enhanced as any).id = filePath
-      ;(enhanced as any).loc = { file: filePath, line: err.line, column: err.column ?? 0 }
-      ;(enhanced as any).plugin = "tiramisu-docs"
+    return compileTiramisu(source, {
+      resolveFile(src) {
+        const resolved = path.resolve(dir, src)
+        return fs.readFileSync(resolved, "utf-8")
+      },
+    })
+  } catch (err: unknown) {
+    const isParseError = err instanceof Error && "line" in err
+    if (isParseError) {
+      const parseErr = err as Error & { line: number; column?: number; hint?: string }
+      const enhanced = new Error(parseErr.hint ?? parseErr.message)
+      Object.assign(enhanced, {
+        id: filePath,
+        loc: { file: filePath, line: parseErr.line, column: parseErr.column ?? 0 },
+        plugin: "tiramisu-docs",
+      })
+      if (parseErr.stack) enhanced.stack = parseErr.stack
       throw enhanced
     }
     throw err
@@ -24,76 +40,42 @@ function compileWithLocation(source: string, filePath: string) {
 
 export interface TiramisuPluginOptions {
   docsDir?: string
-  componentsDir?: string
-  groupOrder?: string[]
-  sections?: SectionConfig[]
-  title?: string
-  i18n?: { defaultLocale: string; locales: { code: string; label: string; flag?: string }[] }
+  config?: TiramisuDocsConfig
 }
 
-export interface SidebarItem {
-  type: "item"
-  title: string
-  slug: string
-  order: number
-}
 
-export interface SidebarSubgroup {
-  type: "subgroup"
-  key: string
-  label: string
-  slug?: string
-  items: SidebarEntry[]
-  order: number
-}
-
-export type SidebarEntry = SidebarItem | SidebarSubgroup
-
-export interface SidebarGroup {
-  label: string
-  items: SidebarEntry[]
+function resolveLastEdited(filePath: string, meta: DocMeta): string {
+  if (meta.lastEdited) return new Date(meta.lastEdited).toISOString()
+  try {
+    const stdout = execSync(`git log -1 --format=%cI "${filePath}"`, {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
+    }).trim()
+    if (stdout) return new Date(stdout).toISOString()
+  } catch {}
+  return fs.statSync(filePath).mtime.toISOString()
 }
 
 const VIRTUAL_MODULE_ID = "virtual:tiramisu-docs"
 const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID
 const TIRAMISU_SVELTE_SUFFIX = ".tiramisu.svelte"
 
-/** Strip HTML tags and decode entities to get plain text for search */
-function extractPlainText(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/g, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/\s+/g, " ")
-    .trim()
-}
-
-function titleCase(slug: string): string {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-}
-
 export function buildSidebarTree(
   docs: { slug: string; meta: DocMeta }[],
   groupOrder: string[] = []
 ): SidebarGroup[] {
-  const groupMap = new Map<string, SidebarEntry[]>()
+  const groupMap = new Map<string, { label: string; items: SidebarEntry[]; icon?: string }>()
 
-  function getOrCreateGroup(label: string): SidebarEntry[] {
+  function getOrCreateGroup(label: string): { label: string; items: SidebarEntry[]; icon?: string } {
     // Normalize lookup: case-insensitive match against existing groups
-    for (const [key, entries] of groupMap) {
+    for (const [key, group] of groupMap) {
       if (key.toLowerCase() === label.toLowerCase()) {
-        return entries
+        return group
       }
     }
-    const entries: SidebarEntry[] = []
-    groupMap.set(label, entries)
-    return entries
+    const group = { label, items: [] as SidebarEntry[] }
+    groupMap.set(label, group)
+    return group
   }
 
   function getOrCreateSubgroup(
@@ -124,21 +106,22 @@ export function buildSidebarTree(
       title: doc.meta.title ?? doc.slug,
       slug: doc.slug,
       order: doc.meta.order ?? 999,
+      icon: doc.meta.icon,
     }
 
     if (segments.length === 1) {
       // Root-level file: use meta.group
       const groupLabel = doc.meta.group ?? "Docs"
-      const entries = getOrCreateGroup(groupLabel)
-      entries.push(item)
+      const group = getOrCreateGroup(groupLabel)
+      group.items.push(item)
     } else {
-      // Nested file: first segment = group, middle segments = subgroups
+      // Nested file: first segment = group (static heading), deeper segments = subgroups
       const groupLabel = titleCase(segments[0])
-      const entries = getOrCreateGroup(groupLabel)
+      const group = getOrCreateGroup(groupLabel)
       const fileName = segments[segments.length - 1]
 
-      // Walk/create subgroups for middle segments
-      let parent = entries
+      // Walk/create subgroups for middle segments (starting at segments[1])
+      let parent = group.items
       let lastSub: SidebarSubgroup | null = null
       for (let i = 1; i < segments.length - 1; i++) {
         const sub = getOrCreateSubgroup(parent, segments[i])
@@ -146,11 +129,18 @@ export function buildSidebarTree(
         parent = sub.items
       }
 
-      // index files become the subgroup's own page rather than a child item
       if (fileName === "index" && lastSub) {
+        // Deeper folder index → sets subgroup slug/label
         lastSub.slug = item.slug
         if (item.order < lastSub.order) lastSub.order = item.order
         if (item.title !== item.slug) lastSub.label = item.title
+        if (doc.meta.icon) lastSub.icon = doc.meta.icon
+      } else if (fileName === "index" && !lastSub) {
+        // Top-level folder index (e.g. "integrations/index") → sets group label only
+        if (item.title !== item.slug) {
+          group.label = item.title
+        }
+        if (doc.meta.icon) group.icon = doc.meta.icon
       } else {
         parent.push(item)
       }
@@ -180,9 +170,9 @@ export function buildSidebarTree(
   }
 
   const sidebar: SidebarGroup[] = []
-  for (const [label, items] of groupMap) {
-    sortEntries(items)
-    sidebar.push({ label, items })
+  for (const [, group] of groupMap) {
+    sortEntries(group.items)
+    sidebar.push({ label: group.label, items: group.items, icon: group.icon })
   }
 
   // Sort groups by groupOrder config
@@ -199,13 +189,6 @@ export function buildSidebarTree(
   return sidebar
 }
 
-export interface ResolvedSection {
-  label: string
-  path?: string
-  href?: string
-  children?: ResolvedSection[]
-  sidebar?: SidebarGroup[]
-}
 
 export function buildSectionSidebars(
   docs: { slug: string; meta: DocMeta }[],
@@ -247,40 +230,38 @@ function resolveSection(
   section: SectionConfig
 ): ResolvedSection {
   if (section.href) {
-    return { label: section.label, href: section.href }
+    return { label: section.label, href: section.href, icon: section.icon }
   }
   if (section.children) {
     return {
       label: section.label,
+      icon: section.icon,
       children: section.children.map((c) => resolveSection(docs, c)),
     }
   }
   const sectionDocs = docs
     .filter((d) => d.slug === section.path || d.slug.startsWith(section.path + "/"))
-    .map((d) => ({
-      slug: d.slug.startsWith(section.path + "/")
-        ? d.slug.slice(section.path!.length + 1)
-        : d.slug.split("/").pop()!,
-      meta: d.meta,
-    }))
+
+  const sidebar = buildSidebarTree(sectionDocs)
 
   return {
     label: section.label,
     path: section.path,
-    sidebar: buildSidebarTree(sectionDocs),
+    icon: section.icon,
+    sidebar,
   }
 }
 
 export function buildLocaleData(
-  allDocs: { slug: string; meta: DocMeta }[],
+  allDocs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[],
   locales: { code: string }[]
-): Record<string, { docs: { slug: string; meta: DocMeta }[] }> {
-  const result: Record<string, { docs: { slug: string; meta: DocMeta }[] }> = {}
+): Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] }> {
+  const result: Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] }> = {}
   for (const locale of locales) {
     const prefix = locale.code + "/"
     const docs = allDocs
       .filter((d) => d.slug.startsWith(prefix))
-      .map((d) => ({ slug: d.slug.slice(prefix.length), meta: d.meta }))
+      .map((d) => ({ slug: d.slug.slice(prefix.length), meta: d.meta, headings: d.headings, lastEdited: d.lastEdited }))
     result[locale.code] = { docs }
   }
   return result
@@ -288,41 +269,27 @@ export function buildLocaleData(
 
 export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
   const docsDir = options.docsDir ?? "src/docs"
-  const groupOrder = options.groupOrder ?? []
+  const config = options.config
+  const groupOrder = config?.sidebar?.groupOrder ?? []
   let viteRoot = process.cwd()
 
   function resolveDocsDir(): string {
     return path.resolve(viteRoot, docsDir)
   }
 
-  function findTiramisuFiles(dir: string): string[] {
-    const results: string[] = []
-    if (!fs.existsSync(dir)) return results
-
-    const entries = fs.readdirSync(dir, { withFileTypes: true })
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name)
-      if (entry.isDirectory()) {
-        results.push(...findTiramisuFiles(fullPath))
-      } else if (entry.name.endsWith(".tiramisu")) {
-        results.push(fullPath)
-      }
-    }
-    return results
-  }
-
   function buildVirtualModule(): string {
     const absDocsDir = resolveDocsDir()
     const files = findTiramisuFiles(absDocsDir)
 
-    const docs: { slug: string; meta: DocMeta; headings: Heading[] }[] = []
+    const docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] = []
 
     for (const file of files) {
       const source = fs.readFileSync(file, "utf-8")
       const { meta, headings } = compileWithLocation(source, file)
       const relativePath = path.relative(absDocsDir, file)
       const slug = relativePath.replace(/\.tiramisu$/, "").replace(/\\/g, "/")
-      docs.push({ slug, meta, headings })
+      const lastEdited = resolveLastEdited(file, meta)
+      docs.push({ slug, meta, headings, lastEdited })
     }
 
     // Build search index with hierarchical group paths
@@ -360,13 +327,13 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       })
       .join(",\n")
 
-    if (options.i18n) {
-      const localeData = buildLocaleData(docs, options.i18n.locales)
+    if (config?.i18n) {
+      const localeData = buildLocaleData(docs, config.i18n.locales)
 
-      const localeBlocks = options.i18n.locales.map((locale) => {
+      const localeBlocks = config.i18n.locales.map((locale) => {
         const localeDocs = localeData[locale.code].docs
-        const localeSections = options.sections
-          ? buildSectionSidebars(localeDocs, options.sections, options.title)
+        const localeSections = config.sections
+          ? buildSectionSidebars(localeDocs, config.sections, config.title)
           : undefined
         const localeSidebar = buildSidebarTree(localeDocs, groupOrder)
 
@@ -405,19 +372,21 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       }).join(",\n")
 
       return [
+
         `export const locales = {\n${localeBlocks}\n};`,
-        `export const defaultLocale = "${options.i18n.defaultLocale}";`,
-        `export const sidebar = locales["${options.i18n.defaultLocale}"].sidebar;`,
-        `export const sections = locales["${options.i18n.defaultLocale}"].sections;`,
-        `export const docs = locales["${options.i18n.defaultLocale}"].docs;`,
-        `export const searchIndex = locales["${options.i18n.defaultLocale}"].searchIndex;`,
-        `export const docImports = locales["${options.i18n.defaultLocale}"].docImports;`,
+        `export const defaultLocale = "${config.i18n.defaultLocale}";`,
+        `export const sidebar = locales["${config.i18n.defaultLocale}"].sidebar;`,
+        `export const sections = locales["${config.i18n.defaultLocale}"].sections;`,
+        `export const docs = locales["${config.i18n.defaultLocale}"].docs;`,
+        `export const searchIndex = locales["${config.i18n.defaultLocale}"].searchIndex;`,
+        `export const docImports = locales["${config.i18n.defaultLocale}"].docImports;`,
       ].join("\n\n")
     }
 
-    if (options.sections) {
-      const resolvedSections = buildSectionSidebars(docs, options.sections, options.title)
+    if (config?.sections) {
+      const resolvedSections = buildSectionSidebars(docs, config.sections, config.title)
       return [
+
         `export const locales = undefined;`,
         `export const defaultLocale = undefined;`,
         `export const sections = ${JSON.stringify(resolvedSections, null, 2)};`,
@@ -429,6 +398,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     } else {
       const sidebar = buildSidebarTree(docs, groupOrder)
       return [
+
         `export const locales = undefined;`,
         `export const defaultLocale = undefined;`,
         `export const sections = undefined;`,
@@ -444,7 +414,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     name: "tiramisu-docs",
     enforce: "pre",
 
-    configResolved(config: ResolvedConfig) {
+    configResolved(config: ViteConfig) {
       viteRoot = config.root
     },
 

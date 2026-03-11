@@ -1,0 +1,84 @@
+meta {
+  title = Formatierung,
+  order = 2,
+  icon = paintbrush
+}
+
+Der Befehl code { tiramisu format } formatiert code { .tiramisu }-Dateien automatisch für einen einheitlichen Stil. Er normalisiert Leerzeichen\, Einrückungen und Abstände bei Parametern.
+
+h3 { Verwendung }
+
+codeblock { language = bash, "tiramisu format [options] [files...]" }
+
+h3 { Optionen }
+
+table {
+  row = [bold { Flag }, bold { Standard }, bold { Beschreibung }],
+  row = [code { --check }, —, Prüft\, ob Dateien formatiert sind\, ohne sie zu ändern. Beendet mit Code 1\, wenn eine Datei formatiert werden muss.],
+  row = [code { --indent <n> }, code { 2 }, Anzahl der Leerzeichen pro Einrückungsebene.],
+  row = [code { --line-width <n> }, code { 80 }, Maximale Zeilenbreite\, bevor Funktionsaufrufe in ein mehrzeiliges Format umgebrochen werden.]
+}
+
+h3 { Dateien direkt formatieren }
+
+Übergeben Sie einen oder mehrere Dateipfade\, um sie direkt zu formatieren:
+
+codeblock { language = bash, tiramisu format src/docs/**/*.tiramisu }
+
+Bereits korrekt formatierte Dateien werden übersprungen (keine unnötigen Schreibvorgänge).
+
+h3 { Stdin / Stdout }
+
+Wenn keine Dateien angegeben werden und die Eingabe über eine Pipe kommt\, liest der Formatierer von stdin und schreibt nach stdout:
+
+codeblock { language = bash, """echo 'bold{hello}' | tiramisu format
+# Output: bold { hello }""" }
+
+Dies ist nützlich für Editor-Integrationen und Skripte.
+
+h3 { Prüfmodus }
+
+Verwenden Sie code { --check } in CI\, um die Formatierung zu überprüfen\, ohne Dateien zu ändern:
+
+codeblock { language = bash, tiramisu format --check src/docs/**/*.tiramisu }
+
+Wenn Dateien formatiert werden müssen\, listet der Befehl sie auf und beendet sich mit Code 1.
+
+h3 { Was er macht }
+
+Der Formatierer wendet folgende Regeln an:
+
+list {
+  bold { Nachgestellte Leerzeichen } — werden aus allen Zeilen entfernt.,
+  bold { Abschließender Zeilenumbruch } — stellt einen einzelnen abschließenden Zeilenumbruch sicher.,
+  bold { Absatzabstände } — reduziert 3+ Leerzeilen auf 2.,
+  bold { Inline-Funktionen } — normalisiert Klammerabstände: code { "bold{hello}" } → code { "bold { hello }" }.,
+  bold { Mehrzeilige Funktionen } — bricht lange Funktionsaufrufe über mehrere Zeilen um\, wenn sie die Zeilenbreite überschreiten.,
+  bold { Parameter } — normalisiert Abstände um code { "=" }: code { "level=1" } → code { "level = 1" }.,
+  bold { Arrays } — formatiert inline oder mehrzeilig basierend auf der Zeilenbreite.,
+  bold { Anführungszeichen } — verwendet den kürzesten gültigen Anführungsstil.
+}
+
+h3 { Beispiele }
+
+Vor der Formatierung:
+
+codeblock { language = tiramisu, """callout{type=warning,Don't forget to install the peer dependencies.}
+
+h2{Quick  Start}
+
+list{First item,Second item,Third item}""" }
+
+Nach Ausführung von code { tiramisu format }:
+
+codeblock { language = tiramisu, """callout { type = warning, Don't forget to install the peer dependencies. }
+
+h2 { Quick Start }
+
+list {
+  First item,
+  Second item,
+  Third item
+}""" }
+
+Der Formatierer ist idempotent — mehrfaches Ausführen erzeugt identische Ergebnisse.

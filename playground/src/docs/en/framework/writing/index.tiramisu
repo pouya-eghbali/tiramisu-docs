@@ -1,0 +1,49 @@
+meta { title = Writing, order = 2, icon = pen-line }
+
+Documentation pages are code { .tiramisu } files inside the code { src/docs/ } directory. Each file becomes a page on your site.
+
+h2 { File Location }
+
+Place your files in code { src/docs/ } (or in a locale subfolder like code { src/docs/ } if using i18n). The file path determines the URL:
+
+table {
+  row = [File Path, URL],
+  row = [code { src/docs/index.tiramisu }, code { /docs }],
+  row = [code { src/docs/guide.tiramisu }, code { /docs/guide }],
+  row = [code { src/docs/api/auth.tiramisu }, code { /docs/api/auth }]
+}
+
+h2 { Folder Structure }
+
+Folders create sidebar groups automatically. A folder with an code { index.tiramisu } file uses the index page's title as the group label:
+
+filetree {
+  folder { src/docs,
+    file { index.tiramisu },
+    folder { getting-started,
+      file { index.tiramisu },
+      file { installation.tiramisu },
+      file { quick-start.tiramisu }
+    },
+    folder { api,
+      file { index.tiramisu },
+      file { endpoints.tiramisu }
+    }
+  }
+}
+
+h2 { Page Anatomy }
+
+Every page has two parts: a code { meta } block and content.
+
+codeblock { language = tiramisu, """meta { title = My Page, order = 2, group = Guide }
+
+Paragraph text goes here. Use bold { bold } and italic { italic } for emphasis.
+
+h2 { A Section }
+
+More content with code { inline code } and other formatting.""" }
+
+callout { type = info, The code { meta } block must appear at the very beginning of the file. Everything after it is rendered as page content. }
+
+callout { type = warning, Do not add an code { "h1 {}" } to your page — the code { title } from the code { meta } block is automatically rendered as the page heading. Adding a manual code { h1 } would create a duplicate. }

@@ -1,0 +1,73 @@
+meta { title = Markup Basics, order = 2, icon = text }
+
+Tiramisu uses a function-call syntax for all structured content. Plain text outside function calls becomes paragraph content.
+
+h2 { Function Calls }
+
+The basic syntax is a function name followed by content in curly braces:
+
+codeblock { language = tiramisu, "h1 { Hello World }" }
+
+Functions can have parameters separated by commas:
+
+codeblock { language = tiramisu, "link { url = https://example.com, Click here }" }
+
+h2 { Paragraphs }
+
+Text outside function calls is rendered as paragraphs. Blank lines separate paragraphs:
+
+codeblock { language = tiramisu, """This is the first paragraph.
+
+This is the second paragraph.""" }
+
+Single line breaks within a paragraph are treated as spaces.
+
+h2 { Inline Formatting }
+
+table {
+  row = [Syntax, Result],
+  row = [code { "bold { text }" }, bold { text }],
+  row = [code { "italic { text }" }, italic { text }],
+  row = [code { "code { text }" }, code { text }]
+}
+
+These can be nested: bold { italic { bold and italic } }.
+
+codeblock { language = tiramisu, "bold { italic { bold and italic } }" }
+
+h2 { Links }
+
+codeblock { language = tiramisu, "link { url = https://example.com, Link text }" }
+
+Renders as: link { url = https://example.com, Link text }
+
+External links (starting with code { http:// } or code { https:// }) automatically open in a new tab and display a small external link icon.
+
+h2 { Headings }
+
+Six levels of headings are available:
+
+codeblock { language = tiramisu, """h1 { Heading 1 }
+h2 { Heading 2 }
+h3 { Heading 3 }
+h4 { Heading 4 }
+h5 { Heading 5 }
+h6 { Heading 6 }""" }
+
+Headings automatically generate anchor IDs and appear in the table of contents.
+
+h2 { Nesting }
+
+Function calls can be nested inside each other:
+
+codeblock { language = tiramisu, """callout { type = info,
+  Use bold { bold } to emphasize key points in your
+  link { url = /docs, documentation }.
+}""" }
+
+demo {
+  callout { type = info,
+    Use bold { bold } to emphasize key points in your
+    link { url = /docs, documentation }.
+  }
+}

@@ -1,0 +1,11 @@
+meta { title = Content, order = 4, icon = layout }
+
+Tiramisu Docs provides a rich set of built-in components for documentation content. These are implemented as Tiramisu functions that compile to Svelte components.
+
+cards {
+  card { title = Code Blocks, description = Syntax-highlighted code with language support, href = /docs/framework/writing/content/code-blocks },
+  card { title = Rich Content, description = Callouts\, tabs\, steps\, and more, href = /docs/framework/writing/content/rich-content },
+  card { title = Visual Elements, description = Tables\, images\, lists\, cards\, and file trees, href = /docs/framework/writing/content/visual-elements },
+  card { title = Layout, description = Columns and demo containers, href = /docs/framework/writing/content/layout },
+  card { title = Diagrams & Math, description = Mermaid diagrams and KaTeX formulas, href = /docs/framework/writing/content/diagrams-math }
+}

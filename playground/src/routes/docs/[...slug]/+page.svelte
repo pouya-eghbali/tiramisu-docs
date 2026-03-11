@@ -1,13 +1,18 @@
-<script>
-  import DocsLayout from "@tiramisu-docs/kit/components/DocsLayout.svelte"
-  import DocPage from "@tiramisu-docs/kit/components/DocPage.svelte"
-  import PrevNextNav from "@tiramisu-docs/kit/components/PrevNextNav.svelte"
+<script lang="ts">
+  import { DocsLayout, DocPage, PrevNextNav } from "$lib/components"
+  import OpenDropdown from "$lib/components/OpenDropdown.svelte"
   import config from "$lib/tiramisu.config"
-  import { resolveConfig } from "@tiramisu-docs/kit"
+  import { resolveConfig, getOpenLinks } from "@tiramisu-docs/kit"
+  import type { LocaleConfig } from "@tiramisu-docs/kit"
 
-  let { data } = $props()
+  let { data }: { data: Record<string, any> } = $props()
 
   const resolved = resolveConfig(config)
+  const links = $derived(
+    resolved.url && data.slug
+      ? getOpenLinks({ baseUrl: resolved.url, slug: data.slug, locale: data.locale, github: resolved.github, mcp: resolved.mcp, title: resolved.title })
+      : []
+  )
 </script>
 
 <DocsLayout
@@ -16,10 +21,13 @@
   headings={data.headings}
   sections={data.sections}
   locale={data.locale}
-  locales={data.locales ? resolved.i18n?.locales?.filter(l => data.locales.includes(l.code)) : undefined}
+  locales={data.locales ? resolved.i18n?.locales?.filter((l: LocaleConfig) => data.locales.includes(l.code)) : undefined}
   showFallbackBanner={data.showFallbackBanner}
 >
-  <DocPage meta={data.meta}>
+  <DocPage meta={data.meta} lastEdited={data.lastEdited} slug={data.slug} baseUrl={resolved.url} sidebar={data.activeSidebar} siteName={resolved.title} instantOg={resolved.instantOg}>
+    {#snippet headerActions()}
+      <OpenDropdown {links} />
+    {/snippet}
     {#if data.component}
       {@const Component = data.component}
       <Component />

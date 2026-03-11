@@ -1,6 +1,11 @@
-<script>
-  let { language = "", code = "", children } = $props()
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import { getLangIcon } from "./lang-icons.js"
+
+  let { language = "", icon = "", code = "", children }: { language?: string; icon?: string; code?: string; children?: Snippet } = $props()
   let copied = $state(false)
+
+  const langIcon = $derived(icon || getLangIcon(language))
 
   async function copyCode() {
     const text = code.replace(/<[^>]*>/g, "")
@@ -12,11 +17,16 @@
 
 <div class="group relative my-4 overflow-hidden rounded-lg border border-border">
   {#if language}
-    <div class="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2">
-      <span class="text-xs font-medium text-muted-foreground">{language}</span>
+    <div class="flex items-center justify-between border-b border-border bg-muted/50 px-3 py-1.5">
+      <span class="flex items-center gap-1.5 text-xs text-muted-foreground">
+        {#if langIcon}
+          <iconify-icon icon={langIcon} width="14" height="14" class="shrink-0"></iconify-icon>
+        {/if}
+        {language}
+      </span>
       <button
         onclick={copyCode}
-        class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
         aria-label="Copy code"
       >
         {#if copied}
