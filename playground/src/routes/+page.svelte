@@ -680,15 +680,7 @@
   <section
     class="relative overflow-hidden bg-background px-4 sm:px-6 py-16 sm:py-24 lg:py-32"
   >
-    <!-- Decorative gradient -->
-    <div class="pointer-events-none absolute inset-0">
-      <div
-        data-animate="parallax"
-        class="absolute bottom-0 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-foreground/5 blur-[120px]"
-      ></div>
-    </div>
-
-    <div data-animate="fade-up" class="relative mx-auto max-w-2xl text-center">
+    <div data-animate="fade-up" class="mx-auto max-w-2xl text-center">
       <h2 class="text-2xl sm:text-3xl font-bold tracking-tight lg:text-4xl">
         Build your docs.
       </h2>
