@@ -4,7 +4,7 @@ import * as p from "@clack/prompts"
 import { mkdirSync, writeFileSync } from "fs"
 import { join, dirname } from "path"
 import { execSync } from "child_process"
-import { generateProjectFiles } from "./scaffold"
+import { generateProjectFiles } from "./scaffold.js"
 
 async function main() {
   p.intro("Create Tiramisu Docs")
