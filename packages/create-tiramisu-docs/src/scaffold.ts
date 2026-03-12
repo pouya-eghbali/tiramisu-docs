@@ -75,7 +75,7 @@ function packageJson(name: string): GeneratedFile {
       check: "svelte-check --tsconfig ./tsconfig.json",
     },
     dependencies: {
-      "@tiramisu-docs/kit": "^0.1.14",
+      "@tiramisu-docs/kit": "^0.1.15",
       "@timeleap/tiramisu": "^1.9.0",
       "bits-ui": "^2.16.0",
       clsx: "^2.1.0",
