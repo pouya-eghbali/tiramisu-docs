@@ -13,7 +13,7 @@
     "@threlte/core": "^8.3.1",
     "@threlte/extras": "^9.7.1",
     "@timeleap/tiramisu": "^1.9.0",
-    "@tiramisu-docs/kit": "workspace:*",
+    "@tiramisu-docs/kit": "workspace:^",
     "clsx": "^2.1.0",
     "gsap": "^3.14.2",
     "iconify-icon": "^3.0.2",
