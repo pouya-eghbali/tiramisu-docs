@@ -1,6 +1,6 @@
 {
   "name": "@tiramisu-docs/kit",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "Apache-2.0",
   "type": "module",
   "svelte": "src/index.ts",
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@timeleap/tiramisu": "^1.9.0",
-    "@tiramisu-docs/core": "workspace:*",
+    "@tiramisu-docs/core": "workspace:^",
     "clsx": "^2.1.1",
     "iconify-icon": "^2.3.0",
     "minisearch": "^7.2.0",
