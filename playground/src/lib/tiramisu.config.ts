@@ -3,7 +3,7 @@ import { defineConfig } from "@tiramisu-docs/kit";
 export default defineConfig({
   title: "Tiramisu Docs",
   description:
-    "Documentation for the Tiramisu markup language and Tiramisu Docs framework",
+    "A SvelteKit documentation framework powered by the Tiramisu markup language. Clean syntax, file-based routing, built-in search, and zero configuration.",
   logo: { light: "/logo.svg", dark: "/logo-dark.svg" },
   url: "https://tiramisudocs.com",
   nav: [{ label: "Docs", href: "/docs" }],
