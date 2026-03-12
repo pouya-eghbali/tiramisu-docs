@@ -1,7 +1,6 @@
 <script lang="ts">
   import "iconify-icon"
   import TopBar from "./TopBar.svelte"
-  import Navbar from "./Navbar.svelte"
   import Sidebar from "./Sidebar.svelte"
   import TableOfContents from "./TableOfContents.svelte"
   import SearchDialog from "./SearchDialog.svelte"
@@ -43,6 +42,7 @@
   }
 
   const hasSections = $derived(sections != null && sections.length > 0)
+  const topBarHeight = $derived(hasSections ? "6rem" : "3.5rem")
 
   function docHref(slug: string): string {
     const prefix = locale ? `/docs/${locale}` : "/docs"
@@ -65,19 +65,14 @@
 </script>
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">
-  {#if hasSections}
-    <TopBar
-      {config}
-      {sections}
-      {locale}
-      {locales}
-      onSearchClick={() => (searchOpen = true)}
-      onMenuClick={() => (mobileOpen = !mobileOpen)}
-    />
-  {:else}
-    <!-- Legacy mobile navbar -->
-    <Navbar {config} {sidebar} onSearchClick={() => (searchOpen = true)} {locale} />
-  {/if}
+  <TopBar
+    {config}
+    {sections}
+    {locale}
+    {locales}
+    onSearchClick={() => (searchOpen = true)}
+    onMenuClick={() => (mobileOpen = !mobileOpen)}
+  />
 
   {#if showFallbackBanner}
     <div class="border-b bg-muted/50 px-4 py-2 text-center text-sm text-muted-foreground">
@@ -89,8 +84,8 @@
     <!-- Sidebar (desktop) -->
     <aside class="relative hidden w-[15rem] shrink-0 border-r lg:block">
       <div class="absolute inset-0 bg-card" style="left: -100vw; width: calc(100% + 100vw);"></div>
-      <div class="relative sticky top-0 h-screen" style:top={hasSections ? "6rem" : "0"} style:height={hasSections ? "calc(100vh - 6rem)" : "100vh"}>
-        <Sidebar {config} groups={sidebar} onSearchClick={() => (searchOpen = true)} {hasSections} {locale} {locales} />
+      <div class="relative sticky top-0 h-screen" style:top={topBarHeight} style:height="calc(100vh - {topBarHeight})">
+        <Sidebar {config} groups={sidebar} {locale} {locales} />
       </div>
     </aside>
 
@@ -107,7 +102,7 @@
     <!-- Table of contents -->
     {#if headings?.length}
       <aside class="hidden w-[13rem] shrink-0 xl:block">
-        <div class="sticky overflow-y-auto overscroll-contain py-10 pr-6" style:top={hasSections ? "6rem" : "0"} style:height={hasSections ? "calc(100vh - 6rem)" : "100vh"}>
+        <div class="sticky overflow-y-auto overscroll-contain py-10 pr-6" style:top={topBarHeight} style:height="calc(100vh - {topBarHeight})">
           <TableOfContents {headings} />
         </div>
       </aside>
@@ -151,8 +146,7 @@
   {/each}
 {/snippet}
 
-{#if hasSections}
-  <SheetContent open={mobileOpen} onclose={() => (mobileOpen = false)} side="left">
+<SheetContent open={mobileOpen} onclose={() => (mobileOpen = false)} side="left">
     <div class="mt-6">
       <ScrollArea class="h-[calc(100vh-8rem)]">
         {#each sidebar as group}
@@ -205,4 +199,3 @@
       </div>
     </div>
   </SheetContent>
-{/if}
