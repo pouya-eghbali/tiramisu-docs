@@ -1,4 +1,4 @@
-import { compileTiramisu } from "@tiramisu-docs/core"
+import { compileTiramisu, toMarkdown } from "@tiramisu-docs/core"
 import type { DocMeta, Heading } from "@tiramisu-docs/core"
 import { execSync } from "node:child_process"
 import fs from "node:fs"
@@ -281,7 +281,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     const absDocsDir = resolveDocsDir()
     const files = findTiramisuFiles(absDocsDir)
 
-    const docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] = []
+    const docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string; markdown?: string }[] = []
 
     for (const file of files) {
       const source = fs.readFileSync(file, "utf-8")
@@ -290,6 +290,12 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       const slug = relativePath.replace(/\.tiramisu$/, "").replace(/\\/g, "/")
       const lastEdited = resolveLastEdited(file, meta)
       docs.push({ slug, meta, headings, lastEdited })
+    }
+
+    for (const doc of docs) {
+      const file = path.resolve(absDocsDir, doc.slug + ".tiramisu")
+      const source = fs.readFileSync(file, "utf-8")
+      doc.markdown = toMarkdown(source)
     }
 
     // Build search index with hierarchical group paths

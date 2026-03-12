@@ -32,6 +32,7 @@ export interface VirtualDoc {
   meta: DocMeta
   headings: Heading[]
   lastEdited?: string
+  markdown?: string
 }
 
 export interface SearchIndexEntry {
