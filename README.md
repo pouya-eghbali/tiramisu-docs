@@ -1,4 +1,14 @@
-# Tiramisu Docs
+<p align="center">
+  <a href="https://tiramisudocs.com">
+    <img src="images/tiramisu.png" alt="Tiramisu Docs" />
+  </a>
+</p>
+
+<h1 align="center">Tiramisu Docs</h1>
+
+<p align="center">
+  <a href="https://tiramisudocs.com">tiramisudocs.com</a>
+</p>
 
 A documentation framework built on [SvelteKit](https://svelte.dev/docs/kit) and the [Tiramisu](https://github.com/timeleaplabs/tiramisu) markup language. Write `.tiramisu` files, get a fully themed documentation site with search, i18n, SEO, and an MCP server for AI assistants.
 
