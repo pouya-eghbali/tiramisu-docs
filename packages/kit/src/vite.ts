@@ -443,6 +443,14 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     name: "tiramisu-docs",
     enforce: "pre",
 
+    config() {
+      return {
+        optimizeDeps: {
+          exclude: ["@tiramisu-docs/kit"],
+        },
+      }
+    },
+
     configResolved(config: ViteConfig) {
       viteRoot = config.root
     },

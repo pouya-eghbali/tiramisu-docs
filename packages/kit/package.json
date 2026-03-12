@@ -1,6 +1,6 @@
 {
   "name": "@tiramisu-docs/kit",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "license": "Apache-2.0",
   "type": "module",
   "svelte": "src/index.ts",
@@ -25,7 +25,8 @@
       "default": "./dist/mcp.js"
     },
     "./components/*": {
-      "svelte": "./src/lib/components/*"
+      "svelte": "./src/lib/components/*",
+      "default": "./src/lib/components/*"
     },
     "./styles/*": {
       "default": "./src/lib/styles/*"
