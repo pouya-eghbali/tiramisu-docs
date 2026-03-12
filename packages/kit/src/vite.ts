@@ -253,15 +253,15 @@ function resolveSection(
 }
 
 export function buildLocaleData(
-  allDocs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[],
+  allDocs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string; markdown?: string }[],
   locales: { code: string }[]
-): Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] }> {
-  const result: Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string }[] }> = {}
+): Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string; markdown?: string }[] }> {
+  const result: Record<string, { docs: { slug: string; meta: DocMeta; headings: Heading[]; lastEdited: string; markdown?: string }[] }> = {}
   for (const locale of locales) {
     const prefix = locale.code + "/"
     const docs = allDocs
       .filter((d) => d.slug.startsWith(prefix))
-      .map((d) => ({ slug: d.slug.slice(prefix.length), meta: d.meta, headings: d.headings, lastEdited: d.lastEdited }))
+      .map((d) => ({ slug: d.slug.slice(prefix.length), meta: d.meta, headings: d.headings, lastEdited: d.lastEdited, markdown: d.markdown }))
     result[locale.code] = { docs }
   }
   return result
