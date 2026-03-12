@@ -462,6 +462,7 @@ function loadLegacy(mod: VirtualModule, slug: string) {
       meta: doc?.meta ?? {},
       headings: doc?.headings ?? [],
       lastEdited: doc?.lastEdited,
+      markdown: doc?.markdown,
       slug,
       sections: mod.sections ?? undefined,
       activeSidebar,
@@ -505,6 +506,7 @@ async function loadDoc(localeData: LocaleData, slug: string, locale: string, mod
     meta: doc?.meta ?? {},
     headings: doc?.headings ?? [],
     lastEdited: doc?.lastEdited,
+    markdown: doc?.markdown,
     slug,
     locale,
     locales: Object.keys(mod.locales!),
@@ -571,6 +573,15 @@ function pageSvelte(): GeneratedFile {
 
   let { data }: { data: Record<string, any> } = $props()
 
+  let mdCopied = $state(false)
+
+  async function copyMarkdown() {
+    if (!data.markdown) return
+    await navigator.clipboard.writeText(data.markdown)
+    mdCopied = true
+    setTimeout(() => (mdCopied = false), 2000)
+  }
+
   const resolved = resolveConfig(config)
   const links = $derived(
     resolved.url && data.slug
@@ -590,7 +601,24 @@ function pageSvelte(): GeneratedFile {
 >
   <DocPage meta={data.meta} lastEdited={data.lastEdited} slug={data.slug} baseUrl={resolved.url} sidebar={data.activeSidebar} siteName={resolved.title} instantOg={resolved.instantOg}>
     {#snippet headerActions()}
-      <OpenDropdown {links} />
+      <div class="flex items-center gap-2">
+        {#if data.markdown}
+          <button
+            onclick={copyMarkdown}
+            class="inline-flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            title="Copy page as Markdown"
+          >
+            {#if mdCopied}
+              <iconify-icon icon="lucide:check" width="14" height="14" class="text-green-500"></iconify-icon>
+              Copied
+            {:else}
+              <iconify-icon icon="lucide:clipboard" width="14" height="14"></iconify-icon>
+              Copy MD
+            {/if}
+          </button>
+        {/if}
+        <OpenDropdown {links} />
+      </div>
     {/snippet}
     {#if data.component}
       {@const Component = data.component}
