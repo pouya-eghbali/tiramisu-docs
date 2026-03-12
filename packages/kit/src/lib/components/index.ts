@@ -2,6 +2,12 @@
 export { default as DocsLayout } from "./DocsLayout.svelte"
 export { default as DocPage } from "./DocPage.svelte"
 export { default as PrevNextNav } from "./PrevNextNav.svelte"
+export { default as TopBar } from "./TopBar.svelte"
+export { default as SearchDialog } from "./SearchDialog.svelte"
+export { default as Sidebar } from "./Sidebar.svelte"
+export { default as Navbar } from "./Navbar.svelte"
+export { default as TableOfContents } from "./TableOfContents.svelte"
+export { default as PageFooter } from "./PageFooter.svelte"
 
 // Tiramisu built-ins
 export { default as Accordion } from "./tiramisu/Accordion.svelte"

@@ -3,8 +3,7 @@
   import { onMount } from "svelte";
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
-  import TopBar from "@tiramisu-docs/kit/components/TopBar.svelte";
-  import SearchDialog from "@tiramisu-docs/kit/components/SearchDialog.svelte";
+  import { TopBar, SearchDialog } from "@tiramisu-docs/kit/components";
   import config from "$lib/tiramisu.config";
   import { resolveConfig, buildInstantOgUrl } from "@tiramisu-docs/kit";
   import { DitheredImage } from "$lib/motion-core";
