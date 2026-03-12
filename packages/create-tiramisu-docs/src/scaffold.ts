@@ -75,7 +75,7 @@ function packageJson(name: string): GeneratedFile {
       check: "svelte-check --tsconfig ./tsconfig.json",
     },
     dependencies: {
-      "@tiramisu-docs/kit": "^0.1.15",
+      "@tiramisu-docs/kit": "^0.1.16",
       "@timeleap/tiramisu": "^1.9.0",
       "bits-ui": "^2.16.0",
       clsx: "^2.1.0",
@@ -225,6 +225,7 @@ function appCss(): GeneratedFile {
   return {
     path: "src/app.css",
     content: `@import "@tiramisu-docs/kit/styles/theme.css";
+@import "@tiramisu-docs/kit/styles/components.css";
 @import "tailwindcss";
 
 @source "../node_modules/@tiramisu-docs/kit";

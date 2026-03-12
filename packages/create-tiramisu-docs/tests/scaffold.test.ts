@@ -111,10 +111,10 @@ describe("generateProjectFiles", () => {
     expect(mcp).toBeUndefined()
   })
 
-  it("includes commented url hint in tiramisu config", () => {
+  it("includes placeholder url in tiramisu config", () => {
     const files = generateProjectFiles(baseOptions)
     const config = files.find(f => f.path === "src/lib/tiramisu.config.ts")!
-    expect(config.content).toContain('// url: "https://example.com"')
+    expect(config.content).toContain('url: "https://example.com"')
   })
 
   it("passes slug and baseUrl to DocPage", () => {

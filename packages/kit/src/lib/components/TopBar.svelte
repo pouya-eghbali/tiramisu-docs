@@ -452,13 +452,3 @@
     if (openDropdown && (e.target as HTMLElement).closest && !(e.target as HTMLElement).closest(".relative")) openDropdown = null;
   }}
 />
-
-<style>
-  .scrollbar-none {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-</style>

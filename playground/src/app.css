@@ -1,4 +1,5 @@
 @import "@tiramisu-docs/kit/styles/theme.css";
+@import "@tiramisu-docs/kit/styles/components.css";
 @import "tailwindcss";
 
 @source "../node_modules/@tiramisu-docs/kit";
