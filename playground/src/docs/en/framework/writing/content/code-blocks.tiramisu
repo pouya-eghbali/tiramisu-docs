@@ -1,40 +1,61 @@
-meta { title = Code Blocks, description = Display syntax-highlighted code with Shiki\, tabbed code blocks\, language icons\, and file imports., order = 5, icon = code }
+meta {
+  title = Code Blocks,
+  description = Display syntax-highlighted code with Shiki\, tabbed code blocks\, language icons\, and file imports.,
+  order = 5,
+  icon = code
+}
 
 Display syntax-highlighted code using the code { codeblock } function. Highlighting is powered by Shiki.
 
 h2 { Basic Usage }
 
-codeblock { language = tiramisu, """codeblock { language = typescript, "const x = 42" }""" }
-
-demo {
-  codeblock { language = typescript, "const x = 42" }
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = typescript, "const x = 42" }""
 }
+
+demo { codeblock { language = typescript, "const x = 42" } }
 
 h2 { Multi-line Code }
 
 Single quotes work for multi-line code, too:
 
-codeblock { language = tiramisu, """codeblock { language = typescript, "function greet(name: string) {
+codeblock {
+  language = tiramisu,
+  """
+codeblock { language = typescript, "function greet(name: string) {
   return \\"Hello, \\" + name
 }
 
-greet(\\"World\\")" }""" }
+greet(\\"World\\")" }
+"""
+}
 
 Alternatively, you can wrap your code samples in multiple quotes so you don't have to use code { \\ }
 for escaping:
 
-codeblock { language = tiramisu, """"codeblock { language = typescript, """function greet(name: string) {
-  return "Hello, " + name
-}
-
-greet("World")""" }"""" }
-
-demo {
-  codeblock { language = typescript, """function greet(name: string) {
+codeblock {
+  language = tiramisu,
+  """"
+codeblock { language = typescript, """function greet(name: string) {
   return "Hello, " + name
 }
 
 greet("World")""" }
+""""
+}
+
+demo {
+  codeblock {
+    language = typescript,
+    """
+function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")
+"""
+  }
 }
 
 The number of starting and ending quotes doesn't matter, as long as they match.
@@ -43,7 +64,10 @@ h2 { Loading Code from Files }
 
 Use code { readfile } to load source code from external files instead of embedding it:
 
-codeblock { language = tiramisu, """codeblock { language = csv, readfile { src = sample-data.csv } }""" }
+codeblock {
+  language = tiramisu,
+  "codeblock { language = csv, readfile { src = sample-data.csv } }"
+}
 
 This keeps your documentation in sync with actual source files. The path is relative to the code { .tiramisu } file.
 
@@ -53,7 +77,10 @@ Code blocks and tabbed code blocks automatically display a language icon in the 
 
 You can override the auto-detected icon with the code { icon } parameter:
 
-codeblock { language = tiramisu, """codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""" }
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""
+}
 
 The code { icon } parameter accepts any link { url = https://icon-sets.iconify.design/, Iconify } icon name.
 
@@ -61,17 +88,28 @@ h2 { Tabbed Code Blocks }
 
 Use code { codetabs } to group related code blocks with tab switching:
 
-codeblock { language = tiramisu, """codetabs { group = pkg,
-  codetab { label = bun, language = bash, "bun add my-package" },
+codeblock {
+  language = tiramisu,
+  """
+codetabs { group = pkg,
+  codetab { label = bun, icon = simple-icons:bun, language = bash, "bun add my-package" },
   codetab { label = npm, language = bash, "npm install my-package" },
   codetab { label = yarn, language = bash, "yarn add my-package" }
-}""" }
+}
+"""
+}
 
 demo {
-  codetabs { group = pkg,
-    codetab { label = bun, language = bash, "bun add my-package" },
-    codetab { label = npm, language = bash, "npm install my-package" },
-    codetab { label = yarn, language = bash, "yarn add my-package" }
+  codetabs {
+    group = pkg,
+    codetab {
+      label = bun,
+      icon = simple-icons:bun,
+      language = bash,
+      bun add my-package
+    },
+    codetab { label = npm, language = bash, npm install my-package },
+    codetab { label = yarn, language = bash, yarn add my-package }
   }
 }
 

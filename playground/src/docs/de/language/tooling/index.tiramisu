@@ -9,8 +9,14 @@ Die Tiramisu-CLI (code { @timeleap/tiramisu }) stellt Befehle für die Arbeit mi
 
 h3 { Installation }
 
-codetabs { group = package-manager,
-  codetab { label = bun, language = bash, bun add -g @timeleap/tiramisu },
+codetabs {
+  group = package-manager,
+  codetab {
+    label = bun,
+    icon = simple-icons:bun,
+    language = bash,
+    bun add -g @timeleap/tiramisu
+  },
   codetab { label = npm, language = bash, npm install -g @timeleap/tiramisu },
   codetab { label = pnpm, language = bash, pnpm add -g @timeleap/tiramisu }
 }
@@ -23,6 +29,9 @@ h3 { Befehle }
 
 table {
   row = [bold { Befehl }, bold { Beschreibung }],
-  row = [code { tiramisu compile <file> }, Kompiliert eine code { .tiramisu }-Datei und gibt den AST als JSON aus],
+  row = [
+    code { tiramisu compile <file> },
+    Kompiliert eine code { .tiramisu }-Datei und gibt den AST als JSON aus
+  ],
   row = [code { tiramisu format }, Formatiert code { .tiramisu }-Dateien]
 }

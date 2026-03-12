@@ -1,44 +1,92 @@
-meta { title = Installation, description = Installez Tiramisu Docs via l'outil de création ou manuellement avec SvelteKit\, Vite et Tailwind CSS., order = 2, icon = download }
+meta {
+  title = Installation,
+  description = Installez Tiramisu Docs via l'outil de création ou manuellement avec SvelteKit\, Vite et Tailwind CSS.,
+  order = 2,
+  icon = download
+}
 
 h2 { Outil de création }
 
 Le moyen le plus rapide de commencer est d'utiliser l'outil de création :
 
-codetabs { group = package-manager,
-  codetab { label = bun, language = bash, "bun create tiramisu-docs my-docs" },
-  codetab { label = npm, language = bash, "npm create tiramisu-docs my-docs" },
-  codetab { label = pnpm, language = bash, "pnpm create tiramisu-docs my-docs" }
+codetabs {
+  group = package-manager,
+  codetab {
+    label = bun,
+    icon = simple-icons:bun,
+    language = bash,
+    bun create tiramisu-docs my-docs
+  },
+  codetab { label = npm, language = bash, npm create tiramisu-docs my-docs },
+  codetab { label = pnpm, language = bash, pnpm create tiramisu-docs my-docs }
 }
 
 L'outil de création vous posera des questions sur les sections et l'i18n. Une fois terminé :
 
-codetabs { group = package-manager,
-  codetab { label = bun, language = bash, """cd my-docs
+codetabs {
+  group = package-manager,
+  codetab {
+    label = bun,
+    icon = simple-icons:bun,
+    language = bash,
+    """
+cd my-docs
 bun install
-bun run dev""" },
-  codetab { label = npm, language = bash, """cd my-docs
+bun run dev
+"""
+  },
+  codetab {
+    label = npm,
+    language = bash,
+    """
+cd my-docs
 npm install
-npm run dev""" },
-  codetab { label = pnpm, language = bash, """cd my-docs
+npm run dev
+"""
+  },
+  codetab {
+    label = pnpm,
+    language = bash,
+    """
+cd my-docs
 pnpm install
-pnpm run dev""" }
+pnpm run dev
+"""
+  }
 }
 
 h2 { Installation manuelle }
 
-Si vous préférez tout configurer vous-même\, commencez par un projet SvelteKit et ajoutez les dépendances :
+Si vous préférez tout configurer vous-même, commencez par un projet SvelteKit et ajoutez les dépendances :
 
-codetabs { group = package-manager,
-  codetab { label = bun, language = bash, "bun add @tiramisu-docs/kit @timeleap/tiramisu" },
-  codetab { label = npm, language = bash, "npm install @tiramisu-docs/kit @timeleap/tiramisu" },
-  codetab { label = pnpm, language = bash, "pnpm add @tiramisu-docs/kit @timeleap/tiramisu" }
+codetabs {
+  group = package-manager,
+  codetab {
+    label = bun,
+    icon = simple-icons:bun,
+    language = bash,
+    bun add @tiramisu-docs/kit @timeleap/tiramisu
+  },
+  codetab {
+    label = npm,
+    language = bash,
+    npm install @tiramisu-docs/kit @timeleap/tiramisu
+  },
+  codetab {
+    label = pnpm,
+    language = bash,
+    pnpm add @tiramisu-docs/kit @timeleap/tiramisu
+  }
 }
 
 h3 { Configuration de Vite }
 
 Configurez le plugin Vite dans code { vite.config.ts } :
 
-codeblock { language = typescript, """import { sveltekit } from "@sveltejs/kit/vite"
+codeblock {
+  language = typescript,
+  """
+import { sveltekit } from "@sveltejs/kit/vite"
 import { tiramisuPlugin } from "@tiramisu-docs/kit/vite"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite"
@@ -47,27 +95,45 @@ import config from "./src/lib/tiramisu.config"
 export default defineConfig({
   plugins: [tiramisuPlugin({ config }), tailwindcss(), sveltekit()],
   resolve: { conditions: ["browser"] },
-})""" }
+})
+"""
+}
 
 h3 { Configuration de Tiramisu }
 
 Créez code { src/lib/tiramisu.config.ts } :
 
-codeblock { language = typescript, """import { defineConfig } from "@tiramisu-docs/kit"
+codeblock {
+  language = typescript,
+  """
+import { defineConfig } from "@tiramisu-docs/kit"
 
 export default defineConfig({
   title: "My Docs",
   description: "Documentation for my project",
   nav: [{ label: "Docs", href: "/docs" }],
-})""" }
+})
+"""
+}
 
 h3 { Configuration du thème }
 
 Importez le thème dans code { src/app.css } :
 
-codeblock { language = css, """@import "@tiramisu-docs/kit/styles/theme.css";
+codeblock {
+  language = css,
+  """
+@import "@tiramisu-docs/kit/styles/theme.css";
 @import "tailwindcss";
 
-@source "../node_modules/@tiramisu-docs/kit/src/lib";""" }
+@source "../node_modules/@tiramisu-docs/kit/src/lib";
+"""
+}
 
-callout { type = info, Consultez link { url = /docs/framework/customization/project-structure, Structure du projet } pour un aperçu complet de tous les fichiers et dossiers. }
+callout {
+  type = info,
+  Consultez link {
+    url = /docs/framework/customization/project-structure,
+    Structure du projet
+  } pour un aperçu complet de tous les fichiers et dossiers.
+}

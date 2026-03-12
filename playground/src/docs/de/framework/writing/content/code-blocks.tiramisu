@@ -1,49 +1,73 @@
-meta { title = Codeblöcke, description = Zeigen Sie syntaxhervorgehobenen Code mit Shiki an und nutzen Sie Tabs\, Datei-Imports und Sprach-Icons., order = 5, icon = code }
+meta {
+  title = Codeblöcke,
+  description = Zeigen Sie syntaxhervorgehobenen Code mit Shiki an und nutzen Sie Tabs\, Datei-Imports und Sprach-Icons.,
+  order = 5,
+  icon = code
+}
 
 Zeigen Sie syntaxhervorgehobenen Code mit der Funktion code { codeblock } an. Die Hervorhebung wird von Shiki bereitgestellt.
 
 h2 { Grundlegende Verwendung }
 
-codeblock { language = tiramisu, """codeblock { language = typescript, "const x = 42" }""" }
-
-demo {
-  codeblock { language = typescript, "const x = 42" }
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = typescript, "const x = 42" }""
 }
+
+demo { codeblock { language = typescript, "const x = 42" } }
 
 h2 { Mehrzeiliger Code }
 
 Einfache Anführungszeichen funktionieren auch für mehrzeiligen Code:
 
-codeblock { language = tiramisu, """codeblock { language = typescript, "function greet(name: string) {
+codeblock {
+  language = tiramisu,
+  """
+codeblock { language = typescript, "function greet(name: string) {
   return \\"Hello, \\" + name
 }
 
-greet(\\"World\\")" }""" }
-
-Alternativ können Sie Ihre Codebeispiele in mehrfache Anführungszeichen einschließen\, damit Sie code { \\ }
-zum Escaping nicht verwenden müssen:
-
-codeblock { language = tiramisu, """"codeblock { language = typescript, """function greet(name: string) {
-  return "Hello, " + name
+greet(\\"World\\")" }
+"""
 }
 
-greet("World")""" }"""" }
+Alternativ können Sie Ihre Codebeispiele in mehrfache Anführungszeichen einschließen, damit Sie code { \\ }
+zum Escaping nicht verwenden müssen:
 
-demo {
-  codeblock { language = typescript, """function greet(name: string) {
+codeblock {
+  language = tiramisu,
+  """"
+codeblock { language = typescript, """function greet(name: string) {
   return "Hello, " + name
 }
 
 greet("World")""" }
+""""
 }
 
-Die Anzahl der öffnenden und schließenden Anführungszeichen spielt keine Rolle\, solange sie übereinstimmen.
+demo {
+  codeblock {
+    language = typescript,
+    """
+function greet(name: string) {
+  return "Hello, " + name
+}
+
+greet("World")
+"""
+  }
+}
+
+Die Anzahl der öffnenden und schließenden Anführungszeichen spielt keine Rolle, solange sie übereinstimmen.
 
 h2 { Code aus Dateien laden }
 
-Verwenden Sie code { readfile }\, um Quellcode aus externen Dateien zu laden\, anstatt ihn einzubetten:
+Verwenden Sie code { readfile }, um Quellcode aus externen Dateien zu laden, anstatt ihn einzubetten:
 
-codeblock { language = tiramisu, """codeblock { language = csv, readfile { src = sample-data.csv } }""" }
+codeblock {
+  language = tiramisu,
+  "codeblock { language = csv, readfile { src = sample-data.csv } }"
+}
 
 Dies hält Ihre Dokumentation mit den tatsächlichen Quelldateien synchron. Der Pfad ist relativ zur code { .tiramisu }-Datei.
 
@@ -53,31 +77,45 @@ Codeblöcke und Codeblöcke mit Tabs zeigen automatisch ein Sprach-Icon in der K
 
 Sie können das automatisch erkannte Icon mit dem Parameter code { icon } überschreiben:
 
-codeblock { language = tiramisu, """codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""" }
+codeblock {
+  language = tiramisu,
+  ""codeblock { language = typescript, icon = "lucide:file-code", "const x = 42" }""
+}
 
 Der Parameter code { icon } akzeptiert jeden link { url = https://icon-sets.iconify.design/, Iconify }-Symbolnamen.
 
 h2 { Codeblöcke mit Tabs }
 
-Verwenden Sie code { codetabs }\, um zusammengehörige Codeblöcke mit Tab-Umschaltung zu gruppieren:
+Verwenden Sie code { codetabs }, um zusammengehörige Codeblöcke mit Tab-Umschaltung zu gruppieren:
 
-codeblock { language = tiramisu, """codetabs { group = pkg,
-  codetab { label = bun, language = bash, "bun add my-package" },
+codeblock {
+  language = tiramisu,
+  """
+codetabs { group = pkg,
+  codetab { label = bun, icon = simple-icons:bun, language = bash, "bun add my-package" },
   codetab { label = npm, language = bash, "npm install my-package" },
   codetab { label = yarn, language = bash, "yarn add my-package" }
-}""" }
+}
+"""
+}
 
 demo {
-  codetabs { group = pkg,
-    codetab { label = bun, language = bash, "bun add my-package" },
-    codetab { label = npm, language = bash, "npm install my-package" },
-    codetab { label = yarn, language = bash, "yarn add my-package" }
+  codetabs {
+    group = pkg,
+    codetab {
+      label = bun,
+      icon = simple-icons:bun,
+      language = bash,
+      bun add my-package
+    },
+    codetab { label = npm, language = bash, npm install my-package },
+    codetab { label = yarn, language = bash, yarn add my-package }
   }
 }
 
 h3 { Gruppen-Synchronisierung }
 
-Wenn mehrere Code-Tab-Gruppen denselben code { group }-Namen teilen\, wird durch die Auswahl eines Tabs in einer Gruppe automatisch der entsprechende Tab in allen anderen umgeschaltet — auch seitenübergreifend. Die Auswahl wird in code { localStorage } gespeichert.
+Wenn mehrere Code-Tab-Gruppen denselben code { group }-Namen teilen, wird durch die Auswahl eines Tabs in einer Gruppe automatisch der entsprechende Tab in allen anderen umgeschaltet — auch seitenübergreifend. Die Auswahl wird in code { localStorage } gespeichert.
 
 h2 { Unterstützte Sprachen }
 
