@@ -113,7 +113,7 @@
 <div class="flex h-full flex-col">
   <!-- Header: logo (hidden when TopBar handles it) -->
   {#if !hasSections}
-  <div class="flex h-14 shrink-0 items-center px-4 lg:px-6">
+  <div class="flex h-14 shrink-0 items-center px-4">
     <a href="/" class="flex items-center gap-2">
       {#if config.logo.light || config.logo.dark}
         <img src={config.logo.light} alt="" class="h-5 w-5 dark:hidden" />
@@ -126,7 +126,7 @@
 
   <!-- Search (hidden when TopBar has it) -->
   {#if !hasSections}
-  <div class="px-4 pb-4 lg:px-6">
+  <div class="px-4 pb-4">
     <button onclick={onSearchClick} class="flex h-8 w-full items-center gap-2 rounded-md border bg-muted/40 px-2.5 text-[13px] text-muted-foreground transition-colors hover:bg-muted">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 opacity-60">
         <circle cx="11" cy="11" r="8"></circle>
@@ -146,16 +146,28 @@
     <nav
       bind:this={navEl}
       onscroll={updateScroll}
-      class="h-full overflow-y-auto overscroll-contain px-4 pt-4 pb-4 lg:px-6"
+      class="h-full overflow-y-auto overscroll-contain px-4 pt-4 pb-4"
     >
       {#each groups as group}
         <div class="mb-5">
-          <h4 class="flex items-center gap-1.5 pl-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
-            {#if group.icon}
-              <iconify-icon icon={group.icon.includes(":") ? group.icon : `lucide:${group.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
-            {/if}
-            {group.label}
-          </h4>
+          {#if group.slug}
+            {@const href = docHref(group.slug)}
+            {@const active = $page.url.pathname === href}
+            <a {href} class="flex items-center gap-1.5 pl-2 text-[11px] font-semibold uppercase tracking-wider transition-colors
+              {active ? 'text-primary' : 'text-muted-foreground/70 hover:text-muted-foreground'}">
+              {#if group.icon}
+                <iconify-icon icon={group.icon.includes(":") ? group.icon : `lucide:${group.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+              {/if}
+              {group.label}
+            </a>
+          {:else}
+            <h4 class="flex items-center gap-1.5 pl-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+              {#if group.icon}
+                <iconify-icon icon={group.icon.includes(":") ? group.icon : `lucide:${group.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+              {/if}
+              {group.label}
+            </h4>
+          {/if}
           <div class="mt-1 space-y-0.5">
             {@render renderEntries(group.items, 0)}
           </div>
@@ -190,7 +202,7 @@
 
   <!-- Bottom bar (hidden when TopBar handles theme toggle) -->
   {#if !hasSections}
-  <div class="flex shrink-0 items-center gap-2 border-t px-4 py-3 lg:px-6">
+  <div class="flex shrink-0 items-center gap-2 border-t px-4 py-3">
     {#if locales?.length > 1}
       <select
         class="h-7 rounded-md border bg-background px-1.5 text-xs text-muted-foreground"

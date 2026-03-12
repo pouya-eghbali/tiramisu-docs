@@ -41,9 +41,12 @@
       <a
         href={docHref(entry.slug)}
         onclick={() => (mobileOpen = false)}
-        class="block rounded-md py-1.5 text-sm text-muted-foreground hover:text-foreground"
+        class="flex items-center gap-1.5 rounded-md py-1.5 text-sm text-muted-foreground hover:text-foreground"
         style:padding-left="{0.5 + depth * 0.75}rem"
       >
+        {#if entry.icon}
+          <iconify-icon icon={entry.icon.includes(":") ? entry.icon : `lucide:${entry.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+        {/if}
         {entry.title}
       </a>
     {:else}
@@ -53,18 +56,24 @@
           {#if entry.slug}
             <a
               href={docHref(entry.slug)}
-              class="text-sm font-medium transition-colors
+              class="flex items-center gap-1.5 text-sm font-medium transition-colors
                 {subActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}"
               style:padding-left="{0.5 + depth * 0.75}rem"
               onclick={(e: MouseEvent) => { e.stopPropagation(); mobileOpen = false; }}
             >
+              {#if entry.icon}
+                <iconify-icon icon={entry.icon.includes(":") ? entry.icon : `lucide:${entry.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+              {/if}
               {entry.label}
             </a>
           {:else}
             <span
-              class="text-sm font-medium text-muted-foreground"
+              class="flex items-center gap-1.5 text-sm font-medium text-muted-foreground"
               style:padding-left="{0.5 + depth * 0.75}rem"
             >
+              {#if entry.icon}
+                <iconify-icon icon={entry.icon.includes(":") ? entry.icon : `lucide:${entry.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+              {/if}
               {entry.label}
             </span>
           {/if}
@@ -106,7 +115,15 @@
     <ScrollArea class="h-[calc(100vh-8rem)]">
       {#each sidebar as group}
         <div class="mb-4">
-          <h4 class="mb-1 px-2 text-sm font-semibold text-foreground">{group.label}</h4>
+          {#if group.slug}
+            <a
+              href={docHref(group.slug)}
+              onclick={() => (mobileOpen = false)}
+              class="mb-1 block px-2 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+            >{group.label}</a>
+          {:else}
+            <h4 class="mb-1 px-2 text-sm font-semibold text-foreground">{group.label}</h4>
+          {/if}
           <div class="space-y-0.5">
             {@render renderMobileEntries(group.items, 0)}
           </div>

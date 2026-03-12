@@ -57,7 +57,7 @@
     </div>
 
     {#if copyright}
-      <p class="mt-4 text-center text-xs text-muted-foreground">{copyright}</p>
+      <p class="mt-4 text-xs text-muted-foreground">{copyright}</p>
     {/if}
   </div>
 </footer>

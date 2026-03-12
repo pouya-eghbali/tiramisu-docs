@@ -62,18 +62,19 @@ const TIRAMISU_SVELTE_SUFFIX = ".tiramisu.svelte"
 
 export function buildSidebarTree(
   docs: { slug: string; meta: DocMeta }[],
-  groupOrder: string[] = []
+  groupOrder: string[] = [],
+  options?: { stripPrefix?: string; defaultGroup?: string }
 ): SidebarGroup[] {
-  const groupMap = new Map<string, { label: string; items: SidebarEntry[]; icon?: string }>()
+  const groupMap = new Map<string, { label: string; items: SidebarEntry[]; icon?: string; slug?: string; order: number }>()
 
-  function getOrCreateGroup(label: string): { label: string; items: SidebarEntry[]; icon?: string } {
+  function getOrCreateGroup(label: string): { label: string; items: SidebarEntry[]; icon?: string; slug?: string; order: number } {
     // Normalize lookup: case-insensitive match against existing groups
     for (const [key, group] of groupMap) {
       if (key.toLowerCase() === label.toLowerCase()) {
         return group
       }
     }
-    const group = { label, items: [] as SidebarEntry[] }
+    const group = { label, items: [] as SidebarEntry[], order: 999 }
     groupMap.set(label, group)
     return group
   }
@@ -99,8 +100,16 @@ export function buildSidebarTree(
     return sub
   }
 
+  const prefix = options?.stripPrefix
+
   for (const doc of docs) {
-    const segments = doc.slug.split("/")
+    // Compute treePath for grouping, but keep original slug for routing
+    const treePath = prefix
+      ? (doc.slug === prefix ? "index"
+         : doc.slug.startsWith(prefix + "/") ? doc.slug.slice(prefix.length + 1)
+         : doc.slug)
+      : doc.slug
+    const segments = treePath.split("/")
     const item: SidebarItem = {
       type: "item",
       title: doc.meta.title ?? doc.slug,
@@ -110,8 +119,12 @@ export function buildSidebarTree(
     }
 
     if (segments.length === 1) {
-      // Root-level file: use meta.group
-      const groupLabel = doc.meta.group ?? "Docs"
+      if (prefix && treePath === "index") {
+        // Section root index — skip as sidebar item (it's the section overview page)
+        continue
+      }
+      // Root-level file: use meta.group or defaultGroup
+      const groupLabel = doc.meta.group ?? options?.defaultGroup ?? "Docs"
       const group = getOrCreateGroup(groupLabel)
       group.items.push(item)
     } else {
@@ -131,16 +144,16 @@ export function buildSidebarTree(
 
       if (fileName === "index" && lastSub) {
         // Deeper folder index → sets subgroup slug/label
-        lastSub.slug = item.slug
+        lastSub.slug = item.slug.replace(/\/index$/, "")
         if (item.order < lastSub.order) lastSub.order = item.order
         if (item.title !== item.slug) lastSub.label = item.title
         if (doc.meta.icon) lastSub.icon = doc.meta.icon
       } else if (fileName === "index" && !lastSub) {
-        // Top-level folder index (e.g. "integrations/index") → sets group label only
-        if (item.title !== item.slug) {
-          group.label = item.title
-        }
+        // Top-level folder index (e.g. "getting-started/index") → make group header clickable
+        group.slug = item.slug.replace(/\/index$/, "")
+        if (doc.meta.group) group.label = doc.meta.group
         if (doc.meta.icon) group.icon = doc.meta.icon
+        if (item.order < group.order) group.order = item.order
       } else {
         parent.push(item)
       }
@@ -172,19 +185,24 @@ export function buildSidebarTree(
   const sidebar: SidebarGroup[] = []
   for (const [, group] of groupMap) {
     sortEntries(group.items)
-    sidebar.push({ label: group.label, items: group.items, icon: group.icon })
+    sidebar.push({ label: group.label, items: group.items, icon: group.icon, slug: group.slug })
   }
 
-  // Sort groups by groupOrder config
-  if (groupOrder.length > 0) {
-    sidebar.sort((a, b) => {
+  // Build order lookup from internal group objects (keyed by final label)
+  const groupOrderMap = new Map<string, number>()
+  for (const [, g] of groupMap) groupOrderMap.set(g.label, g.order)
+
+  // Sort groups by groupOrder config, then by internal order
+  sidebar.sort((a, b) => {
+    if (groupOrder.length > 0) {
       const ai = groupOrder.indexOf(a.label)
       const bi = groupOrder.indexOf(b.label)
       const ao = ai === -1 ? Infinity : ai
       const bo = bi === -1 ? Infinity : bi
-      return ao - bo
-    })
-  }
+      if (ao !== bo) return ao - bo
+    }
+    return (groupOrderMap.get(a.label) ?? 999) - (groupOrderMap.get(b.label) ?? 999)
+  })
 
   return sidebar
 }
@@ -193,7 +211,8 @@ export function buildSidebarTree(
 export function buildSectionSidebars(
   docs: { slug: string; meta: DocMeta }[],
   sections: SectionConfig[],
-  implicitLabel?: string
+  implicitLabel?: string,
+  groupOrder: string[] = []
 ): ResolvedSection[] {
   const allSectionPaths = flattenSectionPaths(sections)
   const rootDocs = docs.filter(
@@ -205,12 +224,12 @@ export function buildSectionSidebars(
   if (rootDocs.length > 0) {
     result.push({
       label: implicitLabel ?? "Docs",
-      sidebar: buildSidebarTree(rootDocs),
+      sidebar: buildSidebarTree(rootDocs, groupOrder),
     })
   }
 
   for (const section of sections) {
-    result.push(resolveSection(docs, section))
+    result.push(resolveSection(docs, section, groupOrder))
   }
 
   return result
@@ -227,7 +246,8 @@ function flattenSectionPaths(sections: SectionConfig[]): string[] {
 
 function resolveSection(
   docs: { slug: string; meta: DocMeta }[],
-  section: SectionConfig
+  section: SectionConfig,
+  groupOrder: string[] = []
 ): ResolvedSection {
   if (section.href) {
     return { label: section.label, href: section.href, icon: section.icon }
@@ -236,13 +256,16 @@ function resolveSection(
     return {
       label: section.label,
       icon: section.icon,
-      children: section.children.map((c) => resolveSection(docs, c)),
+      children: section.children.map((c) => resolveSection(docs, c, groupOrder)),
     }
   }
   const sectionDocs = docs
     .filter((d) => d.slug === section.path || d.slug.startsWith(section.path + "/"))
 
-  const sidebar = buildSidebarTree(sectionDocs)
+  const sidebar = buildSidebarTree(sectionDocs, groupOrder, {
+    stripPrefix: section.path,
+    defaultGroup: section.label,
+  })
 
   return {
     label: section.label,
@@ -339,7 +362,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
       const localeBlocks = config.i18n.locales.map((locale) => {
         const localeDocs = localeData[locale.code].docs
         const localeSections = config.sections
-          ? buildSectionSidebars(localeDocs, config.sections, config.title)
+          ? buildSectionSidebars(localeDocs, config.sections, config.title, groupOrder)
           : undefined
         const localeSidebar = buildSidebarTree(localeDocs, groupOrder)
 
@@ -390,7 +413,7 @@ export function tiramisuPlugin(options: TiramisuPluginOptions = {}): Plugin {
     }
 
     if (config?.sections) {
-      const resolvedSections = buildSectionSidebars(docs, config.sections, config.title)
+      const resolvedSections = buildSectionSidebars(docs, config.sections, config.title, groupOrder)
       return [
 
         `export const locales = undefined;`,

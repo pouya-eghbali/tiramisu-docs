@@ -25,6 +25,7 @@ export interface SidebarGroup {
   label: string
   items: SidebarEntry[]
   icon?: string
+  slug?: string
 }
 
 export interface VirtualDoc {

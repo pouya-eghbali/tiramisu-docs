@@ -49,7 +49,7 @@
   })
 </script>
 
-<div class="min-h-screen bg-background text-foreground">
+<div class="flex min-h-screen flex-col bg-background text-foreground">
   {#if hasSections}
     <TopBar
       {config}
@@ -70,7 +70,7 @@
     </div>
   {/if}
 
-  <div class="mx-auto flex max-w-[90rem]">
+  <div class="mx-auto flex w-full flex-1 max-w-[90rem]">
     <!-- Sidebar (desktop) -->
     <aside class="relative hidden w-[15rem] shrink-0 border-r lg:block">
       <div class="absolute inset-0 bg-card" style="left: -100vw; width: calc(100% + 100vw);"></div>
@@ -79,12 +79,15 @@
       </div>
     </aside>
 
-    <!-- Main content area -->
-    <main class="min-w-0 flex-1 px-6 py-10 lg:px-10 xl:px-14">
-      <div class="mx-auto max-w-3xl">
-        {@render children()}
-      </div>
-    </main>
+    <!-- Main content + footer column -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <main class="flex-1 px-6 py-10 lg:px-10 xl:px-14">
+        <div class="mx-auto max-w-3xl">
+          {@render children()}
+        </div>
+      </main>
+      <PageFooter {config} />
+    </div>
 
     <!-- Table of contents -->
     {#if headings?.length}
@@ -95,8 +98,6 @@
       </aside>
     {/if}
   </div>
-
-  <PageFooter {config} />
 </div>
 
 <SearchDialog bind:open={searchOpen} {locale} />
@@ -108,17 +109,25 @@
       <a
         href={docHref(entry.slug)}
         onclick={() => (mobileOpen = false)}
-        class="block rounded-md py-1.5 text-sm text-muted-foreground hover:text-foreground"
+        class="flex items-center gap-1.5 rounded-md py-1.5 text-sm text-muted-foreground hover:text-foreground"
         style:padding-left="{0.5 + depth * 0.75}rem"
       >
+        {#if entry.icon}
+          <iconify-icon icon={entry.icon.includes(":") ? entry.icon : `lucide:${entry.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+        {/if}
         {entry.title}
       </a>
     {:else if entry.type === "subgroup"}
       <div class="mt-2 mb-1">
         <h5
-          class="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+          class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
           style:padding-left="{0.5 + depth * 0.75}rem"
-        >{entry.label}</h5>
+        >
+          {#if entry.icon}
+            <iconify-icon icon={entry.icon.includes(":") ? entry.icon : `lucide:${entry.icon}`} width="14" height="14" class="shrink-0"></iconify-icon>
+          {/if}
+          {entry.label}
+        </h5>
         <div class="mt-0.5 space-y-0.5">
           {@render renderMobileEntries(entry.items, depth + 1)}
         </div>
@@ -133,7 +142,15 @@
       <ScrollArea class="h-[calc(100vh-8rem)]">
         {#each sidebar as group}
           <div class="mb-4">
-            <h4 class="mb-1 px-2 text-sm font-semibold text-foreground">{group.label}</h4>
+            {#if group.slug}
+              <a
+                href={docHref(group.slug)}
+                onclick={() => (mobileOpen = false)}
+                class="mb-1 block px-2 text-sm font-semibold text-foreground hover:text-primary transition-colors"
+              >{group.label}</a>
+            {:else}
+              <h4 class="mb-1 px-2 text-sm font-semibold text-foreground">{group.label}</h4>
+            {/if}
             <div class="space-y-0.5">
               {@render renderMobileEntries(group.items, 0)}
             </div>

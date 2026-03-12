@@ -39,9 +39,9 @@ describe("buildSidebarTree", () => {
     ]
     const result = buildSidebarTree(docs)
     expect(result).toHaveLength(1)
-    // Index page title becomes the group label; group has no slug
-    expect(result[0].label).toBe("Introduction")
-    expect(result[0]).not.toHaveProperty("slug")
+    // Group label is titleCase of folder name; index page sets group.slug
+    expect(result[0].label).toBe("Getting Started")
+    expect(result[0].slug).toBe("getting-started")
     // Non-index files are direct items in the group
     expect(result[0].items).toHaveLength(1)
     expect((result[0].items[0] as SidebarItem).title).toBe("Quick Start")
@@ -119,6 +119,7 @@ describe("buildSidebarTree", () => {
     ]
     const result = buildSidebarTree(docs)
     expect(result[0].icon).toBe("compass")
+    expect(result[0].slug).toBe("guide")
   })
 
   it("propagates icon from subfolder index to subgroup", () => {
@@ -156,11 +157,91 @@ describe("buildSidebarTree", () => {
     const result = buildSidebarTree(docs)
     const subgroup = result[0].items[0] as SidebarSubgroup
     expect(subgroup.type).toBe("subgroup")
-    expect(subgroup.slug).toBe("guide/advanced/index")
+    expect(subgroup.slug).toBe("guide/advanced")
     expect(subgroup.label).toBe("Advanced Guide")
     expect(subgroup.order).toBe(1)
     expect(subgroup.items).toHaveLength(1)
     expect((subgroup.items[0] as SidebarItem).title).toBe("Tips")
+  })
+
+  it("stripPrefix promotes subfolders to top-level groups", () => {
+    const docs = [
+      { slug: "framework/getting-started/index", meta: { title: "Intro", order: 1 } },
+      { slug: "framework/getting-started/install", meta: { title: "Install", order: 2 } },
+      { slug: "framework/writing/page-meta", meta: { title: "Page Meta", order: 1 } },
+    ]
+    const result = buildSidebarTree(docs, [], { stripPrefix: "framework" })
+    expect(result).toHaveLength(2)
+    // "getting-started" becomes a top-level group
+    const gs = result.find(g => g.label === "Getting Started")!
+    expect(gs).toBeDefined()
+    expect(gs.slug).toBe("framework/getting-started")
+    expect(gs.items).toHaveLength(1)
+    expect((gs.items[0] as SidebarItem).title).toBe("Install")
+    expect((gs.items[0] as SidebarItem).slug).toBe("framework/getting-started/install")
+    // "writing" becomes a top-level group
+    const wr = result.find(g => g.label === "Writing")!
+    expect(wr).toBeDefined()
+    expect(wr.items).toHaveLength(1)
+  })
+
+  it("defaultGroup is used for root-level files after prefix stripping", () => {
+    const docs = [
+      { slug: "framework/overview", meta: { title: "Overview", order: 1 } },
+    ]
+    const result = buildSidebarTree(docs, [], { stripPrefix: "framework", defaultGroup: "Framework" })
+    expect(result).toHaveLength(1)
+    expect(result[0].label).toBe("Framework")
+    expect(result[0].items).toHaveLength(1)
+  })
+
+  it("section root index is skipped as an item", () => {
+    const docs = [
+      { slug: "framework/index", meta: { title: "Framework Home", order: 0 } },
+      { slug: "framework/setup", meta: { title: "Setup", order: 1 } },
+    ]
+    const result = buildSidebarTree(docs, [], { stripPrefix: "framework", defaultGroup: "Framework" })
+    // "index" after stripping → skipped; "setup" is root-level → defaultGroup
+    expect(result).toHaveLength(1)
+    expect(result[0].label).toBe("Framework")
+    expect(result[0].items).toHaveLength(1)
+    expect((result[0].items[0] as SidebarItem).title).toBe("Setup")
+  })
+
+  it("group label uses meta.group from index (explicit override)", () => {
+    const docs = [
+      { slug: "getting-started/index", meta: { title: "Welcome!", order: 1, group: "Quick Start" } },
+      { slug: "getting-started/install", meta: { title: "Install", order: 2 } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect(result).toHaveLength(1)
+    // meta.group overrides titleCase(folder)
+    expect(result[0].label).toBe("Quick Start")
+    expect(result[0].slug).toBe("getting-started")
+  })
+
+  it("group label defaults to titleCase(folder) when index has no meta.group", () => {
+    const docs = [
+      { slug: "getting-started/index", meta: { title: "What is Tiramisu?", order: 1 } },
+      { slug: "getting-started/install", meta: { title: "Install", order: 2 } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect(result).toHaveLength(1)
+    // No meta.group → titleCase of folder name, NOT meta.title
+    expect(result[0].label).toBe("Getting Started")
+  })
+
+  it("groups sort by index page order", () => {
+    const docs = [
+      { slug: "customization/index", meta: { title: "Customization", order: 4 } },
+      { slug: "customization/themes", meta: { title: "Themes", order: 1 } },
+      { slug: "getting-started/index", meta: { title: "Getting Started", order: 1 } },
+      { slug: "getting-started/install", meta: { title: "Install", order: 1 } },
+    ]
+    const result = buildSidebarTree(docs)
+    expect(result).toHaveLength(2)
+    expect(result[0].label).toBe("Getting Started")
+    expect(result[1].label).toBe("Customization")
   })
 })
 
@@ -178,10 +259,13 @@ describe("buildSectionSidebars", () => {
     const result = buildSectionSidebars(docs, sections)
     expect(result).toHaveLength(2)
     expect(result[0].label).toBe("Guides")
+    // After prefix stripping, "intro" and "advanced" are root-level → defaultGroup "Guides"
     expect(result[0].sidebar).toHaveLength(1)
+    expect(result[0].sidebar![0].label).toBe("Guides")
     expect(result[0].sidebar![0].items).toHaveLength(2)
     expect(result[1].label).toBe("API")
     expect(result[1].sidebar).toHaveLength(1)
+    expect(result[1].sidebar![0].label).toBe("API")
   })
 
   it("root-level docs go into implicit section", () => {
@@ -215,13 +299,13 @@ describe("buildSectionSidebars", () => {
     expect(result[0].children![1].sidebar).toHaveLength(1)
   })
 
-  it("nested docs within a section preserve full hierarchy (no prefix stripping)", () => {
+  it("section prefix stripping promotes subfolders to groups", () => {
     const docs = [
       { slug: "writing/index", meta: { title: "Writing", order: 1 } },
-      { slug: "writing/markup-basics", meta: { title: "Markup Basics", order: 2 } },
+      { slug: "writing/markup-basics", meta: { title: "Markup Basics", order: 2, group: "Basics" } },
       { slug: "writing/content/index", meta: { title: "Content", order: 3 } },
       { slug: "writing/content/code-blocks", meta: { title: "Code Blocks", order: 4 } },
-      { slug: "writing/page-meta", meta: { title: "Page Meta", order: 5 } },
+      { slug: "writing/page-meta", meta: { title: "Page Meta", order: 5, group: "Basics" } },
     ]
     const sections = [{ label: "Writing", path: "writing" }]
     const result = buildSectionSidebars(docs, sections)
@@ -229,29 +313,25 @@ describe("buildSectionSidebars", () => {
     expect(result[0].label).toBe("Writing")
 
     const sidebar = result[0].sidebar!
-    expect(sidebar).toHaveLength(1)
+    // After prefix stripping: "writing/" removed
+    // - "index" → section root (skipped)
+    // - "markup-basics" → root-level with group "Basics"
+    // - "content/index" → group "Content" with slug
+    // - "content/code-blocks" → item in "Content" group
+    // - "page-meta" → root-level with group "Basics"
+    expect(sidebar).toHaveLength(2) // "Basics" and "Content" groups
 
-    const group = sidebar[0]
-    expect(group.label).toBe("Writing")
-    // Should have: Markup Basics (item), Content (subgroup), Page Meta (item)
-    expect(group.items).toHaveLength(3)
+    const basicsGroup = sidebar.find(g => g.label === "Basics")!
+    expect(basicsGroup).toBeDefined()
+    expect(basicsGroup.items).toHaveLength(2)
+    expect((basicsGroup.items[0] as SidebarItem).title).toBe("Markup Basics")
+    expect((basicsGroup.items[0] as SidebarItem).slug).toBe("writing/markup-basics")
 
-    const markupBasics = group.items[0] as SidebarItem
-    expect(markupBasics.type).toBe("item")
-    expect(markupBasics.title).toBe("Markup Basics")
-    expect(markupBasics.slug).toBe("writing/markup-basics")
-
-    const contentSubgroup = group.items[1] as SidebarSubgroup
-    expect(contentSubgroup.type).toBe("subgroup")
-    expect(contentSubgroup.label).toBe("Content")
-    expect(contentSubgroup.slug).toBe("writing/content/index")
-    expect(contentSubgroup.items).toHaveLength(1)
-    expect((contentSubgroup.items[0] as SidebarItem).slug).toBe("writing/content/code-blocks")
-
-    const pageMeta = group.items[2] as SidebarItem
-    expect(pageMeta.type).toBe("item")
-    expect(pageMeta.title).toBe("Page Meta")
-    expect(pageMeta.slug).toBe("writing/page-meta")
+    const contentGroup = sidebar.find(g => g.label === "Content")!
+    expect(contentGroup).toBeDefined()
+    expect(contentGroup.slug).toBe("writing/content")
+    expect(contentGroup.items).toHaveLength(1)
+    expect((contentGroup.items[0] as SidebarItem).slug).toBe("writing/content/code-blocks")
   })
 
   it("external href sections have no sidebar", () => {
