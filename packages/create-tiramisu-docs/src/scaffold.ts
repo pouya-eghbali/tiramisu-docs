@@ -83,6 +83,7 @@ function packageJson(name: string): GeneratedFile {
     devDependencies: {
       "@sveltejs/adapter-auto": "^7.0.1",
       "@sveltejs/kit": "^2.53.4",
+      "@sveltejs/vite-plugin-svelte": "^6.2.4",
       svelte: "^5.0.0",
       vite: "^7.3.1",
       tailwindcss: "^4.0.0",
