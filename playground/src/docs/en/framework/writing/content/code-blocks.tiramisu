@@ -1,4 +1,4 @@
-meta { title = Code Blocks, order = 5, icon = code }
+meta { title = Code Blocks, description = Display syntax-highlighted code with Shiki\, tabbed code blocks\, language icons\, and file imports., order = 5, icon = code }
 
 Display syntax-highlighted code using the code { codeblock } function. Highlighting is powered by Shiki.
 

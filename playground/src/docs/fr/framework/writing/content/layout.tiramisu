@@ -1,4 +1,4 @@
-meta { title = Mise en page, order = 8, icon = columns-3 }
+meta { title = Mise en page, description = Organisez votre contenu avec des colonnes côte à côte et des conteneurs de démonstration., order = 8, icon = columns-3 }
 
 Composants pour organiser le contenu sur la page.
 

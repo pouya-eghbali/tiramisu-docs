@@ -1,4 +1,4 @@
-meta { title = Bases du balisage, order = 2, icon = text }
+meta { title = Bases du balisage, description = Maîtrisez les appels de fonctions\, la mise en forme en ligne\, les liens\, les titres et l'imbrication dans Tiramisu., order = 2, icon = text }
 
 Tiramisu utilise une syntaxe d'appels de fonctions pour tout contenu structuré. Le texte brut en dehors des appels de fonctions devient du contenu de paragraphe.
 

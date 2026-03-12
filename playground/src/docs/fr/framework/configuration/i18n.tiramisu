@@ -1,5 +1,6 @@
 meta {
   title = Internationalisation,
+  description = Configurez le support multilingue avec le routage par langue\, le repli automatique et le sélecteur de langue.,
   order = 4,
   icon = globe
 }

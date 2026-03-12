@@ -1,4 +1,4 @@
-meta { title = Quick Start, order = 3, icon = zap }
+meta { title = Quick Start, description = Create your first documentation page\, understand meta blocks\, and learn file-based routing., order = 3, icon = zap }
 
 Once you have a project set up, create your first documentation page.
 

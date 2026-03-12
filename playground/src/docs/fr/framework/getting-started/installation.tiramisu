@@ -1,4 +1,4 @@
-meta { title = Installation, order = 2, icon = download }
+meta { title = Installation, description = Installez Tiramisu Docs via l'outil de création ou manuellement avec SvelteKit\, Vite et Tailwind CSS., order = 2, icon = download }
 
 h2 { Outil de création }
 

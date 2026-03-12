@@ -1,5 +1,6 @@
 meta {
   title = Design,
+  description = Passen Sie Logo\, Navigationslinks\, Dunkelmodus und CSS-Theme Ihrer Dokumentation an.,
   order = 6,
   icon = paintbrush
 }

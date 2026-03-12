@@ -1,5 +1,6 @@
 meta {
   title = AST Overview,
+  description = Explore the Tiramisu AST node types\, structure\, and how to work with parsed documents.,
   order = 3,
   icon = cpu
 }

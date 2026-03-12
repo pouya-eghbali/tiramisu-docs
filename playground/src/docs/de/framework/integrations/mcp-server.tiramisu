@@ -1,5 +1,6 @@
 meta {
   title = MCP Server,
+  description = Aktivieren Sie den eingebauten MCP-Server\, damit KI-Tools Ihre Dokumentation durchsuchen können.,
   order = 3,
   icon = server
 }

@@ -1,5 +1,6 @@
 meta {
   title = Integrations,
+  description = Explore built-in integrations for SEO\, AI assistants\, and machine-readable documentation.,
   order = 5,
   icon = plug
 }

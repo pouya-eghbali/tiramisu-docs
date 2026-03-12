@@ -1,4 +1,4 @@
-meta { title = VSCode Extension, order = 4, icon = code }
+meta { title = VSCode Extension, description = Get syntax highlighting\, bracket matching\, and comment toggling for .tiramisu files in VSCode., order = 4, icon = code }
 
 The Tiramisu VSCode extension adds first-class editor support for code { .tiramisu } files, including syntax highlighting and language configuration.
 

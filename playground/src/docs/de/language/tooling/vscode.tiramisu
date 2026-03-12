@@ -1,4 +1,4 @@
-meta { title = VSCode-Erweiterung, order = 4, icon = code }
+meta { title = VSCode-Erweiterung, description = Installieren Sie die VSCode-Erweiterung für Syntaxhervorhebung und Editor-Unterstützung von .tiramisu-Dateien., order = 4, icon = code }
 
 Die Tiramisu-VSCode-Erweiterung bietet erstklassige Editor-Unterstützung für code { .tiramisu }-Dateien\, einschließlich Syntaxhervorhebung und Sprachkonfiguration.
 

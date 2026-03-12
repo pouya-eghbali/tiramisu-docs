@@ -1,4 +1,4 @@
-meta { title = Writing, order = 2, icon = pen-line }
+meta { title = Writing, description = Learn how to create documentation pages with file-based routing\, folder structure\, and meta blocks., order = 2, icon = pen-line }
 
 Documentation pages are code { .tiramisu } files inside the code { src/docs/ } directory. Each file becomes a page on your site.
 

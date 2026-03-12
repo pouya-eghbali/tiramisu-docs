@@ -1,5 +1,6 @@
 meta {
   title = Serveur MCP,
+  description = Activez le serveur MCP intégré pour permettre à Claude\, Cursor et VSCode de parcourir votre documentation.,
   order = 3,
   icon = server
 }

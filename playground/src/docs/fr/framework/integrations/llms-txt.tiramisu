@@ -1,5 +1,6 @@
 meta {
   title = llms.txt,
+  description = Générez des fichiers llms.txt\, llms-full.txt et skill.md pour rendre votre documentation lisible par les IA.,
   order = 4,
   icon = bot
 }

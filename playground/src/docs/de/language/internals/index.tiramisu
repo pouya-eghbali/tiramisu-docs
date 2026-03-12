@@ -1,5 +1,6 @@
 meta {
   title = AST-Überblick,
+  description = Verstehen Sie den Abstract Syntax Tree des Tiramisu-Parsers mit allen Knotentypen und ihrer Struktur.,
   order = 3,
   icon = cpu
 }

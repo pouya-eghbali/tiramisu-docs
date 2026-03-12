@@ -1,4 +1,4 @@
-meta { title = Parameter, order = 3, icon = sliders-horizontal }
+meta { title = Parameter, description = Verstehen Sie Positions-\, benannte und Array-Parameter in Tiramisu-Funktionsaufrufen., order = 3, icon = sliders-horizontal }
 
 Funktionsaufrufe in Tiramisu können Parameter annehmen. Parameter werden durch Kommas getrennt und kommen in drei Formen vor: Positions-\, benannte und Array-Parameter.
 

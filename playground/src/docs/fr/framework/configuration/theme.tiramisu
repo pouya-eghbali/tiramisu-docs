@@ -1,5 +1,6 @@
 meta {
   title = Thème,
+  description = Personnalisez le logo\, la navigation\, le mode sombre\, l'intégration GitHub et les styles CSS de votre site.,
   order = 6,
   icon = paintbrush
 }

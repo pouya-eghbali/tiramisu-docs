@@ -1,5 +1,6 @@
 meta {
   title = Personnalisation,
+  description = Adaptez Tiramisu Docs à votre marque avec des composants personnalisés et une structure de projet flexible.,
   order = 4,
   icon = palette
 }

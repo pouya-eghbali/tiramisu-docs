@@ -1,4 +1,4 @@
-meta { title = Schreiben, order = 2, icon = pen-line }
+meta { title = Schreiben, description = Erfahren Sie\, wie Dokumentationsseiten aufgebaut sind und wie dateibasiertes Routing funktioniert., order = 2, icon = pen-line }
 
 Dokumentationsseiten sind code { .tiramisu }-Dateien im Verzeichnis code { src/docs/ }. Jede Datei wird zu einer Seite auf Ihrer Website.
 

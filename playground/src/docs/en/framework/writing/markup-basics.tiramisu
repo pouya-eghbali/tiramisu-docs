@@ -1,4 +1,4 @@
-meta { title = Markup Basics, order = 2, icon = text }
+meta { title = Markup Basics, description = Learn Tiramisu's function-call syntax for headings\, inline formatting\, links\, and nested content., order = 2, icon = text }
 
 Tiramisu uses a function-call syntax for all structured content. Plain text outside function calls becomes paragraph content.
 

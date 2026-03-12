@@ -1,4 +1,4 @@
-meta { title = Syntaxe, order = 2, icon = braces }
+meta { title = Syntaxe, description = Comprenez la syntaxe fondamentale de Tiramisu : appels de fonctions\, imbrication\, paragraphes et échappement., order = 2, icon = braces }
 
 Tiramisu possède une seule construction fondamentale : l'bold { appel de fonction }.
 

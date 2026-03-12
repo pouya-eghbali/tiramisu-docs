@@ -1,5 +1,6 @@
 meta {
   title = What is Tiramisu?,
+  description = Understand Tiramisu's core principles: a composable\, output-agnostic markup language built on function calls.,
   order = 1,
   icon = graduation-cap
 }

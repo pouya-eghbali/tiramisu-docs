@@ -1,4 +1,4 @@
-meta { title = Syntax, order = 2, icon = braces }
+meta { title = Syntax, description = Lernen Sie die grundlegende Tiramisu-Syntax: Funktionsaufrufe\, Verschachtelung\, Absätze und Escaping., order = 2, icon = braces }
 
 Tiramisu hat ein grundlegendes Konstrukt: den bold { Funktionsaufruf }.
 

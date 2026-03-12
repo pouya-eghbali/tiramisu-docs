@@ -1,4 +1,4 @@
-meta { title = Reichhaltige Inhalte, order = 6, icon = sparkles }
+meta { title = Reichhaltige Inhalte, description = Nutzen Sie Hinweise\, Schritte\, Tabs\, Akkordeons\, Badges und weitere interaktive Komponenten., order = 6, icon = sparkles }
 
 Eingebaute Komponenten für interaktive und hervorgehobene Inhalte.
 

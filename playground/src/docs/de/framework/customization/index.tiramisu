@@ -1,5 +1,6 @@
 meta {
   title = Anpassung,
+  description = Übersicht der Anpassungsmöglichkeiten: eigene Komponenten\, Projektstruktur und visuelles Erscheinungsbild.,
   order = 4,
   icon = palette
 }

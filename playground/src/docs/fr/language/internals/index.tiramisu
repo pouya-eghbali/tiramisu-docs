@@ -1,5 +1,6 @@
 meta {
   title = Vue d'ensemble de l'AST,
+  description = Explorez les types de nœuds de l'arbre syntaxique abstrait produit par le parseur Tiramisu.,
   order = 3,
   icon = cpu
 }

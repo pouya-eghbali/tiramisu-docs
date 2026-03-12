@@ -1,5 +1,6 @@
 meta {
   title = Qu'est-ce que Tiramisu ?,
+  description = Découvrez Tiramisu\, un langage de balisage basé sur les appels de fonctions\, indépendant du format de sortie.,
   order = 1,
   icon = graduation-cap
 }

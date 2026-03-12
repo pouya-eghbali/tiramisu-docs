@@ -1,5 +1,6 @@
 meta {
   title = Theme,
+  description = Customize logos\, navigation links\, GitHub integration\, dark mode\, and CSS in Tiramisu Docs.,
   order = 6,
   icon = paintbrush
 }

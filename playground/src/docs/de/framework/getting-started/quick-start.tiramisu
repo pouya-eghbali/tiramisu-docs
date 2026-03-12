@@ -1,4 +1,4 @@
-meta { title = Schnellstart, order = 3, icon = zap }
+meta { title = Schnellstart, description = Erstellen Sie Ihre erste Dokumentationsseite und lernen Sie Meta-Blöcke und dateibasiertes Routing kennen., order = 3, icon = zap }
 
 Sobald Sie ein Projekt eingerichtet haben\, erstellen Sie Ihre erste Dokumentationsseite.
 

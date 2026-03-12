@@ -1,5 +1,6 @@
 meta {
   title = Intégrations,
+  description = Intégrez Tiramisu Docs avec le SEO\, le serveur MCP et llms.txt pour les assistants IA.,
   order = 5,
   icon = plug
 }

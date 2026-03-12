@@ -1,5 +1,6 @@
 meta {
   title = Fußzeile,
+  description = Konfigurieren Sie Footer-Links\, Social Icons und Copyright-Text in Tiramisu Docs.,
   order = 5,
   icon = footprints
 }

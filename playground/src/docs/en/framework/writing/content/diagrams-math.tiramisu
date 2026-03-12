@@ -1,4 +1,4 @@
-meta { title = Diagrams & Math, order = 9, icon = chart-no-axes-combined }
+meta { title = Diagrams & Math, description = Render Mermaid diagrams and LaTeX math formulas in your Tiramisu documentation pages., order = 9, icon = chart-no-axes-combined }
 
 Render diagrams and mathematical formulas client-side.
 

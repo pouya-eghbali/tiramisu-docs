@@ -1,5 +1,6 @@
 meta {
   title = MCP Server,
+  description = Enable the built-in MCP server so AI tools like Claude and Cursor can browse your docs programmatically.,
   order = 3,
   icon = server
 }

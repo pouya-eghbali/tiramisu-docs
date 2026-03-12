@@ -1,4 +1,4 @@
-meta { title = Layout, order = 8, icon = columns-3 }
+meta { title = Layout, description = Verwenden Sie Spalten und Demo-Container zur Anordnung von Inhalten auf der Seite., order = 8, icon = columns-3 }
 
 Komponenten zur Anordnung von Inhalten auf der Seite.
 

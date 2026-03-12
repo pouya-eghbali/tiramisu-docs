@@ -1,4 +1,4 @@
-meta { title = Structure du projet, order = 3, icon = folder-tree }
+meta { title = Structure du projet, description = Découvrez l'arborescence des fichiers et les conventions d'un projet Tiramisu Docs basé sur SvelteKit., order = 3, icon = folder-tree }
 
 Un projet Tiramisu Docs suit une structure SvelteKit standard avec quelques conventions spécifiques à Tiramisu.
 

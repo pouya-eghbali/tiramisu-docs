@@ -1,5 +1,6 @@
 meta {
   title = Seitenleiste,
+  description = Steuern Sie Gruppierung\, Sortierung und Verschachtelung der automatisch generierten Seitenleiste.,
   order = 3,
   icon = panel-left
 }

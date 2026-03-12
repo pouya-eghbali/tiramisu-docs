@@ -1,4 +1,4 @@
-meta { title = Rich Content, order = 6, icon = sparkles }
+meta { title = Rich Content, description = Use callouts\, steps\, tabs\, accordions\, blockquotes\, badges\, and task lists in your docs., order = 6, icon = sparkles }
 
 Built-in components for interactive and highlighted content.
 

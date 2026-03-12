@@ -1,5 +1,6 @@
 meta {
   title = Sektionen,
+  description = Teilen Sie Ihre Dokumentation in separate Bereiche mit eigenen Tabs und Seitenleisten auf.,
   order = 2,
   icon = layout-grid
 }

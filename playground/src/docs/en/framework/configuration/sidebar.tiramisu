@@ -1,5 +1,6 @@
 meta {
   title = Sidebar,
+  description = Control sidebar group ordering\, folder-based grouping\, page sorting\, and nested subgroups.,
   order = 3,
   icon = panel-left
 }

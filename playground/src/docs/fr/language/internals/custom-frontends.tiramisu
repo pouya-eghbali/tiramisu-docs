@@ -1,5 +1,6 @@
 meta {
   title = Front-ends personnalisés,
+  description = Construisez votre propre compilateur Tiramisu vers HTML ou tout autre format en parcourant l'AST.,
   order = 2,
   icon = monitor
 }

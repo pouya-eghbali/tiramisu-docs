@@ -1,4 +1,4 @@
-meta { title = Chaînes & Échappement, order = 4, icon = quote }
+meta { title = Chaînes & Échappement, description = Gérez les guillemets doubles\, l'échappement par antislash et les caractères spéciaux dans le balisage Tiramisu., order = 4, icon = quote }
 
 Tiramisu offre plusieurs façons de gérer les caractères spéciaux dans votre contenu. Comprendre les guillemets et l'échappement est essentiel pour écrire du contenu qui contient des virgules\, des signes égal\, des crochets ou des guillemets.
 

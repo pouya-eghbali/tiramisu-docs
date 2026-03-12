@@ -1,4 +1,4 @@
-meta { title = Installation, order = 2, icon = download }
+meta { title = Installation, description = Install Tiramisu Docs using the scaffolder or set up manually with SvelteKit and the Vite plugin., order = 2, icon = download }
 
 h2 { Scaffolder }
 

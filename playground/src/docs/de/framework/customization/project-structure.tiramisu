@@ -1,4 +1,4 @@
-meta { title = Projektstruktur, order = 3, icon = folder-tree }
+meta { title = Projektstruktur, description = Lernen Sie den Aufbau eines Tiramisu Docs-Projekts mit allen wichtigen Dateien und Ordnern kennen., order = 3, icon = folder-tree }
 
 Ein Tiramisu Docs-Projekt folgt einem Standard-SvelteKit-Layout mit einigen Tiramisu-spezifischen Konventionen.
 

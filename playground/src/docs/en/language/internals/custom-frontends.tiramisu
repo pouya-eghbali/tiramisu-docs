@@ -1,5 +1,6 @@
 meta {
   title = Custom Front-Ends,
+  description = Build a custom compiler front-end that transforms Tiramisu AST into HTML or any output format.,
   order = 2,
   icon = monitor
 }

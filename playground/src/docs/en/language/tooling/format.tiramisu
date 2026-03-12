@@ -1,5 +1,6 @@
 meta {
   title = Format,
+  description = Auto-format .tiramisu files for consistent whitespace\, indentation\, and parameter spacing with the CLI.,
   order = 2,
   icon = paintbrush
 }

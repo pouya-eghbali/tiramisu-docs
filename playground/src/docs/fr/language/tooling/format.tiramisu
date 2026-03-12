@@ -1,5 +1,6 @@
 meta {
   title = Formatage,
+  description = Formatez automatiquement vos fichiers .tiramisu avec la commande tiramisu format pour un style cohérent.,
   order = 2,
   icon = paintbrush
 }

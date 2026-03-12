@@ -1,5 +1,6 @@
 meta {
   title = Sections,
+  description = Split documentation into top-level sections with separate navigation tabs\, dropdowns\, and external links.,
   order = 2,
   icon = layout-grid
 }

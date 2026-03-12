@@ -1,5 +1,6 @@
 meta {
   title = Configuration,
+  description = Découvrez le fichier tiramisu.config.ts pour configurer le titre\, les sections\, la barre latérale et le plugin Vite.,
   order = 3,
   icon = settings
 }

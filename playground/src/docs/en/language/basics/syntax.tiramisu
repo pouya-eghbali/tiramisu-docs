@@ -1,4 +1,4 @@
-meta { title = Syntax, order = 2, icon = braces }
+meta { title = Syntax, description = Learn Tiramisu's core syntax: function calls\, nesting\, paragraphs\, and special character escaping., order = 2, icon = braces }
 
 Tiramisu has one fundamental construct: the bold { function call }.
 

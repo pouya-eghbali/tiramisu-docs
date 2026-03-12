@@ -1,4 +1,4 @@
-meta { title = Diagramme & Mathematik, order = 9, icon = chart-no-axes-combined }
+meta { title = Diagramme & Mathematik, description = Rendern Sie Mermaid-Diagramme und LaTeX-Formeln direkt in Ihrer Dokumentation., order = 9, icon = chart-no-axes-combined }
 
 Rendern Sie Diagramme und mathematische Formeln clientseitig.
 

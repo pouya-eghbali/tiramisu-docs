@@ -1,5 +1,6 @@
 meta {
   title = Sections,
+  description = Divisez votre documentation en sections avec onglets de navigation\, liens externes et menus déroulants.,
   order = 2,
   icon = layout-grid
 }

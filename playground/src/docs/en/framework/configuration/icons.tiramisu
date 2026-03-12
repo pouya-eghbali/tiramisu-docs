@@ -1,4 +1,4 @@
-meta { title = Icons, order = 7, icon = lucide:smile }
+meta { title = Icons, description = Use Iconify icons for sections\, pages\, groups\, and code blocks in Tiramisu Docs., order = 7, icon = lucide:smile }
 
 h2 { Adding Icons }
 

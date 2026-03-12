@@ -1,5 +1,6 @@
 meta {
   title = Pied de page,
+  description = Configurez les liens sociaux\, le copyright et le badge « Powered by » du pied de page dans Tiramisu Docs.,
   order = 5,
   icon = footprints
 }

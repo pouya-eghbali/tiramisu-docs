@@ -1,4 +1,4 @@
-meta { title = Rédaction, order = 2, icon = pen-line }
+meta { title = Rédaction, description = Apprenez à créer des pages de documentation avec les fichiers .tiramisu\, les métadonnées et le routage., order = 2, icon = pen-line }
 
 Les pages de documentation sont des fichiers code { .tiramisu } placés dans le répertoire code { src/docs/ }. Chaque fichier devient une page de votre site.
 

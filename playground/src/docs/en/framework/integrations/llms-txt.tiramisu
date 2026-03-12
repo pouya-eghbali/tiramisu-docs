@@ -1,5 +1,6 @@
 meta {
   title = llms.txt,
+  description = Generate machine-readable llms.txt\, llms-full.txt\, and skill.md endpoints for AI assistants.,
   order = 4,
   icon = bot
 }

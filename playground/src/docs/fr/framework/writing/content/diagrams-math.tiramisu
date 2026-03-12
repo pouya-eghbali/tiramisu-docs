@@ -1,4 +1,4 @@
-meta { title = Diagrammes et maths, order = 9, icon = chart-no-axes-combined }
+meta { title = Diagrammes et maths, description = Intégrez des diagrammes Mermaid et des formules mathématiques LaTeX rendues avec KaTeX., order = 9, icon = chart-no-axes-combined }
 
 Affichez des diagrammes et des formules mathématiques côté client.
 

@@ -1,4 +1,4 @@
-meta { title = Layout, order = 8, icon = columns-3 }
+meta { title = Layout, description = Arrange content with multi-column layouts and demo preview containers in Tiramisu Docs., order = 8, icon = columns-3 }
 
 Components for arranging content on the page.
 

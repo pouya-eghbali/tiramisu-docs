@@ -1,5 +1,6 @@
 meta {
   title = Formatierung,
+  description = Formatieren Sie .tiramisu-Dateien automatisch mit dem Befehl tiramisu format für einheitlichen Stil.,
   order = 2,
   icon = paintbrush
 }

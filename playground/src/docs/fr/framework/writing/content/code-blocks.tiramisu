@@ -1,4 +1,4 @@
-meta { title = Blocs de code, order = 5, icon = code }
+meta { title = Blocs de code, description = Affichez du code avec coloration syntaxique Shiki\, onglets synchronisés et chargement depuis des fichiers., order = 5, icon = code }
 
 Affichez du code avec coloration syntaxique en utilisant la fonction code { codeblock }. La coloration est assurée par Shiki.
 

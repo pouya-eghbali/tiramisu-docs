@@ -1,5 +1,6 @@
 meta {
   title = CLI,
+  description = Use the Tiramisu CLI to compile and format .tiramisu files from the terminal.,
   order = 2,
   icon = terminal
 }

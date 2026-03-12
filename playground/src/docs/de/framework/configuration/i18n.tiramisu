@@ -1,5 +1,6 @@
 meta {
   title = Internationalisierung,
+  description = Richten Sie mehrsprachige Dokumentation mit Ordnerstruktur\, Fallback und Sprachwechsler ein.,
   order = 4,
   icon = globe
 }

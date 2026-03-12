@@ -1,5 +1,6 @@
 meta {
   title = llms.txt,
+  description = Generieren Sie maschinenlesbare Dokumentation für KI-Assistenten mit llms.txt und llms-full.txt.,
   order = 4,
   icon = bot
 }

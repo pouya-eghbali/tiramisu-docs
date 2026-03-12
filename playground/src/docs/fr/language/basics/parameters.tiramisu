@@ -1,4 +1,4 @@
-meta { title = Paramètres, order = 3, icon = sliders-horizontal }
+meta { title = Paramètres, description = Apprenez à utiliser les paramètres positionnels\, nommés et de type tableau dans les appels de fonctions Tiramisu., order = 3, icon = sliders-horizontal }
 
 Les appels de fonctions dans Tiramisu peuvent accepter des paramètres. Les paramètres sont séparés par des virgules et se présentent sous trois formes : positionnels\, nommés et tableaux.
 

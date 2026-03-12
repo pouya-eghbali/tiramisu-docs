@@ -1,5 +1,6 @@
 meta {
   title = Was ist Tiramisu?,
+  description = Einführung in die Tiramisu-Auszeichnungssprache\, ihre Grundprinzipien und den Unterschied zu Tiramisu Docs.,
   order = 1,
   icon = graduation-cap
 }

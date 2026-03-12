@@ -1,5 +1,6 @@
 meta {
   title = Integrationen,
+  description = Integrieren Sie Tiramisu Docs mit SEO-Tools\, KI-Assistenten und Entwicklungsworkflows.,
   order = 5,
   icon = plug
 }

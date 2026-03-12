@@ -1,4 +1,4 @@
-meta { title = Contenu riche, order = 6, icon = sparkles }
+meta { title = Contenu riche, description = Utilisez les encadrés\, étapes\, onglets\, accordéons\, citations\, badges et listes de tâches intégrés., order = 6, icon = sparkles }
 
 Composants intégrés pour du contenu interactif et mis en valeur.
 

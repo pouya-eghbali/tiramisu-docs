@@ -1,4 +1,4 @@
-meta { title = Symbole, order = 7, icon = lucide:smile }
+meta { title = Symbole, description = Verwenden Sie Iconify-Symbole für Sektionen\, Seiten\, Gruppen und Codeblöcke in Ihrer Dokumentation., order = 7, icon = lucide:smile }
 
 h2 { Symbole hinzufügen }
 

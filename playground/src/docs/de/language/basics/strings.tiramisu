@@ -1,4 +1,4 @@
-meta { title = Zeichenketten & Escaping, order = 4, icon = quote }
+meta { title = Zeichenketten & Escaping, description = Erfahren Sie\, wie Sie Sonderzeichen\, Anführungszeichen und Backslash-Escaping in Tiramisu verwenden., order = 4, icon = quote }
 
 Tiramisu bietet verschiedene Möglichkeiten\, Sonderzeichen in Ihrem Inhalt zu verarbeiten. Das Verständnis von Anführungszeichen und Escaping ist wichtig\, um Inhalte mit Kommas\, Gleichheitszeichen\, Klammern oder Anführungszeichen zu schreiben.
 

@@ -1,5 +1,6 @@
 meta {
   title = Internationalization,
+  description = Set up multi-language documentation with locale folders\, URL routing\, fallback behavior\, and a locale switcher.,
   order = 4,
   icon = globe
 }

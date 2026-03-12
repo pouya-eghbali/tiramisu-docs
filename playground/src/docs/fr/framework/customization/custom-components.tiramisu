@@ -1,4 +1,4 @@
-meta { title = Composants personnalisés, order = 2, icon = puzzle }
+meta { title = Composants personnalisés, description = Créez des composants Svelte personnalisés et remplacez les composants intégrés de Tiramisu Docs., order = 2, icon = puzzle }
 
 Tout appel de fonction dans Tiramisu qui ne correspond pas à une fonction intégrée devient automatiquement un composant Svelte personnalisé. Cela vous permet d'enrichir votre documentation avec des widgets interactifs\, des mises en page personnalisées ou toute interface que vous pouvez construire avec Svelte.
 

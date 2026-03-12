@@ -1,4 +1,4 @@
-meta { title = Parameters, order = 3, icon = sliders-horizontal }
+meta { title = Parameters, description = Learn about positional\, named\, and array parameters in Tiramisu function calls., order = 3, icon = sliders-horizontal }
 
 Function calls in Tiramisu can accept parameters. Parameters are separated by commas and come in three forms: positional, named, and arrays.
 

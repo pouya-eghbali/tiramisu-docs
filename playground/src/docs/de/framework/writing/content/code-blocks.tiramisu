@@ -1,4 +1,4 @@
-meta { title = Codeblöcke, order = 5, icon = code }
+meta { title = Codeblöcke, description = Zeigen Sie syntaxhervorgehobenen Code mit Shiki an und nutzen Sie Tabs\, Datei-Imports und Sprach-Icons., order = 5, icon = code }
 
 Zeigen Sie syntaxhervorgehobenen Code mit der Funktion code { codeblock } an. Die Hervorhebung wird von Shiki bereitgestellt.
 

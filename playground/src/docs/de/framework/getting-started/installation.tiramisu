@@ -1,4 +1,4 @@
-meta { title = Installation, order = 2, icon = download }
+meta { title = Installation, description = Installieren Sie Tiramisu Docs per Scaffolder oder richten Sie ein Projekt manuell mit SvelteKit ein., order = 2, icon = download }
 
 h2 { Scaffolder }
 

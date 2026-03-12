@@ -1,5 +1,6 @@
 meta {
   title = Konfiguration,
+  description = Überblick über die zentrale Konfigurationsdatei von Tiramisu Docs und alle verfügbaren Optionen.,
   order = 3,
   icon = settings
 }

@@ -1,4 +1,4 @@
-meta { title = Benutzerdefinierte Komponenten, order = 2, icon = puzzle }
+meta { title = Benutzerdefinierte Komponenten, description = Erstellen Sie eigene Svelte-Komponenten als Tiramisu-Funktionen und überschreiben Sie eingebaute Komponenten., order = 2, icon = puzzle }
 
 Jeder Funktionsaufruf in Tiramisu\, der keiner eingebauten Funktion entspricht\, wird automatisch zu einer benutzerdefinierten Svelte-Komponente. So können Sie Ihre Dokumentation mit interaktiven Widgets\, benutzerdefinierten Layouts oder jeder beliebigen UI erweitern\, die Sie mit Svelte erstellen können.
 

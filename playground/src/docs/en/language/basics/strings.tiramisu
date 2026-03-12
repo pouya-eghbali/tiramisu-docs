@@ -1,4 +1,4 @@
-meta { title = Strings & Escaping, order = 4, icon = quote }
+meta { title = Strings & Escaping, description = Handle special characters in Tiramisu with quoting\, backslash escaping\, and multi-quote strings., order = 4, icon = quote }
 
 Tiramisu provides several ways to handle special characters in your content. Understanding quoting and escaping is essential for writing content that contains commas, equals signs, brackets, or quotes.
 

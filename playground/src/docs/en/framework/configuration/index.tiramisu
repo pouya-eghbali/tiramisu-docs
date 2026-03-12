@@ -1,5 +1,6 @@
 meta {
   title = Configuration,
+  description = Learn how to configure Tiramisu Docs using the tiramisu.config.ts file and the Vite plugin.,
   order = 3,
   icon = settings
 }

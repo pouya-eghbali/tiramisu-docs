@@ -1,4 +1,4 @@
-meta { title = Extension VSCode, order = 4, icon = code }
+meta { title = Extension VSCode, description = Ajoutez la coloration syntaxique et le support éditeur pour les fichiers .tiramisu dans VSCode., order = 4, icon = code }
 
 L'extension Tiramisu pour VSCode ajoute un support éditeur de premier plan pour les fichiers code { .tiramisu }\, incluant la coloration syntaxique et la configuration du langage.
 

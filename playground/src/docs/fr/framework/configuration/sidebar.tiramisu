@@ -1,5 +1,6 @@
 meta {
   title = Barre latérale,
+  description = Contrôlez l'ordre des groupes\, le regroupement par dossier\, les sous-groupes et le tri des pages dans la barre latérale.,
   order = 3,
   icon = panel-left
 }

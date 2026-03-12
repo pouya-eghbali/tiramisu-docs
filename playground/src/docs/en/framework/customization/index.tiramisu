@@ -1,5 +1,6 @@
 meta {
   title = Customization,
+  description = Customize Tiramisu Docs by overriding components\, creating custom functions\, and adjusting project structure.,
   order = 4,
   icon = palette
 }

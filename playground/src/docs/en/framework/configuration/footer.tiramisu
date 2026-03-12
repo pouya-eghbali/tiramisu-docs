@@ -1,5 +1,6 @@
 meta {
   title = Footer,
+  description = Configure footer social links\, copyright text\, and the powered-by badge in Tiramisu Docs.,
   order = 5,
   icon = footprints
 }

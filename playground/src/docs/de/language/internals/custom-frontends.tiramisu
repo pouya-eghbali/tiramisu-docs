@@ -1,5 +1,6 @@
 meta {
   title = Eigene Front-Ends,
+  description = Bauen Sie ein eigenes Compiler-Front-End\, um Tiramisu-AST in HTML oder andere Formate zu kompilieren.,
   order = 2,
   icon = monitor
 }

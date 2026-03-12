@@ -1,4 +1,4 @@
-meta { title = Démarrage rapide, order = 3, icon = zap }
+meta { title = Démarrage rapide, description = Créez votre première page de documentation\, comprenez les métadonnées et le routage basé sur les fichiers., order = 3, icon = zap }
 
 Une fois votre projet mis en place\, créez votre première page de documentation.
 

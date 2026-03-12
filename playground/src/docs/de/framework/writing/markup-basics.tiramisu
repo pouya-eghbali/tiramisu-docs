@@ -1,4 +1,4 @@
-meta { title = Markup-Grundlagen, order = 2, icon = text }
+meta { title = Markup-Grundlagen, description = Lernen Sie die Funktionsaufruf-Syntax\, Inline-Formatierung\, Links und Überschriften in Tiramisu kennen., order = 2, icon = text }
 
 Tiramisu verwendet eine Funktionsaufruf-Syntax für alle strukturierten Inhalte. Einfacher Text außerhalb von Funktionsaufrufen wird als Absatzinhalt dargestellt.
 

@@ -1,4 +1,4 @@
-meta { title = Custom Components, order = 2, icon = puzzle }
+meta { title = Custom Components, description = Create custom Svelte components as Tiramisu functions and override built-in components., order = 2, icon = puzzle }
 
 Any function call in Tiramisu that doesn't match a built-in function automatically becomes a custom Svelte component. This lets you extend your documentation with interactive widgets, custom layouts, or any UI you can build with Svelte.
 
