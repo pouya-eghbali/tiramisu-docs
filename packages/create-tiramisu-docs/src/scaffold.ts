@@ -43,6 +43,8 @@ export function generateProjectFiles(
     virtualDts(),
     tsconfig(),
     gitignore(),
+    logoSvg(),
+    faviconSvg(),
     ...alertFiles(),
     ...collapsibleFiles(),
     ...sheetFiles(),
@@ -136,10 +138,21 @@ function tiramisuConfig(options: ScaffoldOptions): GeneratedFile {
   const configLines: string[] = [];
   configLines.push(`  title: "${options.name}",`);
   configLines.push(`  description: "Documentation powered by Tiramisu Docs",`);
-  configLines.push(`  // url: "https://example.com",`);
+  configLines.push(`  url: "https://example.com", // TODO: Replace with your site URL`);
+  configLines.push(`  logo: "/logo.svg", // TODO: Replace with your logo`);
   configLines.push(`  nav: [`);
   configLines.push(`    { label: "Docs", href: "/docs" },`);
   configLines.push(`  ],`);
+  configLines.push(`  github: {`);
+  configLines.push(`    repo: "your-org/your-repo", // TODO: Replace with your GitHub repo`);
+  configLines.push(`  },`);
+  configLines.push(`  footer: {`);
+  configLines.push(`    copyright: "© ${new Date().getFullYear()} ${options.name}. All rights reserved.",`);
+  configLines.push(`    socials: {`);
+  configLines.push(`      github: "https://github.com/your-org/your-repo", // TODO: Replace with your links`);
+  configLines.push(`      x: "https://x.com/yourhandle",`);
+  configLines.push(`    },`);
+  configLines.push(`  },`);
 
   if (options.sections) {
     configLines.push(`  sections: [`);
@@ -190,7 +203,7 @@ function appHtml(): GeneratedFile {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1326,6 +1339,37 @@ function tsconfig(): GeneratedFile {
     "moduleResolution": "bundler"
   }
 }
+`,
+  };
+}
+
+function logoSvg(): GeneratedFile {
+  return {
+    path: "static/logo.svg",
+    content: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- Tiramisu placeholder logo — replace with your own -->
+  <rect x="3" y="16" width="18" height="3" rx="1" fill="#5c4a3a"/>
+  <rect x="4" y="11" width="16" height="3" rx="1" fill="#7a6555"/>
+  <rect x="5" y="6" width="14" height="3" rx="1" fill="#3e2e22"/>
+  <circle cx="8" cy="4" r="0.7" fill="#5c4a3a"/>
+  <circle cx="12" cy="3.5" r="0.7" fill="#3e2e22"/>
+  <circle cx="16" cy="4" r="0.7" fill="#5c4a3a"/>
+</svg>
+`,
+  };
+}
+
+function faviconSvg(): GeneratedFile {
+  return {
+    path: "static/favicon.svg",
+    content: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <rect x="3" y="16" width="18" height="3" rx="1" fill="#5c4a3a"/>
+  <rect x="4" y="11" width="16" height="3" rx="1" fill="#7a6555"/>
+  <rect x="5" y="6" width="14" height="3" rx="1" fill="#3e2e22"/>
+  <circle cx="8" cy="4" r="0.7" fill="#5c4a3a"/>
+  <circle cx="12" cy="3.5" r="0.7" fill="#3e2e22"/>
+  <circle cx="16" cy="4" r="0.7" fill="#5c4a3a"/>
+</svg>
 `,
   };
 }
