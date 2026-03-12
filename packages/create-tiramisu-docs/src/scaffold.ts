@@ -73,7 +73,7 @@ function packageJson(name: string): GeneratedFile {
       check: "svelte-check --tsconfig ./tsconfig.json",
     },
     dependencies: {
-      "@tiramisu-docs/kit": "^0.1.10",
+      "@tiramisu-docs/kit": "^0.1.11",
       "@timeleap/tiramisu": "^1.9.0",
       "bits-ui": "^2.16.0",
       clsx: "^2.1.0",
@@ -126,12 +126,6 @@ import config from "./src/lib/tiramisu.config"
 
 export default defineConfig({
   plugins: [tiramisuPlugin({ config }), tailwindcss(), sveltekit()],
-  optimizeDeps: {
-    exclude: ["@tiramisu-docs/kit"],
-  },
-  ssr: {
-    noExternal: ["@tiramisu-docs/kit"],
-  },
 })
 `,
   };
