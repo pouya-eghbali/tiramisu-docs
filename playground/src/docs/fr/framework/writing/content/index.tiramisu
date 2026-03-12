@@ -1,4 +1,4 @@
-meta { title = Contenu, order = 4, icon = layout }
+meta { title = Contenu, description = Composants intégrés pour blocs de code\, tableaux\, diagrammes\, encadrés et autres contenus de documentation., order = 4, icon = layout }
 
 Tiramisu Docs fournit un ensemble riche de composants intégrés pour le contenu de documentation. Ceux-ci sont implémentés sous forme de fonctions Tiramisu qui se compilent en composants Svelte.
 

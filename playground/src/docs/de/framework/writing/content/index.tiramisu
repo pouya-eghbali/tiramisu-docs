@@ -1,4 +1,4 @@
-meta { title = Inhalte, order = 4, icon = layout }
+meta { title = Inhalte, description = Eingebaute Komponenten für Codeblöcke\, Tabellen\, Diagramme\, Hinweise und weitere Dokumentationsinhalte., order = 4, icon = layout }
 
 Tiramisu Docs bietet eine umfangreiche Sammlung eingebauter Komponenten für Dokumentationsinhalte. Diese sind als Tiramisu-Funktionen implementiert\, die zu Svelte-Komponenten kompiliert werden.
 

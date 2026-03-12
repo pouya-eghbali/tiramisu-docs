@@ -1,5 +1,6 @@
 meta {
   title = SEO,
+  description = Built-in sitemap\, canonical URLs\, Open Graph tags\, and JSON-LD structured data for search engines.,
   order = 2,
   icon = search
 }

@@ -1,4 +1,4 @@
-meta { title = Éléments visuels, order = 7, icon = image }
+meta { title = Éléments visuels, description = Affichez des tableaux\, images\, arborescences de fichiers et autres contenus visuels structurés., order = 7, icon = image }
 
 Composants pour afficher des données structurées et des médias.
 

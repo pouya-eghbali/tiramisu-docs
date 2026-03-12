@@ -1,4 +1,4 @@
-meta { title = Premiers pas, order = 1, icon = rocket }
+meta { title = Premiers pas, description = Installez Tiramisu Docs et créez votre première page de documentation en quelques minutes., order = 1, icon = rocket }
 
 Tiramisu Docs est un framework de documentation propulsé par link { url = https://svelte.dev, SvelteKit } et le langage de balisage Tiramisu. Rédigez vos documents dans des fichiers code { .tiramisu } et obtenez un site de documentation moderne et soigné.
 

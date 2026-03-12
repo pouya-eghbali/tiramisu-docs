@@ -1,4 +1,4 @@
-meta { title = Content, order = 4, icon = layout }
+meta { title = Content, description = Built-in components for code blocks\, tables\, diagrams\, callouts\, and other rich documentation content., order = 4, icon = layout }
 
 Tiramisu Docs provides a rich set of built-in components for documentation content. These are implemented as Tiramisu functions that compile to Svelte components.
 

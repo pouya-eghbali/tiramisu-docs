@@ -1,5 +1,6 @@
 meta {
   title = SEO,
+  description = Integrierte Sitemap\, kanonische URLs\, Open-Graph-Tags und JSON-LD-Strukturdaten für Suchmaschinen.,
   order = 2,
   icon = search
 }

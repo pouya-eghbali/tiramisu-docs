@@ -1,4 +1,4 @@
-meta { title = Visual Elements, order = 7, icon = image }
+meta { title = Visual Elements, description = Display tables\, images\, file trees\, and other structured visual content in your docs., order = 7, icon = image }
 
 Components for displaying structured data and media.
 

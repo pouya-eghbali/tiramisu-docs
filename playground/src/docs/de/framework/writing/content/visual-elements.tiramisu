@@ -1,4 +1,4 @@
-meta { title = Visuelle Elemente, order = 7, icon = image }
+meta { title = Visuelle Elemente, description = Zeigen Sie Tabellen\, Bilder\, Dateibäume und andere strukturierte visuelle Inhalte in Ihrer Dokumentation an., order = 7, icon = image }
 
 Komponenten zur Anzeige strukturierter Daten und Medien.
 
