@@ -573,15 +573,6 @@ function pageSvelte(): GeneratedFile {
 
   let { data }: { data: Record<string, any> } = $props()
 
-  let mdCopied = $state(false)
-
-  async function copyMarkdown() {
-    if (!data.markdown) return
-    await navigator.clipboard.writeText(data.markdown)
-    mdCopied = true
-    setTimeout(() => (mdCopied = false), 2000)
-  }
-
   const resolved = resolveConfig(config)
   const links = $derived(
     resolved.url && data.slug
@@ -601,24 +592,7 @@ function pageSvelte(): GeneratedFile {
 >
   <DocPage meta={data.meta} lastEdited={data.lastEdited} slug={data.slug} baseUrl={resolved.url} sidebar={data.activeSidebar} siteName={resolved.title} instantOg={resolved.instantOg}>
     {#snippet headerActions()}
-      <div class="flex items-center gap-2">
-        {#if data.markdown}
-          <button
-            onclick={copyMarkdown}
-            class="inline-flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            title="Copy page as Markdown"
-          >
-            {#if mdCopied}
-              <iconify-icon icon="lucide:check" width="14" height="14" class="text-green-500"></iconify-icon>
-              Copied
-            {:else}
-              <iconify-icon icon="lucide:clipboard" width="14" height="14"></iconify-icon>
-              Copy MD
-            {/if}
-          </button>
-        {/if}
-        <OpenDropdown {links} />
-      </div>
+      <OpenDropdown {links} markdown={data.markdown} />
     {/snippet}
     {#if data.component}
       {@const Component = data.component}
@@ -678,18 +652,26 @@ function openDropdownSvelte(): GeneratedFile {
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu"
   import type { OpenLink } from "@tiramisu-docs/kit"
 
-  let { links = [] }: { links?: OpenLink[] } = $props()
+  let { links = [], markdown = undefined }: { links?: OpenLink[]; markdown?: string } = $props()
 
   const openLinks = $derived(links.filter((l: OpenLink) => l.type === "open"))
   const editLinks = $derived(links.filter((l: OpenLink) => l.type === "edit"))
   const mcpLinks = $derived(links.filter((l: OpenLink) => l.type === "mcp"))
 
   let copied = $state(false)
+  let mdCopied = $state(false)
 
   async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text)
     copied = true
     setTimeout(() => (copied = false), 2000)
+  }
+
+  async function copyMarkdown() {
+    if (!markdown) return
+    await navigator.clipboard.writeText(markdown)
+    mdCopied = true
+    setTimeout(() => (mdCopied = false), 2000)
   }
 </script>
 
@@ -709,7 +691,7 @@ function openDropdownSvelte(): GeneratedFile {
   {/if}
 {/snippet}
 
-{#if links.length > 0}
+{#if links.length > 0 || markdown}
   <DropdownMenu.Root>
     <DropdownMenu.Trigger class="inline-flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
       Open
@@ -760,6 +742,23 @@ function openDropdownSvelte(): GeneratedFile {
             {/if}
           </DropdownMenu.Item>
         {/each}
+      {/if}
+      {#if markdown}
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item>
+          <button
+            onclick={(e: MouseEvent) => { e.preventDefault(); e.stopPropagation(); copyMarkdown(); }}
+            class="flex w-full items-center gap-2"
+          >
+            {#if mdCopied}
+              <svg class="size-4 shrink-0 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Copied!
+            {:else}
+              <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+              Copy as Markdown
+            {/if}
+          </button>
+        </DropdownMenu.Item>
       {/if}
     </DropdownMenu.Content>
   </DropdownMenu.Root>
