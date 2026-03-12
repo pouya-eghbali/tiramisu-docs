@@ -100,7 +100,7 @@ function getPositionalText(fc: FunctionCall): string {
       if (Array.isArray(p.value)) {
         parts.push(p.value.map((v) => emitNode(v)).join(""))
       } else {
-        parts.push(p.value.toString())
+        parts.push(emitNode(p.value))
       }
     }
   }
