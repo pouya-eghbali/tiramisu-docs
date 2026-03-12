@@ -159,8 +159,9 @@
       </svg>
     </button>
 
+    <!-- Language selector (desktop only) -->
     {#if locales?.length > 1}
-      <div class="relative">
+      <div class="relative hidden lg:block">
         <button
           onclick={() =>
             (openDropdown = openDropdown === "lang" ? null : "lang")}
@@ -210,12 +211,13 @@
       </div>
     {/if}
 
+    <!-- GitHub + theme toggle (desktop only) -->
     {#if config.github?.repo}
       <a
         href="https://github.com/{config.github.repo}"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+        class="hidden h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground lg:inline-flex"
         aria-label="GitHub"
       >
         <iconify-icon icon="mdi:github" width="18" height="18"></iconify-icon>
@@ -224,7 +226,7 @@
 
     <button
       onclick={toggleTheme}
-      class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+      class="hidden h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground lg:inline-flex"
       aria-label="Toggle dark mode"
     >
       <svg
@@ -262,11 +264,12 @@
     </button>
   </div>
 
-  <!-- Row 2: section tabs (scrollable) -->
+  <!-- Row 2: section tabs (scrollable) + language selector on mobile -->
   {#if sections?.length > 0}
     <div class="border-t">
+      <div class="mx-auto flex max-w-[90rem] items-center px-4 py-1">
       <nav
-        class="scrollbar-none mx-auto flex max-w-[90rem] items-center gap-0.5 overflow-x-auto px-4 py-1"
+        class="scrollbar-none flex items-center gap-0.5 overflow-x-auto"
       >
         {#each sections as section}
           {#if section.children}
@@ -385,7 +388,61 @@
             </a>
           {/if}
         {/each}
+
       </nav>
+
+      <!-- Language selector (mobile only, in Row 2) -->
+      {#if locales?.length > 1}
+        <div class="relative ml-auto shrink-0 lg:hidden">
+          <button
+            onclick={() =>
+              (openDropdown = openDropdown === "lang" ? null : "lang")}
+            class="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          >
+            {#each locales as loc}
+              {#if loc.code === locale}
+                {loc.flag ?? ""} {loc.label}
+              {/if}
+            {/each}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg
+            >
+          </button>
+          {#if openDropdown === "lang"}
+            <div
+              class="absolute right-0 top-full z-50 mt-1 min-w-[10rem] rounded-md border bg-popover p-1 shadow-md"
+            >
+              {#each locales as loc}
+                {@const currentPath = $page.url.pathname}
+                {@const newPath = currentPath.replace(
+                  `/docs/${locale}`,
+                  `/docs/${loc.code}`,
+                )}
+                <a
+                  href={newPath}
+                  onclick={() => (openDropdown = null)}
+                  class="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent
+                    {loc.code === locale
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground'}"
+                >
+                  {#if loc.flag}<span>{loc.flag}</span>{/if}
+                  {loc.label}
+                </a>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      {/if}
+      </div>
     </div>
   {/if}
 </header>

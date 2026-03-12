@@ -27,6 +27,20 @@
 
   let searchOpen = $state(false)
   let mobileOpen = $state(false)
+  let dark = $state(false)
+
+  function initMobileTheme() {
+    if (typeof window === "undefined") return
+    const stored = window.localStorage.getItem("theme")
+    dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches)
+  }
+
+  function toggleTheme() {
+    if (typeof window === "undefined") return
+    dark = !dark
+    document.documentElement.classList.toggle("dark", dark)
+    window.localStorage.setItem("theme", dark ? "dark" : "light")
+  }
 
   const hasSections = $derived(sections != null && sections.length > 0)
 
@@ -38,6 +52,7 @@
   }
 
   onMount(() => {
+    initMobileTheme()
     function handleKeydown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault()
@@ -157,6 +172,37 @@
           </div>
         {/each}
       </ScrollArea>
+      <!-- GitHub + theme toggle (mobile sheet footer) -->
+      <div class="flex items-center gap-2 border-t px-2 py-3">
+        {#if config.github?.repo}
+          <a
+            href="https://github.com/{config.github.repo}"
+            target="_blank"
+            rel="noopener noreferrer"
+            onclick={() => (mobileOpen = false)}
+            class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            aria-label="GitHub"
+          >
+            <iconify-icon icon="mdi:github" width="18" height="18"></iconify-icon>
+          </a>
+        {/if}
+        <button
+          onclick={toggleTheme}
+          class="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          aria-label="Toggle dark mode"
+        >
+          <svg class="h-4 w-4 dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path><path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path><path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg class="hidden h-4 w-4 dark:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+      </div>
     </div>
   </SheetContent>
 {/if}
