@@ -12,6 +12,43 @@
 
 A documentation framework built on [SvelteKit](https://svelte.dev/docs/kit) and the [Tiramisu](https://github.com/timeleaplabs/tiramisu) markup language. Write `.tiramisu` files, get a fully themed documentation site with search, i18n, SEO, and an MCP server for AI assistants.
 
+## Write this
+
+```
+callout { type = warning, Don't forget to install the peer dependencies. }
+
+codetabs {
+  group = pkg,
+  codetab { label = npm, language = bash, npm install my-package },
+  codetab { label = yarn, language = bash, yarn add my-package }
+}
+```
+
+## Not this
+
+```mdx
+import { Callout } from '../components/Callout'
+import { Tabs, Tab } from '../components/Tabs'
+
+<Callout type="warning">
+  Don't forget to install the **peer
+  dependencies**.
+</Callout>
+
+<Tabs items={['npm', 'yarn']}>
+  <Tab value="npm">
+    ```bash
+    npm install my-package
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn add my-package
+    ```
+  </Tab>
+</Tabs>
+```
+
 ## Packages
 
 | Package | Description |
